@@ -6,6 +6,7 @@ class Perro(models.Model):
     nombre = models.CharField(max_length=15)
     raza = models.CharField(max_length=30)
     edad = models.IntegerField()
+    dniDueño = models.IntegerField()
     color = models.CharField(max_length=15)
     
     
