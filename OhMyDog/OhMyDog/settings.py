@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'OhMyDog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ohmydog',
+        'NAME': 'bd_ohmydog',
         'USER':'root',
         'HOST':'localhost',
         'PASSWORD':'',
@@ -122,6 +122,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+MEDIA_ROOT=os.path.join(BASE_DIR,'')
+MEDIA_URL = '/imagenes/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
