@@ -3,6 +3,8 @@ from . import views
 from django.conf import settings
 from django.contrib.staticfiles.urls import static
 
+#Declarar rutas para hacer cuando se ingresan direcciones e invocar funciones de views
+
 urlpatterns = [
     path('',views.index,name='index'),
     path('nosotros',views.nosotros,name='nosotros'),

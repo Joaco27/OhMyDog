@@ -1,5 +1,7 @@
 from django.db import models
 
+# Aca declaramos todas las tablas de la BD
+
 # Create your models here.
 class Perro(models.Model):
     id = models.AutoField(primary_key=True)
