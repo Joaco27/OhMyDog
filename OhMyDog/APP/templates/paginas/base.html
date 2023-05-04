@@ -11,14 +11,32 @@
     <title>{% block titulo %} {% endblock %}</title>
 </head>
 <body>
+    <style>
+        .imagen{
+            background-image: transparent url('static/imagenes/Logo2.png') no-repeat;
+        }
+    </style>
+    <header>
+        <section class="mensajes">
+            {% if messages %}
+                <ul class="messages_list">
+                    {% for message in messages %}
+                        <li {% if message.tags %} class="{{message.tags}}" {% endif %}>{{message}}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </section>
+    </header>
     <nav class="navbar bg-primary">
         <div>
             <a href="./" class="navbar-brand container d-flex align-items-center justify-content-center">
-                <!-- <img src="/imagenes/logo.jpg" height="50" width="50" class="d-inline-block align-top" alt=""> -->
-                <p class="text-white"><strong>LOGO</strong></p>
+                <img class="imagen" src="static/imagenes/Logo2.png" height="50" width="80" class="d-inline-block align-top" alt="LOGO">
+                <!-- <p class="text-white"><strong>LOGO</strong></p> -->
             </a>
         </div>
             <a href="./nosotros" class="nav-item nav-link active text-white">Nosotros</a>
+            <a href="./formulario" class="nav-item nav-link active text-white">Form</a>
+            <a href="./listarAlgo" class="nav-item nav-link active text-white">Listar Algo</a>
     </nav>
     <br><br>
     {% block contenido %} {% endblock %}

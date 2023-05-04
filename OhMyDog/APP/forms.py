@@ -3,7 +3,12 @@ from django import forms
 
 from django.core.exceptions import ValidationError 
 
-class Perro_form(forms.Form):
+class Perro_form(forms.ModelForm):
+    
+    class Meta:
+        model = Perro
+        fields = ['nombre','raza', 'edad']
+        
     nombre = forms.CharField(max_length=15, required=True, label='Nombre')
     raza = forms.CharField(max_length=15, required=True, label='Raza')
     edad = forms.IntegerField(required=True, label='Edad')
