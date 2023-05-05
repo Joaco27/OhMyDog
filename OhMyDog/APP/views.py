@@ -4,6 +4,7 @@ from .models import *
 from .forms import *
 from django.contrib import messages
 
+#Declarar funciones para hacer cuando se ingresan direcciones
 
 # Create your views here.
 def index(request):
@@ -14,15 +15,17 @@ def nosotros(request):
 
 def listarAlgo(request):
     context = Perro.objects.all()
+    #context = Perro.objects.filter(nombre__icontains='Papeto')
+    #context = Perro.objects.filter(edad__gt=5)
     return render(request, 'paginas/listarAlgo.html', {'context': context})
 
 def agregarAlgo(request):
     #form = Perro_form(request.POST, request.FILES or None)
     if request.method == 'POST':
-        form = Perro_form(request.POST)
-        if form.is_valid():
+        form = Perro_form(request.POST) #Guardo formulario
+        if form.is_valid(): #Si pasa todos los clean
             
-            form.save()
+            form.save()  #Subir a la BD
             messages.add_message(request, messages.SUCCESS, 'Consulta enviada con exito', extra_tags="tag1")
 
             return redirect("index")
