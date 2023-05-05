@@ -75,14 +75,20 @@ WSGI_APPLICATION = 'OhMyDog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'bd_ohmydog',
+#         'USER':'root',
+#         'HOST':'localhost',
+#         'PASSWORD':'',
+#         'PORT':'3306',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bd_ohmydog',
-        'USER':'root',
-        'HOST':'localhost',
-        'PASSWORD':'',
-        'PORT':'3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
