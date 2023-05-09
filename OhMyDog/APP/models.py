@@ -55,3 +55,11 @@ class ContactoCuidador(models.Model):
     telCuidador = models.IntegerField()
     def __str__(self):
         return f'El usuario {self.usuario} quiere contactar a {self.cuidador}'
+    
+class Turnos(models.Model):
+    descripcion = models.CharField(max_length=400)
+    nombre = models.CharField(max_length=30)
+    edad = models.IntegerField()
+    raza = models.CharField(max_length=30)
+    def __str__(self):
+        return f'Turno de {self.nombre} de edad {self.edad} raza {self.raza} y descripcion {self.descripcion}'

@@ -51,3 +51,20 @@ class Cuidador_form(forms.ModelForm):
         if len(str(data)) < 7:
             raise ValidationError("Telefono invalido")
         return data
+class Turnos_form(forms.ModelForm):
+    # Meta sirve para enlazar con la BD
+    class Meta:
+        model = Turnos
+        fields = ['descripcion','raza', 'edad','nombre']
+    # Creamos los campos del formulario
+    descripcion = forms.CharField(max_length=400, required=True, label='Descripcion')
+    nombre = forms.CharField(max_length=15, required=True, label='Nombre')
+    raza = forms.CharField(max_length=15, required=True, label='Raza')
+    edad = forms.IntegerField(required=True, label='Edad')
+
+    # Clean son validaciones 
+    def clean_edad(self):
+        data = self.cleaned_data["edad"]
+        if data < 1 or data > 20:
+            raise ValidationError("Edad invalida")
+        return data

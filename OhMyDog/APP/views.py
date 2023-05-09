@@ -103,3 +103,19 @@ def publicarP(request):
         'form': form,
     }
     return render(request, 'paginas/agregarPaseador.html', context)
+def turno(request):
+    if request.method == 'POST':
+        form = Turnos_form(request.POST)
+        if form.is_valid():
+            
+            form.save() 
+            messages.add_message(request, messages.SUCCESS, 'El veterinario se pondra en contacto pronto', extra_tags="tag1")
+
+            return redirect("index")
+    else:
+        form = Turnos_form()
+    
+    context = {
+        'form': form,
+    }
+    return render(request, 'paginas/turnos.html', context)

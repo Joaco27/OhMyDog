@@ -17,6 +17,7 @@ urlpatterns = [
     path('publicar',views.publicar,name='publicar'),
     path('publicarP',views.publicarP,name='publicarP'),
     path('publicarC',views.publicarC,name='publicarC'),
+    path('turnos',views.turnos,name='turnos'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
