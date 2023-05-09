@@ -57,7 +57,7 @@ class ContactoCuidador(models.Model):
         return f'El usuario {self.usuario} quiere contactar a {self.cuidador}'
     
 class Turnos(models.Model):
-    descripcion = models.CharField(max_length=400)
+    descripcion = models.TextField(max_length=400)
     nombre = models.CharField(max_length=30)
     edad = models.IntegerField()
     raza = models.CharField(max_length=30)

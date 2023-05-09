@@ -103,7 +103,7 @@ def publicarP(request):
         'form': form,
     }
     return render(request, 'paginas/agregarPaseador.html', context)
-def turno(request):
+def turnos(request):
     if request.method == 'POST':
         form = Turnos_form(request.POST)
         if form.is_valid():

@@ -57,7 +57,7 @@ class Turnos_form(forms.ModelForm):
         model = Turnos
         fields = ['descripcion','raza', 'edad','nombre']
     # Creamos los campos del formulario
-    descripcion = forms.CharField(max_length=400, required=True, label='Descripcion')
+    descripcion = forms.Textarea()
     nombre = forms.CharField(max_length=15, required=True, label='Nombre')
     raza = forms.CharField(max_length=15, required=True, label='Raza')
     edad = forms.IntegerField(required=True, label='Edad')
