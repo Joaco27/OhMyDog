@@ -36,3 +36,70 @@ def agregarAlgo(request):
         'form': form,
     }
     return render(request, 'paginas/formulario.html', context)
+
+def listarCuidadores(request):
+    context = Cuidador.objects.all()
+    return render(request, 'paginas/listaCuidadores.html', {'context': context})
+    
+def listarPaseadores(request): 
+    context = Paseador.objects.all()
+    return render(request, 'paginas/listaPaseadores.html', {'context': context})
+
+def contactarC(request, nombre, telefono):
+    cuida = ContactoCuidador(
+        cuidador =  nombre,
+        telCuidador = telefono,
+        usuario = 'Pedro',
+        telUsuario = 1234567,
+    )
+    cuida.save()
+    messages.add_message(request, messages.SUCCESS, 'Pronto se pondran en contacto con usted', extra_tags="tag1")
+    return redirect("index")
+
+def contactarP(request, nombre, telefono): 
+    pasea = ContactoPaseador(
+        paseador =  nombre,
+        telPaseador = telefono,
+        usuario = 'Pedro',
+        telUsuario = 1234567,
+    )
+    pasea.save()
+    messages.add_message(request, messages.SUCCESS, 'Pronto se pondran en contacto con usted', extra_tags="tag1")
+    return redirect("index")
+
+def publicar(request):
+    return render(request,'paginas/publicar.html')
+
+def publicarC(request):
+    if request.method == 'POST':
+        form = Cuidador_form(request.POST) #Guardo formulario
+        if form.is_valid(): #Si pasa todos los clean
+            
+            form.save()  #Subir a la BD
+            messages.add_message(request, messages.SUCCESS, 'Consulta enviada con exito', extra_tags="tag1")
+
+            return redirect("index")
+    else:
+        form = Cuidador_form()
+        
+    context = {
+        'form': form,
+    }
+    return render(request, 'paginas/agregarCuidador.html', context)
+
+def publicarP(request):
+    if request.method == 'POST':
+        form = Paseador_form(request.POST)
+        if form.is_valid():
+            
+            form.save() 
+            messages.add_message(request, messages.SUCCESS, 'Consulta enviada con exito', extra_tags="tag1")
+
+            return redirect("index")
+    else:
+        form = Paseador_form()
+        
+    context = {
+        'form': form,
+    }
+    return render(request, 'paginas/agregarPaseador.html', context)

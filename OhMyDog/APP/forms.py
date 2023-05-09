@@ -21,3 +21,33 @@ class Perro_form(forms.ModelForm):
         if data < 1 or data > 20:
             raise ValidationError("Edad invalida")
         return data
+    
+class Paseador_form(forms.ModelForm):
+    class Meta:
+        model=Paseador
+        fields=['nombre', 'telefono', 'zona', 'disponibilidad']
+    nombre = forms.CharField(max_length=50, required=True, label='Nombre')
+    telefono = forms.IntegerField(required=True, label='Telefono')
+    zona = forms.CharField(max_length=20, required=True, label='Zona')
+    disponibilidad = forms.CharField(max_length=30, required=True, label='Disponibilidad')
+    
+    def clean_telefono(self):
+        data=self.cleaned_data["telefono"]
+        if len(str(data)) < 7:
+            raise ValidationError("Telefono invalido")
+        return data
+    
+class Cuidador_form(forms.ModelForm):
+    class Meta:
+        model=Cuidador
+        fields=['nombre', 'telefono', 'zona', 'disponibilidad']
+    nombre = forms.CharField(max_length=50, required=True, label='Nombre')
+    telefono = forms.IntegerField(required=True, label='Telefono')
+    zona = forms.CharField(max_length=20, required=True, label='Zona')
+    disponibilidad = forms.CharField(max_length=30, required=True, label='Disponibilidad')
+    
+    def clean_telefono(self):
+        data=self.cleaned_data["telefono"]
+        if len(str(data)) < 7:
+            raise ValidationError("Telefono invalido")
+        return data

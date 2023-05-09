@@ -20,4 +20,38 @@ class Cliente(models.Model):
     dni = models.IntegerField()
     telefono = models.IntegerField()
     
+
+class Paseador(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=50)
+    telefono = models.IntegerField()
+    zona = models.CharField(max_length=20)
+    disponibilidad = models.CharField(max_length=30)
+    def __str__(self):
+        return f'Paseador: {self.nombre} por {self.zona}'
+
+class ContactoPaseador(models.Model):
+    paseador = models.CharField(max_length=30)
+    usuario = models.CharField(max_length=30)
+    telUsuario = models.IntegerField()
+    telPaseador = models.IntegerField()
+    def __str__(self):
+        return f'El usuario {self.usuario} quiere contactar a {self.paseador}'
     
+    
+class Cuidador(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=50)
+    telefono = models.IntegerField()
+    zona = models.CharField(max_length=20)
+    disponibilidad = models.CharField(max_length=30)
+    def __str__(self):
+        return f'Cuidador: {self.nombre} por {self.zona}'
+    
+class ContactoCuidador(models.Model):
+    cuidador = models.CharField(max_length=30)
+    usuario = models.CharField(max_length=30)
+    telUsuario = models.IntegerField()
+    telCuidador = models.IntegerField()
+    def __str__(self):
+        return f'El usuario {self.usuario} quiere contactar a {self.cuidador}'

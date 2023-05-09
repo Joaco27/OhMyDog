@@ -1,0 +1,19 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+{% block titulo %} Paseadores {% endblock %}
+
+{% block contenido %} 
+
+<div class="d-flex justify-content-center flex-column align-items-center">
+    {% for c in context %}
+        <p>Nombre: {{ c.nombre }}</p>
+        <p>Telefono: {{ c.telefono }}</p>
+        <p>Zona: {{ c.zona }}</p>
+        <p>Disponibilidad: {{ c.disponibilidad }}</p>
+        <a href="./contactarP/{{c.nombre}}/{{c.telefono}}" class="btn btn-success">Contactar</a>
+        <p>-----------------</p>
+    {% endfor %}
+</div>
+
+{% endblock %}
