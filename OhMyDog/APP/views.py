@@ -119,3 +119,21 @@ def turnos(request):
         'form': form,
     }
     return render(request, 'paginas/turnos.html', context)
+
+
+def publicarAdopcion(request):
+    if request.method == 'POST':
+        form = perroAdopcion_form(request.POST)
+        if form.is_valid():
+            
+            form.save() 
+            messages.add_message(request, messages.SUCCESS, 'el perro esta en estado pendiente', extra_tags="tag1")
+
+            return redirect("index")
+    else:
+        form = perroAdopcion_form()
+    
+    context = {
+        'form': form,
+    }
+    return render(request, 'paginas/publicarAdopcion.html', context)

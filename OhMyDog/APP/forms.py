@@ -69,7 +69,7 @@ class Turnos_form(forms.ModelForm):
             raise ValidationError("Edad invalida")
         return data
     
-"""class perroAdopcion_form(forms.ModelForm):
+class perroAdopcion_form(forms.ModelForm):
     class Meta:
         model= PerroAdopcion
         fields=['nombre', 'peso', 'raza', 'descripcion', 'zona', 'castrado']
@@ -79,4 +79,3 @@ class Turnos_form(forms.ModelForm):
     raza= forms.CharField(max_length=20, required=True, label='raza')
     descripcion= forms.CharField(max_length=30, required=True, label='description')
     castrado= forms.CharField(max_length=2,required=True, label='castrado')
-   """
