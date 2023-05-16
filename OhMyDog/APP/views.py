@@ -100,6 +100,10 @@ def listarPaseadores(request):
     context = Paseador.objects.all()
     return render(request, 'paginas/listaPaseadores.html', {'context': context})
 
+def ListarAdopciones(request): 
+    context = PerroAdopcion.objects.all()
+    return render(request, 'paginas/ListarAdopciones.html', {'context': context})
+
 def contactarC(request, nombre, telefono):
     cuida = ContactoCuidador(
         cuidador =  nombre,
@@ -196,3 +200,4 @@ def publicarAdopcion(request):
         'form': form,
     }
     return render(request, 'paginas/publicarAdopcion.html', context)
+

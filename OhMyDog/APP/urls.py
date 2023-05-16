@@ -22,6 +22,7 @@ urlpatterns = [
     path('registrarCliente',views.registrarCliente,name='registrarCliente'),
     path('LogIn',views.LogIn,name='LogIn'),
     path('LogOut',views.LogOut,name='LogOut'),
+    path('ListarAdopciones',views.ListarAdopciones,name='ListarAdopciones'),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
