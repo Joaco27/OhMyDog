@@ -21,6 +21,8 @@ urlpatterns = [
     path('publicarAdopcion',views.publicarAdopcion,name='publicarAdopcion'),
     path('registrarCliente',views.registrarCliente,name='registrarCliente'),
     path('LogIn',views.LogIn,name='LogIn'),
+    path('LogOut',views.LogOut,name='LogOut'),
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

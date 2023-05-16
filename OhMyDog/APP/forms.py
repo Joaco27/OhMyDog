@@ -132,10 +132,10 @@ class LogIn_form(forms.Form):
         return data
     
     def clean_contra(self):
+        u = self.clean_usuario()
         data = self.cleaned_data["contra"]
-        ok = Cliente.objects.filter(usuario=self.clean_usuario)
-        for c in ok:
-            if c.contra!=data:
-                raise ValidationError('Contraseña Incorrecta')
+        ok = Cliente.objects.get(usuario=u)
+        if ok.contra!=data:
+            raise ValidationError('Contraseña Incorrecta')
         return data
     
