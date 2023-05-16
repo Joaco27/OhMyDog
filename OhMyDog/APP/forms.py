@@ -80,3 +80,62 @@ class perroAdopcion_form(forms.ModelForm):
     raza= forms.CharField(max_length=20, required=True, label='raza')
     descripcion= forms.CharField(max_length=30, required=True, label='description')
     castrado= forms.CharField(max_length=2,required=True, label='castrado')
+    
+class Cliente_form(forms.ModelForm):
+    class Meta:
+        model = Cliente
+        fields = ['nombreC','usuario','contra','mail','dni','telefono']
+    nombreC = forms.CharField(max_length=40, required=True, label='Nombre Completo')
+    usuario = forms.CharField(max_length=20, required=True, label='Nombre de Usuario')
+    contra = forms.CharField(max_length=20, required=True, label='Contraseña')
+    dni = forms.IntegerField(required=True, label='Dni')
+    mail = forms.EmailField(max_length=30, required=True, label='Mail')
+    telefono = forms.IntegerField(required=True, label='Telefono')
+    
+    def clean_usuario(self):
+        data = self.cleaned_data["usuario"]
+        ok = Cliente.objects.filter(usuario=data).exists()
+        if ok==True:
+            raise ValidationError('Usuario Ya Registrado')
+        return data
+    
+    def clean_telefono(self):
+        data = self.cleaned_data["telefono"]
+        ok = Cliente.objects.filter(telefono=data).exists()
+        if ok==True:
+            raise ValidationError('Telefono Ya Registrado')
+        return data
+    
+    def clean_mail(self):
+        data = self.cleaned_data["mail"]
+        ok = Cliente.objects.filter(mail=data).exists()
+        if ok==True:
+            raise ValidationError('Mail Ya Registrado')
+        return data
+    
+    def clean_dni(self):
+        data = self.cleaned_data["dni"]
+        ok = Cliente.objects.filter(dni=data).exists()
+        if ok==True:
+            raise ValidationError('DNI Ya Registrado')
+        return data
+    
+class LogIn_form(forms.Form):
+    usuario = forms.CharField(max_length=30, required=True, label='Nombre de Usuario')
+    contra = forms.CharField(max_length=30, required=True, label='Contraseña')
+    
+    def clean_usuario(self):
+        data = self.cleaned_data["usuario"]
+        ok = Cliente.objects.filter(usuario=data).exists()
+        if ok==False:
+            raise ValidationError('Nombre de Usuario Incorrecto')
+        return data
+    
+    def clean_contra(self):
+        data = self.cleaned_data["contra"]
+        ok = Cliente.objects.filter(usuario=self.clean_usuario)
+        for c in ok:
+            if c.contra!=data:
+                raise ValidationError('Contraseña Incorrecta')
+        return data
+    

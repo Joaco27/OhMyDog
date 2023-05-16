@@ -19,6 +19,8 @@ urlpatterns = [
     path('publicarC',views.publicarC,name='publicarC'),
     path('turnos',views.turnos,name='turnos'),
     path('publicarAdopcion',views.publicarAdopcion,name='publicarAdopcion'),
+    path('registrarCliente',views.registrarCliente,name='registrarCliente'),
+    path('LogIn',views.LogIn,name='LogIn'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

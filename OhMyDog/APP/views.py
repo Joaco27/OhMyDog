@@ -7,8 +7,55 @@ from django.contrib import messages
 #Declarar funciones para hacer cuando se ingresan direcciones
 
 # Create your views here.
+usuario = {
+    "nombre": "",
+    "contra": "",
+    "esCliente": False,
+    "esVeterinario": True,
+}
+
 def index(request):
-    return render(request, 'paginas/index.html')
+    context ={
+        'usuario':usuario
+    }
+    return render(request, 'paginas/index.html', context)
+
+def registrarCliente(request):
+    if request.method == 'POST':
+        form = Cliente_form(request.POST) 
+        if form.is_valid(): 
+            
+            form.save()
+            messages.add_message(request, messages.SUCCESS, 'Cliente registrado con exito', extra_tags="tag1")
+
+            return redirect("index")
+    else:
+        form = Cliente_form()
+        
+    context = {
+        'form': form,
+    }
+    return render(request, 'paginas/registrarCliente.html', context)
+
+def LogIn(request):
+    if request.method == 'POST':
+        form = LogIn_form(request.POST) 
+        if form.is_valid(): 
+            usuario["nombre"] = form.cleaned_data["usuario"]
+            usuario["contra"] = form.cleaned_data["contra"]
+            usuario['esCliente'] = True
+            if usuario['nombre'] == "Veterinario":
+                usuario['esVeterinario'] = True
+            messages.add_message(request, messages.SUCCESS, 'Iniciaste Sesion', extra_tags="tag1")
+
+            return redirect("index")
+    else:
+        form = LogIn_form()
+        
+    context = {
+        'form': form,
+    }
+    return render(request, 'paginas/LogIn.html', context)
 
 def nosotros(request):
     return render(request, 'paginas/nosotros.html')
@@ -68,7 +115,10 @@ def contactarP(request, nombre, telefono):
     return redirect("index")
 
 def publicar(request):
-    return render(request,'paginas/publicar.html')
+    context ={
+        'usuario':usuario
+    }
+    return render(request,'paginas/publicar.html', context)
 
 def publicarC(request):
     if request.method == 'POST':
@@ -76,7 +126,7 @@ def publicarC(request):
         if form.is_valid(): #Si pasa todos los clean
             
             form.save()  #Subir a la BD
-            messages.add_message(request, messages.SUCCESS, 'Consulta enviada con exito', extra_tags="tag1")
+            messages.add_message(request, messages.SUCCESS, 'Cuidador publicado con exito', extra_tags="tag1")
 
             return redirect("index")
     else:
@@ -93,7 +143,7 @@ def publicarP(request):
         if form.is_valid():
             
             form.save() 
-            messages.add_message(request, messages.SUCCESS, 'Consulta enviada con exito', extra_tags="tag1")
+            messages.add_message(request, messages.SUCCESS, 'Paseador publicado con exito', extra_tags="tag1")
 
             return redirect("index")
     else:

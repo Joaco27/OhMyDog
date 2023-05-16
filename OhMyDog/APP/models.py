@@ -4,7 +4,6 @@ from django.db import models
 
 # Create your models here.
 class Perro(models.Model):
-    id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=15)
     raza = models.CharField(max_length=30)
     edad = models.IntegerField()
@@ -13,16 +12,15 @@ class Perro(models.Model):
         return f'Perro: {self.nombre} con {self.edad} años'
     
 class Cliente(models.Model):
-    id = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=15)
+    nombreC = models.CharField(max_length=15)
     usuario = models.CharField(max_length=30)
-    mail = models.CharField(max_length=30)
+    contra = models.CharField(max_length=30, null=True)
+    mail = models.EmailField(max_length=30)
     dni = models.IntegerField()
     telefono = models.IntegerField()
     
 
 class Paseador(models.Model):
-    id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50)
     telefono = models.IntegerField()
     zona = models.CharField(max_length=20)
@@ -40,7 +38,6 @@ class ContactoPaseador(models.Model):
     
     
 class Cuidador(models.Model):
-    id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50)
     telefono = models.IntegerField()
     zona = models.CharField(max_length=20)

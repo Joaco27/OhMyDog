@@ -6,10 +6,12 @@
 
 {% block contenido %} 
 <div class="d-flex justify-content-center flex-column align-items-center">
+    {% if usuario.esVeterinario %}
     <a href="./publicarC" class="btn btn-success">Agregar Cuidador</a>
     <br><br>
     <a href="./publicarP" class="btn btn-success">Agregar Paseador</a>
     <br><br>
+    {% endif %}
     <a href="./publicarAdopcion" class="btn btn-success">Agregar Adopcion</a>
     <br><br>
 </div>
