@@ -15,7 +15,7 @@
 </div>
 <br>
 <div class="d-flex justify-content-center">
-    <form action= "{% url 'publicarC' %}" method="POST">
+    <form action= "{% url 'publicarAdopcion' %}" method="POST">
         {% csrf_token %}
         {% if form.errors %}
                 <div class="alert alert-danger">

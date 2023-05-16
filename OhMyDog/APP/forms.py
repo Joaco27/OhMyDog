@@ -63,7 +63,8 @@ class Turnos_form(forms.ModelForm):
     raza = forms.CharField(max_length=15, required=True, label='Raza')
     edad = forms.IntegerField(required=True, label='Edad')
     motivo = forms.Select()
-    fecha = forms.DateField(required = True, label='datepicker')
+    fecha = forms.DateField(required = True, label='Seleccione la fecha de su turno',
+                            widget=forms.DateInput(attrs={"type": "date"}))
     # Clean son validaciones 
     def clean_edad(self):
         data = self.cleaned_data["edad"]
