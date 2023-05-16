@@ -93,11 +93,15 @@ def agregarAlgo(request):
     return render(request, 'paginas/formulario.html', context)
 
 def listarCuidadores(request):
-    context = Cuidador.objects.all()
-    return render(request, 'paginas/listaCuidadores.html', {'context': context})
+    cuid = Cuidador.objects.all()
+    context = {'context': cuid,
+               'usuario': usuario}
+    return render(request, 'paginas/listaCuidadores.html', context)
     
 def listarPaseadores(request): 
-    context = Paseador.objects.all()
+    pasea = Paseador.objects.all()
+    context = {'context': pasea,
+               'usuario': usuario}
     return render(request, 'paginas/listaPaseadores.html', {'context': context})
 
 def ListarAdopciones(request): 
@@ -149,6 +153,11 @@ def publicarC(request):
     }
     return render(request, 'paginas/agregarCuidador.html', context)
 
+def borrarC(request, telefono):
+    cuidador = Cuidador.objects.get(telefono=telefono)
+    cuidador.delete()
+    return redirect("cuidadores")
+
 def publicarP(request):
     if request.method == 'POST':
         form = Paseador_form(request.POST)
@@ -165,6 +174,11 @@ def publicarP(request):
         'form': form,
     }
     return render(request, 'paginas/agregarPaseador.html', context)
+
+def borrarP(request, telefono):
+    paseador = Paseador.objects.get(telefono=telefono)
+    paseador.delete()
+    return redirect("paseadroes")
 
 def turnos(request):
     if request.method == 'POST':

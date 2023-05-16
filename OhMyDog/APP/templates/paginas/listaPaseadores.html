@@ -12,6 +12,9 @@
         <p>Zona: {{ c.zona }}</p>
         <p>Disponibilidad: {{ c.disponibilidad }}</p>
         <a href="./contactarP/{{c.nombre}}/{{c.telefono}}" class="btn btn-success">Contactar</a>
+        {% if usuario.esVeterinario %}
+            <a href="./borrarP/{{c.telefono}}" class="btn btn-danger">Borrar</a>
+        {% endif %}
         <p>-----------------</p>
     {% endfor %}
 </div>

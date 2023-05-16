@@ -120,7 +120,7 @@ class LogIn_form(forms.Form):
     contra = forms.CharField(max_length=30, required=True, label='Contraseña')
     
     def clean_usuario(self):
-        data = self.cleaned_data['usuario']
+        data = self.cleaned_data["usuario"]
         ok = Cliente.objects.filter(usuario=data).exists()
         if ok==False:
             raise ValidationError('Nombre de Usuario Incorrecto')
