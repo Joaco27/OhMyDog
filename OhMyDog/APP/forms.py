@@ -51,6 +51,7 @@ class Cuidador_form(forms.ModelForm):
         if len(str(data)) < 7:
             raise ValidationError("Telefono invalido")
         return data
+    
 class Turnos_form(forms.ModelForm):
     # Meta sirve para enlazar con la BD
     class Meta:

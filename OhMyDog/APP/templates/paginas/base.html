@@ -11,6 +11,11 @@
     <title>{% block titulo %} {% endblock %}</title>
 </head>
 <body>
+    <style>
+        .logo{
+            mix-blend-mode: color-burn;
+        }
+    </style>
     <div>
         {% if messages %}
                 {% for message in messages %}
@@ -21,7 +26,7 @@
     <nav class="navbar bg-primary">
         <div>
             <a href="./" class="navbar-brand container d-flex align-items-center justify-content-center">
-                <img class="" src="static/imagenes/Logo2.png" height="50" width="80" class="d-inline-block align-top" alt="LOGO">
+                <img class="logo" src="static/imagenes/Logo2.png" height="50" width="80" class="d-inline-block align-top" alt="LOGO">
                 <!-- <p class="text-white"><strong>LOGO</strong></p> -->
             </a>
         </div>

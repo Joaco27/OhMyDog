@@ -103,6 +103,7 @@ def publicarP(request):
         'form': form,
     }
     return render(request, 'paginas/agregarPaseador.html', context)
+
 def turnos(request):
     if request.method == 'POST':
         form = Turnos_form(request.POST)
@@ -127,7 +128,7 @@ def publicarAdopcion(request):
         if form.is_valid():
             
             form.save() 
-            messages.add_message(request, messages.SUCCESS, 'el perro esta en estado pendiente', extra_tags="tag1")
+            messages.add_message(request, messages.SUCCESS, 'Se ha publicado perro en adopcion', extra_tags="tag1")
 
             return redirect("index")
     else:
