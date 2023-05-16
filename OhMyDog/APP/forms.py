@@ -84,7 +84,7 @@ class perroAdopcion_form(forms.ModelForm):
 class Cliente_form(forms.ModelForm):
     class Meta:
         model = Cliente
-        fields = ['nombreC','usuario','contra','mail','dni','telefono']
+        fields = ['nombreC','usuario','contra','mail','telefono']
     nombreC = forms.CharField(max_length=40, required=True, label='Nombre Completo')
     usuario = forms.CharField(max_length=20, required=True, label='Nombre de Usuario')
     contra = forms.CharField(max_length=20, required=True, label='Contraseña')
