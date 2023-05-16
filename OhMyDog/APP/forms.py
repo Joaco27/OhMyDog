@@ -88,7 +88,6 @@ class Cliente_form(forms.ModelForm):
     nombreC = forms.CharField(max_length=40, required=True, label='Nombre Completo')
     usuario = forms.CharField(max_length=20, required=True, label='Nombre de Usuario')
     contra = forms.CharField(max_length=20, required=True, label='Contraseña')
-    dni = forms.IntegerField(required=True, label='Dni')
     mail = forms.EmailField(max_length=30, required=True, label='Mail')
     telefono = forms.IntegerField(required=True, label='Telefono')
     
@@ -112,13 +111,7 @@ class Cliente_form(forms.ModelForm):
         if ok==True:
             raise ValidationError('Mail Ya Registrado')
         return data
-    
-    def clean_dni(self):
-        data = self.cleaned_data["dni"]
-        ok = Cliente.objects.filter(dni=data).exists()
-        if ok==True:
-            raise ValidationError('DNI Ya Registrado')
-        return data
+
     
 class LogIn_form(forms.Form):
     usuario = forms.CharField(max_length=30, required=True, label='Nombre de Usuario')
