@@ -11,7 +11,7 @@ usuario = {
     "nombre": "",
     "contra": "",
     "esCliente": False,
-    "esVeterinario": True,
+    "esVeterinario": False,
 }
 
 def index(request):
@@ -56,6 +56,14 @@ def LogIn(request):
         'form': form,
     }
     return render(request, 'paginas/LogIn.html', context)
+
+def LogOut(request):
+    usuario["nombre"] = ""
+    usuario["contra"] = ""
+    usuario['esCliente'] = False
+    usuario['esVeterinario'] = False
+    
+    return redirect("index")
 
 def nosotros(request):
     return render(request, 'paginas/nosotros.html')

@@ -16,7 +16,6 @@ class Cliente(models.Model):
     usuario = models.CharField(max_length=30)
     contra = models.CharField(max_length=30, null=True)
     mail = models.EmailField(max_length=30)
-    dni = models.IntegerField()
     telefono = models.IntegerField()
     
 
