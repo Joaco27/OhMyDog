@@ -125,6 +125,7 @@ class LogIn_form(forms.Form):
         return data
     
     def clean_contra(self):
+        #hola
         u = self.clean_usuario()
         data = self.cleaned_data["contra"]
         ok = Cliente.objects.get(usuario=u)
