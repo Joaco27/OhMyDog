@@ -33,8 +33,11 @@ class Paseador_form(forms.ModelForm):
     
     def clean_telefono(self):
         data=self.cleaned_data["telefono"]
-        if len(str(data)) < 7:
+        if len(str(data)) < 7 or len(str(data)) > 11:
             raise ValidationError("Telefono invalido")
+        ok = Paseador.objects.filter(telefono=data).first()
+        if ok is not None:
+            raise ValidationError("Telefono ya registrado")
         return data
     
 class Cuidador_form(forms.ModelForm):
@@ -48,8 +51,11 @@ class Cuidador_form(forms.ModelForm):
     
     def clean_telefono(self):
         data=self.cleaned_data["telefono"]
-        if len(str(data)) < 7:
+        if len(str(data)) < 7 or len(str(data)) > 11:
             raise ValidationError("Telefono invalido")
+        ok = Cuidador.objects.filter(telefono=data).first()
+        if ok is not None:
+            raise ValidationError("Telefono ya registrado")
         return data
     
 class Turnos_form(forms.ModelForm):
@@ -89,7 +95,7 @@ class Cliente_form(forms.ModelForm):
         fields = ['nombreC','usuario','contra','mail','telefono']
     nombreC = forms.CharField(max_length=40, required=True, label='Nombre Completo')
     usuario = forms.CharField(max_length=20, required=True, label='Nombre de Usuario')
-    contra = forms.CharField(max_length=20, required=True, label='Contraseña')
+    contra = forms.CharField(max_length=20, required=True, label='Contraseña',widget=forms.PasswordInput)
     mail = forms.EmailField(max_length=30, required=True, label='Mail')
     telefono = forms.IntegerField(required=True, label='Telefono')
     
@@ -117,21 +123,21 @@ class Cliente_form(forms.ModelForm):
     
 class LogIn_form(forms.Form):
     usuario = forms.CharField(max_length=30, required=True, label='Nombre de Usuario')
-    contra = forms.CharField(max_length=30, required=True, label='Contraseña')
+    contra = forms.CharField(max_length=30, required=True, label='Contraseña',widget=forms.PasswordInput)
     
     def clean_usuario(self):
-        data = self.cleaned_data["usuario"]
-        ok = Cliente.objects.filter(usuario=data).exists()
-        if ok==False:
-            raise ValidationError('Nombre de Usuario Incorrecto')
-        return data
+        usuario = self.cleaned_data['usuario']
+        user = Cliente.objects.filter(usuario=usuario).first()
+        if user is None:
+            raise ValidationError('Nombre de usuario incorrecto')
+        return usuario
     
     def clean_contra(self):
-        #hola
-        u = self.clean_usuario()
-        data = self.cleaned_data["contra"]
-        ok = Cliente.objects.get(usuario=u)
-        if ok.contra!=data:
-            raise ValidationError('Contraseña Incorrecta')
-        return data
+        password = self.cleaned_data['contra']
+        username = self.cleaned_data.get('usuario')
+        if username:
+            user = Cliente.objects.filter(usuario=username).first()
+            if user is not None and not user.contra==password:
+                raise forms.ValidationError('Contraseña incorrecta')
+        return password
     

@@ -15,6 +15,7 @@ usuario = {
 }
 
 def index(request):
+
     context ={
         'usuario':usuario
     }
@@ -63,6 +64,8 @@ def LogOut(request):
     usuario['esCliente'] = False
     usuario['esVeterinario'] = False
     
+    messages.add_message(request, messages.SUCCESS, 'Cerraste Sesion', extra_tags="tag1")
+    
     return redirect("index")
 
 def nosotros(request):
@@ -102,11 +105,13 @@ def listarPaseadores(request):
     pasea = Paseador.objects.all()
     context = {'context': pasea,
                'usuario': usuario}
-    return render(request, 'paginas/listaPaseadores.html', {'context': context})
+    return render(request, 'paginas/listaPaseadores.html', context)
 
 def ListarAdopciones(request): 
-    context = PerroAdopcion.objects.all()
-    return render(request, 'paginas/ListarAdopciones.html', {'context': context})
+    adop = PerroAdopcion.objects.all()
+    context = {'context': adop,
+               'usuario': usuario}
+    return render(request, 'paginas/ListarAdopciones.html', context)
 
 def contactarC(request, nombre, telefono):
     cuida = ContactoCuidador(
@@ -150,12 +155,14 @@ def publicarC(request):
         
     context = {
         'form': form,
+        'usuario': usuario,
     }
     return render(request, 'paginas/agregarCuidador.html', context)
 
 def borrarC(request, telefono):
     cuidador = Cuidador.objects.get(telefono=telefono)
     cuidador.delete()
+    messages.add_message(request, messages.SUCCESS, 'Cuidador Eliminado', extra_tags="tag1")
     return redirect("cuidadores")
 
 def publicarP(request):
@@ -172,13 +179,16 @@ def publicarP(request):
         
     context = {
         'form': form,
+        'usuario': usuario,
     }
     return render(request, 'paginas/agregarPaseador.html', context)
 
 def borrarP(request, telefono):
     paseador = Paseador.objects.get(telefono=telefono)
     paseador.delete()
-    return redirect("paseadroes")
+    messages.add_message(request, messages.SUCCESS, 'Paseador Eliminado', extra_tags="tag1")
+    
+    return redirect("paseadores")
 
 def turnos(request):
     if request.method == 'POST':
@@ -194,6 +204,7 @@ def turnos(request):
     
     context = {
         'form': form,
+        'usuario' : usuario,
     }
     return render(request, 'paginas/turnos.html', context)
 
@@ -212,6 +223,7 @@ def publicarAdopcion(request):
     
     context = {
         'form': form,
+        'usuario' : usuario,
     }
     return render(request, 'paginas/publicarAdopcion.html', context)
 
