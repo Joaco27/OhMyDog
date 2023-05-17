@@ -113,6 +113,12 @@ def ListarAdopciones(request):
                'usuario': usuario}
     return render(request, 'paginas/ListarAdopciones.html', context)
 
+def misPerros(request): 
+    adop = Perro.objects.all()
+    context = {'context': adop,
+               'usuario': usuario}
+    return render(request, 'paginas/misPerros.html', context)
+
 def contactarC(request, nombre, telefono):
     cuida = ContactoCuidador(
         cuidador =  nombre,

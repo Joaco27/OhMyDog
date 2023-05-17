@@ -1,0 +1,22 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+{% block titulo %} Mis Perros {% endblock %}
+
+{% block contenido %} 
+
+<div class="d-flex justify-content-center flex-column align-items-center">
+    {% if context|length == 0 %}
+        <p>No hay perros cargados en el sistema</p>
+    {% else %}
+    {% for c in context %}
+        <p>Nombre: {{ c.nombre }}</p>
+        <p>Raza: {{ c.raza }}</p>
+        <p>Edad: {{ c.edad }}</p>
+        <br>
+        <p>----------------</p>
+    {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock %}
