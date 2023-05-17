@@ -36,12 +36,15 @@
 
             <a href="./turnos" class="nav-item nav-link active text-white">Solicitar Turno</a>
 
+            
+
             {% if usuario.esVeterinario %}
                 <a href="./registrarCliente" class="nav-item nav-link active text-white">Registrar Cliente</a>
             {% endif %}
 
             {% if usuario.esCliente or usuario.esVeterinario %} 
                 <a href="./publicar" class="nav-item nav-link active text-white">Publicar</a>
+                <a href="./misPerros" class="nav-item nav-link active text-white">Mis Perros</a>
                 <a href="./LogOut" class="nav-item nav-link active text-white">Cerrar Sesion</a>
             {% else %}
                 <a href="./LogIn" class="nav-item nav-link active text-white">Iniciar Sesion</a>
