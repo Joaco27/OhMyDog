@@ -16,6 +16,8 @@
         <p>Disponibilidad: {{ c.disponibilidad }}</p>
         {% if usuario.esCliente %}
             <a href="./contactarC/{{c.nombre}}/{{c.telefono}}" class="btn btn-success">Contactar</a>
+        {% else %}
+        <a href="./contactarCVisit/{{c.nombre}}/{{c.telefono}}" class="btn btn-success">Contactar</a>
         {% endif %}
        
         <br>

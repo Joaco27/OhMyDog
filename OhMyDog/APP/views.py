@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .models import *
 from .forms import *
 from django.contrib import messages
+from django.urls import reverse
 
 #Declarar funciones para hacer cuando se ingresan direcciones
 
@@ -20,6 +21,10 @@ def index(request):
         'usuario':usuario
     }
     return render(request, 'paginas/index.html', context)
+
+def redireccion(request):
+    url_raiz = reverse('/', args=[])
+    return redirect(url_raiz)
 
 def registrarCliente(request):
     if request.method == 'POST':
@@ -114,26 +119,79 @@ def ListarAdopciones(request):
     return render(request, 'paginas/ListarAdopciones.html', context)
 
 def contactarC(request, nombre, telefono):
+    cli =  Cliente.objects.get(usuario=usuario["nombre"])
     cuida = ContactoCuidador(
         cuidador =  nombre,
         telCuidador = telefono,
-        usuario = 'Pedro',
-        telUsuario = 1234567,
+        usuario = cli.nombreC,
+        telUsuario = cli.telefono,
     )
     cuida.save()
     messages.add_message(request, messages.SUCCESS, 'Pronto se pondran en contacto con usted', extra_tags="tag1")
     return redirect("index")
 
-def contactarP(request, nombre, telefono): 
+def contactarCVisit(request, nombre, telefono):
+    if request.method == 'POST':
+        form = contacto_form(request.POST) 
+        if form.is_valid():
+            contactoNuevo = ContactoCuidador(
+                cuidador = nombre,
+                telCuidador = telefono,
+                usuario = form.cleaned_data.get('usuario'),
+                telUsuario = form.cleaned_data.get('telefono')
+            )
+            contactoNuevo.save()
+            messages.add_message(request, messages.SUCCESS, 'Pronto se pondran en contacto con usted', extra_tags="tag1")
+
+            return redirect("index")
+    else:
+        form = contacto_form()
+    #url_params = reverse('contactarCVisit',args=[nombre,telefono])
+    context = {
+        'form': form,
+        'usuario':usuario,
+        'nombre' : nombre,
+        'telefono' : telefono,    
+        }
+    return render(request, 'paginas/contactarCVisitante.html', context)
+
+def contactarP(request, nombre, telefono):
+    cli =  Cliente.objects.get(usuario=usuario["nombre"])
     pasea = ContactoPaseador(
         paseador =  nombre,
         telPaseador = telefono,
-        usuario = 'Pedro',
-        telUsuario = 1234567,
+        usuario = cli.nombreC,
+        telUsuario = cli.telefono,
     )
     pasea.save()
     messages.add_message(request, messages.SUCCESS, 'Pronto se pondran en contacto con usted', extra_tags="tag1")
     return redirect("index")
+
+def contactarPVisit(request, nombre, telefono):
+    if request.method == 'POST':
+        form = contacto_form(request.POST) 
+        if form.is_valid():
+            contactoNuevo = ContactoPaseador(
+                paseador = nombre,
+                telPaseador = telefono,
+                usuario = form.cleaned_data.get('usuario'),
+                telUsuario = form.cleaned_data.get('telefono')
+            )
+            contactoNuevo.save()
+            messages.add_message(request, messages.SUCCESS, 'Pronto se pondran en contacto con usted', extra_tags="tag1")
+
+            return redirect("index")
+    else:
+        form = contacto_form()
+        
+    #url_params = reverse('contactarPVisit',args=[nombre,telefono])
+    context = {
+        'form': form,
+        'usuario':usuario,
+        'nombre' : nombre,
+        'telefono' : telefono,
+    }
+    return render(request, 'paginas/contactarPVisitante.html', context)
 
 def publicar(request):
     context ={

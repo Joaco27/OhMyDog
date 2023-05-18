@@ -1,0 +1,33 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+
+{% block titulo %} Contactar {% endblock %}
+
+{% block contenido %} 
+<style>
+    .errorlist{
+        display: none;
+    }
+</style>
+<div class="d-flex justify-content-center">
+    <h1>Ingrese los datos para poder ponernos en contacto con usted</h1>
+</div>
+<br>
+<div class="d-flex justify-content-center">
+    <form action= "{% url 'contactarCVisit' nombre telefono %}" method="POST">
+        {% csrf_token %}
+        {% if form.errors %}
+                <div class="alert alert-danger">
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            {{ error }} <br>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {{ form.as_p }}
+        <input type="submit" value="Enviar" class="btn btn-success">
+    </form>
+</div>
+{% endblock %}

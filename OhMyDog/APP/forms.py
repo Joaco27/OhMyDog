@@ -52,7 +52,7 @@ class Cuidador_form(forms.ModelForm):
     def clean_telefono(self):
         data=self.cleaned_data["telefono"]
         if len(str(data)) < 7 or len(str(data)) > 11:
-            raise ValidationError("Telefono invalido")
+            raise ValidationError("El telefono debe tener entre 7 y 11 caracters")
         ok = Cuidador.objects.filter(telefono=data).first()
         if ok is not None:
             raise ValidationError("Telefono ya registrado")
@@ -140,4 +140,14 @@ class LogIn_form(forms.Form):
             if user is not None and not user.contra==password:
                 raise forms.ValidationError('Contraseña incorrecta')
         return password
+    
+class contacto_form(forms.Form):
+    usuario = forms.CharField(max_length=40, required=True, label='Nombre')
+    telefono = forms.IntegerField(required=True)
+            
+    def clean_telefono(self):
+        data=self.cleaned_data["telefono"]
+        if len(str(data)) < 7 or len(str(data)) > 11:
+            raise ValidationError("El telefono debe tener entre 7 y 11 caracters")
+        return data
     
