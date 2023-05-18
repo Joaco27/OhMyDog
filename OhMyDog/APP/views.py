@@ -136,4 +136,4 @@ def publicarAdopcion(request):
     context = {
         'form': form,
     }
-    return render(request, 'paginas/publicarAdopcion.html', context)
+    return render(request, 'paginas/publicarAdopciones.html', context)

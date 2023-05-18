@@ -75,6 +75,7 @@ class perroAdopcion_form(forms.ModelForm):
         fields=['nombre', 'peso', 'raza', 'descripcion', 'zona', 'castrado']
     nombre = forms.CharField(max_length=50, required=True, label='nombre')
     peso = forms.IntegerField(required=True, label='peso')
+    edad = forms.IntegerField(required=True, label='edad')
     zona = forms.CharField(max_length=50, required=True, label='zona')
     raza= forms.CharField(max_length=20, required=True, label='raza')
     descripcion= forms.CharField(max_length=30, required=True, label='description')
