@@ -11,7 +11,7 @@ usuario = {
     "nombre": "",
     "contra": "",
     "esCliente": False,
-    "esVeterinario": False,
+    "esVeterinario": True,
 }
 
 def index(request):
