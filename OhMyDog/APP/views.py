@@ -4,13 +4,13 @@ from .models import *
 from .forms import *
 from django.contrib import messages
 from django.urls import reverse
+from itertools import chain
 
 #Declarar funciones para hacer cuando se ingresan direcciones
 
 # Create your views here.
 usuario = {
     "nombre": "",
-    "contra": "",
     "esCliente": False,
     "esVeterinario": False,
 }
@@ -36,6 +36,7 @@ def registrarCliente(request):
         
     context = {
         'form': form,
+        'usuario':usuario,
     }
     return render(request, 'paginas/registrarCliente.html', context)
 
@@ -44,7 +45,6 @@ def LogIn(request):
         form = LogIn_form(request.POST) 
         if form.is_valid(): 
             usuario["nombre"] = form.cleaned_data["usuario"]
-            usuario["contra"] = form.cleaned_data["contra"]
             usuario['esCliente'] = True
             if usuario['nombre'] == "Veterinario":
                 usuario['esVeterinario'] = True
@@ -57,6 +57,7 @@ def LogIn(request):
         
     context = {
         'form': form,
+        'usurio':usuario,
     }
     return render(request, 'paginas/LogIn.html', context)
 
@@ -300,4 +301,33 @@ def borrarCliente(request, usuario):
     messages.add_message(request, messages.SUCCESS, 'Cliente Eliminado', extra_tags="tag1")
     
     return redirect("listarClientes")
+
+def notificaciones(request):
+    context ={
+        'usuario':usuario
+    }
+    return render(request,'paginas/notificaciones.html', context)
     
+def notiContacto(request):
+    datosC = ContactoCuidador.objects.all()
+    datosP = ContactoPaseador.objects.all()
+    #d = chain(datosC,datosP)
+    
+    context ={
+        'usuario':usuario,
+        'paseadores':datosP,
+        'cuiddores':datosC,
+    }
+    return render(request,'paginas/notiContactos.html', context)
+
+def terminarContactoC(request, nombreU, nombreC):
+    
+    ContactoCuidador.objects.filter(usuario=nombreU,cuidador=nombreC).delete()
+
+    return redirect("notiContacto")
+
+def terminarContactoP(request, nombreU, nombreP):
+    
+    ContactoPaseador.objects.filter(usuario=nombreU,paseador=nombreP).delete()
+
+    return redirect("notiContacto")

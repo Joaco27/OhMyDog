@@ -1,0 +1,16 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+
+{% block titulo %} Notificaciones {% endblock %}
+
+{% block contenido %} 
+<div class="d-flex justify-content-center flex-column align-items-center">
+    {% if usuario.esVeterinario %}
+        <a href="./notiContacto" class="btn btn-success">Contacto a Paseador/Cuidador</a>
+        <p>----------------</p>
+    {% else %}
+    {% endif %}
+</div>
+
+{% endblock %}
