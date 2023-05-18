@@ -7,7 +7,7 @@ class Perro(models.Model):
     nombre = models.CharField(max_length=15)
     raza = models.CharField(max_length=30)
     edad = models.IntegerField()
-    
+    emailDueño = models.EmailField(max_length=30)
     def __str__(self):
         return f'Perro: {self.nombre} con {self.edad} años'
     
