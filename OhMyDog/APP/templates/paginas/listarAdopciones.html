@@ -1,0 +1,22 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+{% block titulo %} Listar Adopciones {% endblock %}
+
+{% block contenido %} 
+
+<div class="d-flex justify-content-center flex-column align-items-center">
+    {% for c in context %}
+        <p>Nombre: {{ c.nombre }}</p>
+        <p>Peso: {{ c.peso }}</p>
+        <p>Edad: {{ c.edad }}</p>
+        <p>Zona: {{ c.zona }}</p>
+        <p>Raza: {{ c.raza }}</p>
+        <p>Descripcion: {{ c.descripcion }}</p>
+        <p>Castrado: {{ c.castrado }}</p>
+        <a href="" class="btn btn-success">Contactar</a>
+        <p>-----------------</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

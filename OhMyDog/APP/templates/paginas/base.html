@@ -11,6 +11,11 @@
     <title>{% block titulo %} {% endblock %}</title>
 </head>
 <body>
+    <style>
+        .logo{
+            mix-blend-mode: color-burn;
+        }
+    </style>
     <div>
         {% if messages %}
                 {% for message in messages %}
@@ -21,26 +26,40 @@
     <nav class="navbar bg-primary">
         <div>
             <a href="./" class="navbar-brand container d-flex align-items-center justify-content-center">
-                <img class="" src="static/imagenes/Logo2.png" height="50" width="80" class="d-inline-block align-top" alt="LOGO">
+                <img class="logo" src="static/imagenes/Logo2.png" height="50" width="80" class="d-inline-block align-top" alt="LOGO">
                 <!-- <p class="text-white"><strong>LOGO</strong></p> -->
             </a>
         </div>
-            <a href="./publicar" class="nav-item nav-link active text-white">Publicar</a>
             <!-- <a href="./formulario" class="nav-item nav-link active text-white">Form</a>
             <a href="./listarAlgo" class="nav-item nav-link active text-white">Listar Algo</a> -->
-            <a href="./admin" class="nav-item nav-link active text-white">Soy Veterinario</a>
-            <a href="./turnos" class="nav-item nav-link active text-white">Solicitar Turno</a>
+            
+            {% if usuario.esVeterinario %}
+                <a href="./listarClientes" class="nav-item nav-link active text-white">Listar Clientes</a>
+                <a href="./registrarCliente" class="nav-item nav-link active text-white">Registrar Cliente</a>
+            {% endif %}
+
+            {% if usuario.esCliente %}
+                <a href="./turnos" class="nav-item nav-link active text-white">Solicitar Turno</a>
+            {% endif %}
+
+            {% if usuario.esCliente or usuario.esVeterinario %}
+                <a href="./publicar" class="nav-item nav-link active text-white">Publicar</a>
+                <a href="./misPerros" class="nav-item nav-link active text-white">Mis Perros</a>
+                <a href="./LogOut" class="nav-item nav-link active text-white">Cerrar Sesion</a>
+            {% else %}
+                <a href="./LogIn" class="nav-item nav-link active text-white">Iniciar Sesion</a>
+            {% endif %}
     </nav>
     <br>
     <br>
     {% block contenido %} {% endblock %}
     <br><br>
     <footer>
-        <div class="container-fluid bg-dark text-center p-3">
-            <p class="medium text-info">
+        <div class="container-fluid bg-primary text-center p-3" style="font-size: larger; color: rgb(23, 96, 179); text-align: center;">
+            <p class="medium text-info text-dark">
                 Contactanos 
             </p>
-            <p class="medium text-info">
+            <p class="medium text-info text-dark">
                 Telefono Fijo = 221-15-4530217 ----
                 Whatsapp = 221-4185179 ----
                 Gmail = ohmydog@gmail.com

@@ -1,0 +1,33 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+
+{% block titulo %} Iniciar Sesion {% endblock %}
+
+{% block contenido %} 
+<style>
+    .errorlist{
+        display: none;
+    }
+</style>
+<div class="d-flex justify-content-center">
+    <h1>Iniciar Sesion</h1>
+</div>
+<br>
+<div class="d-flex justify-content-center">
+    <form action= "{% url 'LogIn' %}" method="POST">
+        {% csrf_token %}
+        {% if form.errors %}
+                <div class="alert alert-danger">
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            {{ error }} <br>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {{ form.as_p }}
+        <input type="submit" value="Ingresar" class="btn btn-success">
+    </form>
+</div>
+{% endblock %}
