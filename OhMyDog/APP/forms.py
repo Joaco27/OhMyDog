@@ -9,17 +9,25 @@ class Perro_form(forms.ModelForm):
     # Meta sirve para enlazar con la BD
     class Meta:
         model = Perro
-        fields = ['nombre','raza', 'edad']
+        fields = ['nombre','raza', 'edad', 'emailDueño']
     # Creamos los campos del formulario
     nombre = forms.CharField(max_length=15, required=True, label='Nombre')
     raza = forms.CharField(max_length=15, required=True, label='Raza')
     edad = forms.IntegerField(required=True, label='Edad')
+    emailDueño = forms.EmailField(max_length=30, required=True, label='Email Dueño')
 
     # Clean son validaciones 
     def clean_edad(self):
         data = self.cleaned_data["edad"]
         if data < 1 or data > 20:
             raise ValidationError("Edad invalida")
+        return data
+    
+    def clean_mail(self):
+        data = self.cleaned_data.get('emailDueño')
+        ok = Cliente.objects.filter(mail=data).exists()
+        if not ok :
+            raise ValidationError('El email no pertenece a un dueño')
         return data
     
 class Paseador_form(forms.ModelForm):
@@ -84,6 +92,7 @@ class perroAdopcion_form(forms.ModelForm):
         fields=['nombre', 'peso', 'raza', 'descripcion', 'zona', 'castrado']
     nombre = forms.CharField(max_length=50, required=True, label='nombre')
     peso = forms.IntegerField(required=True, label='peso')
+    edad = forms.IntegerField(required=True, label='edad')
     zona = forms.CharField(max_length=50, required=True, label='zona')
     raza= forms.CharField(max_length=20, required=True, label='raza')
     descripcion= forms.CharField(max_length=30, required=True, label='description')

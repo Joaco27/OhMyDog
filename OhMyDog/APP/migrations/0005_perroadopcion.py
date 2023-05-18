@@ -17,6 +17,7 @@ class Migration(migrations.Migration):
                 ('usuario', models.CharField(max_length=30)),
                 ('nombre', models.CharField(max_length=30)),
                 ('peso', models.IntegerField()),
+                ('edad', models.IntegerField()),
                 ('raza', models.CharField(max_length=20)),
                 ('descripcion', models.CharField(max_length=30)),
                 ('zona', models.CharField(max_length=50)),

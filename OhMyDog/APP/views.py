@@ -12,11 +12,10 @@ from itertools import chain
 usuario = {
     "nombre": "",
     "esCliente": False,
-    "esVeterinario": False,
+    "esVeterinario": True,
 }
 
 def index(request):
-
     context ={
         'usuario':usuario
     }
@@ -39,6 +38,24 @@ def registrarCliente(request):
         'usuario':usuario,
     }
     return render(request, 'paginas/registrarCliente.html', context)
+
+def registrarPerro(request):
+    if request.method == 'POST':
+        form = Perro_form(request.POST) 
+        if form.is_valid(): 
+            
+            form.save()
+            messages.add_message(request, messages.SUCCESS, 'Perro registrado con exito', extra_tags="tag1")
+
+            return redirect("index")
+    else:
+        form = Perro_form()
+        
+    context = {
+        'form': form,
+        'usuario':usuario
+    }
+    return render(request, 'paginas/registrarPerro.html', context)
 
 def LogIn(request):
     if request.method == 'POST':
@@ -117,8 +134,11 @@ def ListarAdopciones(request):
     return render(request, 'paginas/ListarAdopciones.html', context)
 
 def misPerros(request): 
-    context = Perro.objects.all()
-    return render(request, 'paginas/misPerros.html', {'context': context})
+    usu = Cliente.objects.filter(usuario=usuario["nombre"]).first()
+    lista = Perro.objects.filter(emailDueño=usu.mail)
+    context = {'context': lista,
+               'usuario': usuario}
+    return render(request, 'paginas/misPerros.html', context)
 
 def contactarC(request, nombre, telefono):
     cli =  Cliente.objects.get(usuario=usuario["nombre"])
@@ -200,6 +220,12 @@ def publicar(request):
         'usuario':usuario
     }
     return render(request,'paginas/publicar.html', context)
+
+def registrar(request):
+    context ={
+        'usuario':usuario
+    }
+    return render(request,'paginas/registrar.html', context)
 
 def publicarC(request):
     if request.method == 'POST':
