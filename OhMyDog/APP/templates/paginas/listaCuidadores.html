@@ -9,23 +9,37 @@
     {% if context|length == 0 %}
         <p>No hay Cuidadores Publicados</p>
     {% else %}
-    {% for c in context %}
-        <p>Nombre: {{ c.nombre }}</p>
-        <p>Telefono: {{ c.telefono }}</p>
-        <p>Zona: {{ c.zona }}</p>
-        <p>Disponibilidad: {{ c.disponibilidad }}</p>
-        {% if usuario.esCliente %}
-            <a href="./contactarC/{{c.nombre}}/{{c.telefono}}" class="btn btn-success">Contactar</a>
-        {% else %}
-        <a href="./contactarCVisit/{{c.nombre}}/{{c.telefono}}" class="btn btn-success">Contactar</a>
-        {% endif %}
-       
-        <br>
-        {% if usuario.esVeterinario %}
-             <a href="./borrarC/{{c.telefono}}" class="btn btn-danger">Borrar</a>
-        {% endif %}
-        <p>-----------------</p>
-    {% endfor %}
+    <table class="table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Zona</th>
+            <th>Teléfono</th>
+            <th>Disponibilidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in context %}
+          <tr>
+            <td>{{ c.nombre }}</td>
+            <td>{{ c.zona }}</td>
+            <td>{{ c.telefono }}</td>
+            <td>{{ c.disponibilidad }}</td>
+            <td>
+                {% if usuario.esCliente %}
+                    <a href="./contactarC/{{c.nombre}}/{{c.telefono}}" class="btn btn-success">Contactar</a>
+                {% else %}
+                    {% if usuario.esVeterinario %}
+                        <a href="./borrarC/{{c.telefono}}" class="btn btn-danger">Borrar</a>
+                    {% else %}
+                        <a href="./contactarCVisit/{{c.nombre}}/{{c.telefono}}" class="btn btn-success">Contactar</a>
+                    {% endif %}
+                {% endif %}        
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
     {% endif %}
 </div>
 

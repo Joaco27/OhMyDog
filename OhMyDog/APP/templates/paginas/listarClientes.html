@@ -1,0 +1,38 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+{% block titulo %} Clientes {% endblock %}
+
+{% block contenido %} 
+
+<div class="d-flex justify-content-center flex-column align-items-center">
+    {% if context|length == 0 %}
+        <p>No hay Clientes Registrados</p>
+    {% else %}
+    <table class="table">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Mail</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in context %}
+          {% if c.usuario != 'Veterinario' %}
+          <tr>
+            <td>{{ c.usuario }}</td>
+            <td>{{ c.nombreC }}</td>
+            <td>{{ c.telefono }}</td>
+            <td>{{ c.mail }}</td>
+            <td><a href="./borrarCliente/{{c.usuario}}" class="btn btn-danger">Borrar</a></td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+
+{% endblock %}

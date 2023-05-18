@@ -28,9 +28,13 @@ urlpatterns = [
     
     path('turnos',views.turnos,name='turnos'),
     path('publicarAdopcion',views.publicarAdopcion,name='publicarAdopcion'),
+    
     path('registrarCliente',views.registrarCliente,name='registrarCliente'),
     path('LogIn',views.LogIn,name='LogIn'),
     path('LogOut',views.LogOut,name='LogOut'),
+    path('listarClientes',views.listarClientes,name='listarClientes'),
+    path('borrarCliente/<str:usuario>',views.borrarCliente,name='borrarCliente'),
+    
     path('ListarAdopciones',views.ListarAdopciones,name='ListarAdopciones'),
     path('misPerros',views.misPerros,name='misPerros'),
 

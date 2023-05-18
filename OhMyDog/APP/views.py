@@ -22,10 +22,6 @@ def index(request):
     }
     return render(request, 'paginas/index.html', context)
 
-def redireccion(request):
-    url_raiz = reverse('/', args=[])
-    return redirect(url_raiz)
-
 def registrarCliente(request):
     if request.method == 'POST':
         form = Cliente_form(request.POST) 
@@ -52,6 +48,7 @@ def LogIn(request):
             usuario['esCliente'] = True
             if usuario['nombre'] == "Veterinario":
                 usuario['esVeterinario'] = True
+                usuario['esCliente'] = False
             messages.add_message(request, messages.SUCCESS, 'Iniciaste Sesion', extra_tags="tag1")
 
             return redirect("index")
@@ -289,3 +286,18 @@ def publicarAdopcion(request):
     }
     return render(request, 'paginas/publicarAdopcion.html', context)
 
+def listarClientes(request):
+    cli = Cliente.objects.all()
+    context = {
+        'context':cli,
+        'usuario':usuario
+    }
+    return render(request, 'paginas/listarClientes.html', context)
+
+def borrarCliente(request, usuario):
+    cli = Cliente.objects.get(usuario=usuario)
+    cli.delete()
+    messages.add_message(request, messages.SUCCESS, 'Cliente Eliminado', extra_tags="tag1")
+    
+    return redirect("listarClientes")
+    
