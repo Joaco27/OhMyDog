@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .models import *
 from .forms import *
 from django.contrib import messages
+from django.urls import reverse
 
 #Declarar funciones para hacer cuando se ingresan direcciones
 
@@ -15,6 +16,7 @@ usuario = {
 }
 
 def index(request):
+
     context ={
         'usuario':usuario
     }
@@ -46,6 +48,7 @@ def LogIn(request):
             usuario['esCliente'] = True
             if usuario['nombre'] == "Veterinario":
                 usuario['esVeterinario'] = True
+                usuario['esCliente'] = False
             messages.add_message(request, messages.SUCCESS, 'Iniciaste Sesion', extra_tags="tag1")
 
             return redirect("index")
@@ -62,6 +65,8 @@ def LogOut(request):
     usuario["contra"] = ""
     usuario['esCliente'] = False
     usuario['esVeterinario'] = False
+    
+    messages.add_message(request, messages.SUCCESS, 'Cerraste Sesion', extra_tags="tag1")
     
     return redirect("index")
 
@@ -93,38 +98,101 @@ def agregarAlgo(request):
     return render(request, 'paginas/formulario.html', context)
 
 def listarCuidadores(request):
-    context = Cuidador.objects.all()
-    return render(request, 'paginas/listaCuidadores.html', {'context': context})
+    cuid = Cuidador.objects.all()
+    context = {'context': cuid,
+               'usuario': usuario}
+    return render(request, 'paginas/listaCuidadores.html', context)
     
 def listarPaseadores(request): 
-    context = Paseador.objects.all()
-    return render(request, 'paginas/listaPaseadores.html', {'context': context})
+    pasea = Paseador.objects.all()
+    context = {'context': pasea,
+               'usuario': usuario}
+    return render(request, 'paginas/listaPaseadores.html', context)
 
 def ListarAdopciones(request): 
-    context = PerroAdopcion.objects.all()
-    return render(request, 'paginas/ListarAdopciones.html', {'context': context})
+    adop = PerroAdopcion.objects.all()
+    context = {'context': adop,
+               'usuario': usuario}
+    return render(request, 'paginas/ListarAdopciones.html', context)
+
+def misPerros(request): 
+    context = Perro.objects.all()
+    return render(request, 'paginas/misPerros.html', {'context': context})
 
 def contactarC(request, nombre, telefono):
+    cli =  Cliente.objects.get(usuario=usuario["nombre"])
     cuida = ContactoCuidador(
         cuidador =  nombre,
         telCuidador = telefono,
-        usuario = 'Pedro',
-        telUsuario = 1234567,
+        usuario = cli.nombreC,
+        telUsuario = cli.telefono,
     )
     cuida.save()
     messages.add_message(request, messages.SUCCESS, 'Pronto se pondran en contacto con usted', extra_tags="tag1")
     return redirect("index")
 
-def contactarP(request, nombre, telefono): 
+def contactarCVisit(request, nombre, telefono):
+    if request.method == 'POST':
+        form = contacto_form(request.POST) 
+        if form.is_valid():
+            contactoNuevo = ContactoCuidador(
+                cuidador = nombre,
+                telCuidador = telefono,
+                usuario = form.cleaned_data.get('usuario'),
+                telUsuario = form.cleaned_data.get('telefono')
+            )
+            contactoNuevo.save()
+            messages.add_message(request, messages.SUCCESS, 'Pronto se pondran en contacto con usted', extra_tags="tag1")
+
+            return redirect("index")
+    else:
+        form = contacto_form()
+    #url_params = reverse('contactarCVisit',args=[nombre,telefono])
+    context = {
+        'form': form,
+        'usuario':usuario,
+        'nombre' : nombre,
+        'telefono' : telefono,    
+        }
+    return render(request, 'paginas/contactarCVisitante.html', context)
+
+def contactarP(request, nombre, telefono):
+    cli =  Cliente.objects.get(usuario=usuario["nombre"])
     pasea = ContactoPaseador(
         paseador =  nombre,
         telPaseador = telefono,
-        usuario = 'Pedro',
-        telUsuario = 1234567,
+        usuario = cli.nombreC,
+        telUsuario = cli.telefono,
     )
     pasea.save()
     messages.add_message(request, messages.SUCCESS, 'Pronto se pondran en contacto con usted', extra_tags="tag1")
     return redirect("index")
+
+def contactarPVisit(request, nombre, telefono):
+    if request.method == 'POST':
+        form = contacto_form(request.POST) 
+        if form.is_valid():
+            contactoNuevo = ContactoPaseador(
+                paseador = nombre,
+                telPaseador = telefono,
+                usuario = form.cleaned_data.get('usuario'),
+                telUsuario = form.cleaned_data.get('telefono')
+            )
+            contactoNuevo.save()
+            messages.add_message(request, messages.SUCCESS, 'Pronto se pondran en contacto con usted', extra_tags="tag1")
+
+            return redirect("index")
+    else:
+        form = contacto_form()
+        
+    #url_params = reverse('contactarPVisit',args=[nombre,telefono])
+    context = {
+        'form': form,
+        'usuario':usuario,
+        'nombre' : nombre,
+        'telefono' : telefono,
+    }
+    return render(request, 'paginas/contactarPVisitante.html', context)
 
 def publicar(request):
     context ={
@@ -146,8 +214,15 @@ def publicarC(request):
         
     context = {
         'form': form,
+        'usuario': usuario,
     }
     return render(request, 'paginas/agregarCuidador.html', context)
+
+def borrarC(request, telefono):
+    cuidador = Cuidador.objects.get(telefono=telefono)
+    cuidador.delete()
+    messages.add_message(request, messages.SUCCESS, 'Cuidador Eliminado', extra_tags="tag1")
+    return redirect("cuidadores")
 
 def publicarP(request):
     if request.method == 'POST':
@@ -163,8 +238,16 @@ def publicarP(request):
         
     context = {
         'form': form,
+        'usuario': usuario,
     }
     return render(request, 'paginas/agregarPaseador.html', context)
+
+def borrarP(request, telefono):
+    paseador = Paseador.objects.get(telefono=telefono)
+    paseador.delete()
+    messages.add_message(request, messages.SUCCESS, 'Paseador Eliminado', extra_tags="tag1")
+    
+    return redirect("paseadores")
 
 def turnos(request):
     if request.method == 'POST':
@@ -180,6 +263,7 @@ def turnos(request):
     
     context = {
         'form': form,
+        'usuario' : usuario,
     }
     return render(request, 'paginas/turnos.html', context)
 
@@ -198,6 +282,22 @@ def publicarAdopcion(request):
     
     context = {
         'form': form,
+        'usuario' : usuario,
     }
     return render(request, 'paginas/publicarAdopcion.html', context)
 
+def listarClientes(request):
+    cli = Cliente.objects.all()
+    context = {
+        'context':cli,
+        'usuario':usuario
+    }
+    return render(request, 'paginas/listarClientes.html', context)
+
+def borrarCliente(request, usuario):
+    cli = Cliente.objects.get(usuario=usuario)
+    cli.delete()
+    messages.add_message(request, messages.SUCCESS, 'Cliente Eliminado', extra_tags="tag1")
+    
+    return redirect("listarClientes")
+    
