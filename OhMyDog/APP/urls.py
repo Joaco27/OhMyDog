@@ -35,7 +35,7 @@ urlpatterns = [
     path('listarClientes',views.listarClientes,name='listarClientes'),
     path('borrarCliente/<str:usuario>',views.borrarCliente,name='borrarCliente'),
     
-    path('ListarAdopcion',views.ListarAdopciones,name='ListarAdopcion'),
+    path('ListarAdopciones',views.ListarAdopciones,name='ListarAdopciones'),
     path('misPerros',views.misPerros,name='misPerros'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
