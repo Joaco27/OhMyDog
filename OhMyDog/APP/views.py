@@ -4,19 +4,18 @@ from .models import *
 from .forms import *
 from django.contrib import messages
 from django.urls import reverse
+from itertools import chain
 
 #Declarar funciones para hacer cuando se ingresan direcciones
 
 # Create your views here.
 usuario = {
     "nombre": "",
-    "contra": "",
     "esCliente": False,
     "esVeterinario": False,
 }
 
 def index(request):
-
     context ={
         'usuario':usuario
     }
@@ -36,15 +35,40 @@ def registrarCliente(request):
         
     context = {
         'form': form,
+        'usuario':usuario,
     }
     return render(request, 'paginas/registrarCliente.html', context)
+
+def registrarPerro(request):
+    if request.method == 'POST':
+        form = Perro_form(request.POST) 
+        if form.is_valid(): 
+            
+            form.save()
+            messages.add_message(request, messages.SUCCESS, 'Perro registrado con exito', extra_tags="tag1")
+
+            return redirect("index")
+    else:
+        form = Perro_form()
+        
+    context = {
+        'form': form,
+        'usuario':usuario
+    }
+    return render(request, 'paginas/registrarPerro.html', context)
+
+def borrarPerro(request, nombre, emailDueño):
+    perro = Perro.objects.get(nombre=nombre, emailDueño=emailDueño)
+    perro.delete()
+    messages.add_message(request, messages.SUCCESS, 'Perro Eliminado', extra_tags="tag1")
+    
+    return redirect("losPerros")
 
 def LogIn(request):
     if request.method == 'POST':
         form = LogIn_form(request.POST) 
         if form.is_valid(): 
             usuario["nombre"] = form.cleaned_data["usuario"]
-            usuario["contra"] = form.cleaned_data["contra"]
             usuario['esCliente'] = True
             if usuario['nombre'] == "Veterinario":
                 usuario['esVeterinario'] = True
@@ -57,6 +81,7 @@ def LogIn(request):
         
     context = {
         'form': form,
+        'usurio':usuario,
     }
     return render(request, 'paginas/LogIn.html', context)
 
@@ -116,8 +141,17 @@ def ListarAdopciones(request):
     return render(request, 'paginas/ListarAdopciones.html', context)
 
 def misPerros(request): 
-    context = Perro.objects.all()
-    return render(request, 'paginas/misPerros.html', {'context': context})
+    usu = Cliente.objects.filter(usuario=usuario["nombre"]).first()
+    lista = Perro.objects.filter(emailDueño=usu.mail)
+    context = {'context': lista,
+               'usuario': usuario}
+    return render(request, 'paginas/misPerros.html', context)
+
+def losPerros(request): 
+    lista = Perro.objects.all()
+    context = {'context': lista,
+               'usuario': usuario}
+    return render(request, 'paginas/losPerros.html', context)
 
 def contactarC(request, nombre, telefono):
     cli =  Cliente.objects.get(usuario=usuario["nombre"])
@@ -199,6 +233,12 @@ def publicar(request):
         'usuario':usuario
     }
     return render(request,'paginas/publicar.html', context)
+
+def registrar(request):
+    context ={
+        'usuario':usuario
+    }
+    return render(request,'paginas/registrar.html', context)
 
 def publicarC(request):
     if request.method == 'POST':
@@ -300,4 +340,37 @@ def borrarCliente(request, usuario):
     messages.add_message(request, messages.SUCCESS, 'Cliente Eliminado', extra_tags="tag1")
     
     return redirect("listarClientes")
+
+def notificaciones(request):
+    context ={
+        'usuario':usuario
+    }
+    return render(request,'paginas/notificaciones.html', context)
     
+def notiContacto(request):
+    datosC = ContactoCuidador.objects.all()
+    datosP = ContactoPaseador.objects.all()
+    #d = chain(datosC,datosP)
+    
+    context ={
+        'usuario':usuario,
+        'paseadores':datosP,
+        'cuiddores':datosC,
+    }
+    return render(request,'paginas/notiContactos.html', context)
+
+def terminarContactoC(request, nombreU, nombreC):
+    
+    ContactoCuidador.objects.filter(usuario=nombreU,cuidador=nombreC).delete()
+    
+    messages.add_message(request, messages.SUCCESS, 'Consulta efectuada', extra_tags="tag1")
+
+    return redirect("notiContacto")
+
+def terminarContactoP(request, nombreU, nombreP):
+    
+    ContactoPaseador.objects.filter(usuario=nombreU,paseador=nombreP).delete()
+    
+    messages.add_message(request, messages.SUCCESS, 'Consulta efectuada', extra_tags="tag1")
+
+    return redirect("notiContacto")

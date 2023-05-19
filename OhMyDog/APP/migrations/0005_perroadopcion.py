@@ -5,9 +5,9 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('APP', '0004_turnos'),
-    ]
+    #dependencies = [
+     #   ('APP', '0004_turnos'),
+    #]
 
     operations = [
         migrations.CreateModel(

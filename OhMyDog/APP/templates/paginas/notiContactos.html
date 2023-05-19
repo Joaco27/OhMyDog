@@ -1,0 +1,26 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+
+{% block titulo %} Contactos {% endblock %}
+
+{% block contenido %} 
+
+<div class="d-flex justify-content-center flex-column align-items-center">
+    {% if cuidadores|length == 0 or paseadores|length == 0 %}
+        <p>Aun no hay consultas</p>
+    {% else %}
+        {% for c in cuidadores %}
+            <p>{{ c }}</p>
+            <a href="./borrarNotiC/{{c.usuario}}/{{c.cuidador}}" class="btn btn-success">Confirmado</a>
+            <p>-----------------</p>
+        {% endfor %}
+        {% for c in paseadores %}
+            <p>{{ c }}</p>
+            <a href="./borrarNotiP/{{c.usuario}}/{{c.paseador}}" class="btn btn-success">Confirmado</a>
+            <p>-----------------</p>
+        {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock %}

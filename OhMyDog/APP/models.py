@@ -7,7 +7,7 @@ class Perro(models.Model):
     nombre = models.CharField(max_length=15)
     raza = models.CharField(max_length=30)
     edad = models.IntegerField()
-    
+    emailDueño = models.EmailField(max_length=30)
     def __str__(self):
         return f'Perro: {self.nombre} con {self.edad} años'
     
@@ -33,7 +33,7 @@ class ContactoPaseador(models.Model):
     telUsuario = models.IntegerField()
     telPaseador = models.IntegerField()
     def __str__(self):
-        return f'El usuario {self.usuario} quiere contactar a {self.paseador}'
+        return f'El usuario {self.usuario} Tel:{self.telUsuario}) quiere contactar al paseador {self.paseador} Tel:{self.telPaseador}'
     
     
 class Cuidador(models.Model):
@@ -50,7 +50,7 @@ class ContactoCuidador(models.Model):
     telUsuario = models.IntegerField()
     telCuidador = models.IntegerField()
     def __str__(self):
-        return f'El usuario {self.usuario} quiere contactar a {self.cuidador}'
+        return f'El usuario {self.usuario} Tel:{self.telUsuario} quiere contactar al cuidador {self.cuidador} Tel:{self.telCuidador}'
     
 class Turnos(models.Model):
     descripcion = models.TextField(max_length=400)
