@@ -349,11 +349,15 @@ def notiContacto(request):
 def terminarContactoC(request, nombreU, nombreC):
     
     ContactoCuidador.objects.filter(usuario=nombreU,cuidador=nombreC).delete()
+    
+    messages.add_message(request, messages.SUCCESS, 'Consulta efectuada', extra_tags="tag1")
 
     return redirect("notiContacto")
 
 def terminarContactoP(request, nombreU, nombreP):
     
     ContactoPaseador.objects.filter(usuario=nombreU,paseador=nombreP).delete()
+    
+    messages.add_message(request, messages.SUCCESS, 'Consulta efectuada', extra_tags="tag1")
 
     return redirect("notiContacto")
