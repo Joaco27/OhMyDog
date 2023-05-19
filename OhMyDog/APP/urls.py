@@ -39,6 +39,7 @@ urlpatterns = [
     path('misPerros',views.misPerros,name='misPerros'),
     path('registrar',views.registrar,name='registrar'),
     path('registrarPerro',views.registrarPerro,name='registrarPerro'),
+    path('losPerros',views.losPerros,name='losPerros'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

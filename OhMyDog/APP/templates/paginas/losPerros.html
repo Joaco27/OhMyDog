@@ -1,0 +1,35 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+{% block titulo %} Todos los Perros {% endblock %}
+
+{% block contenido %} 
+
+<div class="d-flex justify-content-center flex-column align-items-center">
+    {% if context|length == 0 %}
+        <p>No hay Perros Registrados</p>
+    {% else %}
+    <table class="table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>raza</th>
+            <th>edad</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in context %}
+          <tr>
+            <td>{{ c.nombre }}</td>
+            <td>{{ c.raza }}</td>
+            <td>{{ c.edad }}</td>
+            <td>
+                 <a href="./borrarPerro/{{c.nombre}{c.emailDueño}}" class="btn btn-danger">Borrar</a>            </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+
+{% endblock %}
