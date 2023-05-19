@@ -89,7 +89,7 @@ class Turnos_form(forms.ModelForm):
 class perroAdopcion_form(forms.ModelForm):
     class Meta:
         model= PerroAdopcion
-        fields=['nombre', 'peso', 'edad','raza', 'descripcion', 'zona', 'castrado']
+        fields=['nombre', 'peso', 'edad','zona','raza', 'descripcion', 'castrado']
     nombre = forms.CharField(max_length=50, required=True, label='nombre')
     peso = forms.IntegerField(required=True, label='peso')
     edad = forms.IntegerField(required=True, label='edad')
