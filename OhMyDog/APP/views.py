@@ -57,6 +57,13 @@ def registrarPerro(request):
     }
     return render(request, 'paginas/registrarPerro.html', context)
 
+def borrarPerro(request, nombre, emailDueño):
+    perro = Perro.objects.get(nombre=nombre, emailDueño=emailDueño)
+    perro.delete()
+    messages.add_message(request, messages.SUCCESS, 'Perro Eliminado', extra_tags="tag1")
+    
+    return redirect("losPerros")
+
 def LogIn(request):
     if request.method == 'POST':
         form = LogIn_form(request.POST) 
@@ -139,6 +146,12 @@ def misPerros(request):
     context = {'context': lista,
                'usuario': usuario}
     return render(request, 'paginas/misPerros.html', context)
+
+def losPerros(request): 
+    lista = Perro.objects.all()
+    context = {'context': lista,
+               'usuario': usuario}
+    return render(request, 'paginas/losPerros.html', context)
 
 def contactarC(request, nombre, telefono):
     cli =  Cliente.objects.get(usuario=usuario["nombre"])
