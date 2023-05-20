@@ -34,6 +34,8 @@ urlpatterns = [
     path('LogOut',views.LogOut,name='LogOut'),
     path('listarClientes',views.listarClientes,name='listarClientes'),
     path('borrarCliente/<str:usuario>',views.borrarCliente,name='borrarCliente'),
+    path('borrarPerro/<str:emailDueño>/<str:nombre>',views.borrarPerro,name='borrarPerro'),
+    path('borrarPerroC/<str:emailDueño>/<str:nombre>',views.borrarPerroC,name='borrarPerroC'),
     
     path('ListarAdopciones',views.ListarAdopciones,name='ListarAdopciones'),
     path('misPerros',views.misPerros,name='misPerros'),

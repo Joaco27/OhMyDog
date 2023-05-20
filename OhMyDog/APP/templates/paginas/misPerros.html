@@ -1,17 +1,38 @@
 {% extends 'paginas/base.html' %}
 {% load static %}
 
-{% block titulo %} Mis Perros {% endblock %}
+{% block titulo %} Todos los Perros {% endblock %}
 
 {% block contenido %} 
 
 <div class="d-flex justify-content-center flex-column align-items-center">
-    {% for c in context %}
-        <p>Nombre: {{ c.nombre }}</p>
-        <p>Raza: {{ c.raza }}</p>
-        <p>Edad: {{ c.edad }}</p>
-        <p>-----------------</p>
-    {% endfor %}
+    {% if context|length == 0 %}
+        <p>No hay Perros Registrados</p>
+    {% else %}
+    <table class="table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Raza</th>
+            <th>Edad</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in context %}
+          {% if c.usuario != 'Veterinario' %}
+          <tr>
+            <td>{{ c.nombre }}</td>
+            <td>{{ c.raza }}</td>
+            <td>{{ c.edad }}</td>
+            <td>{{ c.emailDueño }}</td>
+            <td><a href="./borrarPerroC/{{c.emailDueño}}/{{c.nombre}}" class="btn btn-danger">Borrar</a></td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
 </div>
 
 {% endblock %}

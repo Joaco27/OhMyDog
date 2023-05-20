@@ -9,7 +9,7 @@ class Perro(models.Model):
     edad = models.IntegerField()
     emailDueño = models.EmailField(max_length=30)
     def __str__(self):
-        return f'Perro: {self.nombre} con {self.edad} años'
+        return f'Perro: {self.nombre} con {self.edad} años, raza {self.raza}, y emailD {self.emailDueño}'
     
 class Cliente(models.Model):
     nombreC = models.CharField(max_length=15)
