@@ -17,13 +17,15 @@ class Perro_form(forms.ModelForm):
     emailDueño = forms.EmailField(max_length=30, required=True, label='Email Dueño')
 
     # Clean son validaciones 
+    # Se debe respetar que en el nombre de la validacion este
+    # el nombre del campo , osea clean_<nombre de campo>
     def clean_edad(self):
         data = self.cleaned_data["edad"]
         if data < 1 or data > 20:
             raise ValidationError("Edad invalida")
         return data
     
-    def clean_mail(self):
+    def clean_emailDueño(self):
         data = self.cleaned_data.get('emailDueño')
         ok = Cliente.objects.filter(mail=data).exists()
         if not ok :

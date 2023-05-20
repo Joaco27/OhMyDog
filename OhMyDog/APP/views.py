@@ -57,12 +57,19 @@ def registrarPerro(request):
     }
     return render(request, 'paginas/registrarPerro.html', context)
 
-def borrarPerro(request, nombre, emailDueño):
-    perro = Perro.objects.get(nombre=nombre, emailDueño=emailDueño)
+def borrarPerro(request, emailDueño, nombre):
+    perro = Perro.objects.get(emailDueño=emailDueño, nombre=nombre)
     perro.delete()
     messages.add_message(request, messages.SUCCESS, 'Perro Eliminado', extra_tags="tag1")
     
     return redirect("losPerros")
+
+def borrarPerroC(request, emailDueño, nombre):
+    perro = Perro.objects.get(emailDueño=emailDueño, nombre=nombre)
+    perro.delete()
+    messages.add_message(request, messages.SUCCESS, 'Perro Eliminado', extra_tags="tag1")
+    
+    return redirect("misPerros")
 
 def LogIn(request):
     if request.method == 'POST':

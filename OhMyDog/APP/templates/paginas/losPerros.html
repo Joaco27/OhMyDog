@@ -13,19 +13,22 @@
         <thead>
           <tr>
             <th>Nombre</th>
-            <th>raza</th>
-            <th>edad</th>
+            <th>Raza</th>
+            <th>Edad</th>
+            <th>Email</th>
           </tr>
         </thead>
         <tbody>
           {% for c in context %}
+          {% if c.usuario != 'Veterinario' %}
           <tr>
             <td>{{ c.nombre }}</td>
             <td>{{ c.raza }}</td>
             <td>{{ c.edad }}</td>
-            <td>
-                 <a href="./borrarPerro/{{c.nombre}{c.emailDueño}}" class="btn btn-danger">Borrar</a>            </td>
-            </tr>
+            <td>{{ c.emailDueño }}</td>
+            <td><a href="./borrarPerro/{{c.emailDueño}}/{{c.nombre}}" class="btn btn-danger">Borrar</a></td>
+          </tr>
+          {% endif %}
           {% endfor %}
         </tbody>
     </table>
