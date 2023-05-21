@@ -15,9 +15,9 @@
             <a href="./borrarNotiC/{{c.usuario}}/{{c.cuidador}}" class="btn btn-success">Confirmado</a>
             <p>-----------------</p>
         {% endfor %}
-        {% for c in paseadores %}
-            <p>{{ c }}</p>
-            <a href="./borrarNotiP/{{c.usuario}}/{{c.paseador}}" class="btn btn-success">Confirmado</a>
+        {% for p in paseadores %}
+            <p>{{ p }}</p>
+            <a href="./borrarNotiP/{{p.usuario}}/{{p.paseador}}" class="btn btn-success">Confirmado</a>
             <p>-----------------</p>
         {% endfor %}
     {% endif %}

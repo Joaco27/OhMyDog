@@ -12,7 +12,7 @@ from itertools import chain
 usuario = {
     "nombre": "",
     "esCliente": False,
-    "esVeterinario": True,
+    "esVeterinario": False,
 }
 def getUsuario():
     return usuario
@@ -369,11 +369,10 @@ def notiContacto(request):
     datosC = ContactoCuidador.objects.all()
     datosP = ContactoPaseador.objects.all()
     #d = chain(datosC,datosP)
-    
     context ={
         'usuario':usuario,
         'paseadores':datosP,
-        'cuiddores':datosC,
+        'cuidadores':datosC,
     }
     return render(request,'paginas/notiContactos.html', context)
 
