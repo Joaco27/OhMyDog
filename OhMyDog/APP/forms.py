@@ -72,7 +72,7 @@ class Turnos_form(forms.ModelForm):
     # Meta sirve para enlazar con la BD
     class Meta:
         model = Turnos
-        fields = ['descripcion','raza', 'edad','nombre']
+        fields = ['descripcion','raza', 'edad','nombre','fecha']
     # Creamos los campos del formulario
     descripcion = forms.Textarea()
     nombre = forms.CharField(max_length=15, required=True, label='Nombre')

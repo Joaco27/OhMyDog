@@ -156,7 +156,7 @@ def ListarAdopciones(request):
     adop = PerroAdopcion.objects.all()
     context = {'context': adop,
                'usuario': usuario}
-    return render(request, 'paginas/ListarAdopciones.html', context)
+    return render(request, 'paginas/listarAdopciones.html', context)
 
 def misPerros(request): 
     usu = Cliente.objects.filter(usuario=usuario["nombre"]).first()
