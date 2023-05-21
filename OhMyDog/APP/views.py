@@ -12,7 +12,7 @@ from itertools import chain
 usuario = {
     "nombre": "",
     "esCliente": False,
-    "esVeterinario": True,
+    "esVeterinario": False,
 }
 
 def index(request):
@@ -342,7 +342,7 @@ def notiContacto(request):
     context ={
         'usuario':usuario,
         'paseadores':datosP,
-        'cuiddores':datosC,
+        'cuidadores':datosC,
     }
     return render(request,'paginas/notiContactos.html', context)
 
