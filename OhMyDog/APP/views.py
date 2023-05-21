@@ -64,6 +64,15 @@ def borrarPerro(request, emailDueño, nombre):
     
     return redirect("losPerros")
 
+def borrarPerroA(request,nombre,zona):
+    perro = PerroAdopcion.objects.get(nombre=nombre,zona=zona)
+    perro.delete()
+    messages.add_message(request, messages.SUCCESS, 'la publicación se elimino con éxito', extra_tags="tag1")
+    
+    return redirect("ListarAdopciones")
+
+
+
 def borrarPerroC(request, emailDueño, nombre):
     perro = Perro.objects.get(emailDueño=emailDueño, nombre=nombre)
     perro.delete()

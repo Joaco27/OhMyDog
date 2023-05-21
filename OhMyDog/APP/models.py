@@ -66,10 +66,10 @@ class PerroAdopcion(models.Model):
     usuario = models.CharField(max_length=30)
     nombre = models.CharField(max_length=30)
     peso= models.IntegerField()
-    edad= models.IntegerField()
+    #edad= models.IntegerField()
     raza= models.CharField(max_length=20)
     descripcion= models.CharField(max_length=30)
     zona= models.CharField(max_length=50)
     castrado = models.CharField(max_length=2)
     def __str__(self):
-        return f'El usuario {self.usuario} publica al perro {self.nombre}'
+        return f'se publico el perro {self.nombre}'
