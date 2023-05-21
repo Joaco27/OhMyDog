@@ -91,7 +91,9 @@ class Turnos_form(forms.ModelForm):
 class perroAdopcion_form(forms.ModelForm):
     class Meta:
         model= PerroAdopcion
-        fields=['nombre', 'peso', 'raza', 'descripcion', 'zona', 'castrado']
+        fields=['usuario','nombre', 'peso', 'raza', 'descripcion', 'zona', 'castrado']
+
+    usuario= forms.CharField(max_length=30, required=True, label='usuario')
     nombre = forms.CharField(max_length=50, required=True, label='nombre')
     peso = forms.IntegerField(required=True, label='peso')
     #edad = forms.IntegerField(required=True, label='edad')
@@ -99,6 +101,13 @@ class perroAdopcion_form(forms.ModelForm):
     raza= forms.CharField(max_length=20, required=True, label='raza')
     descripcion= forms.CharField(max_length=30, required=True, label='description')
     castrado= forms.CharField(max_length=2,required=True, label='castrado')
+
+    def clean_usuario(self):
+        data = self.cleaned_data["usuario"]
+        ok = Cliente.objects.filter(usuario=data).exists()
+        if ok==False:
+            raise ValidationError('no pertenece a ningun usuario')
+        return data
     
 class Cliente_form(forms.ModelForm):
     class Meta:

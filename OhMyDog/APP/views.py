@@ -14,6 +14,8 @@ usuario = {
     "esCliente": False,
     "esVeterinario": True,
 }
+def getUsuario():
+    return usuario
 
 def index(request):
     context ={
@@ -64,11 +66,11 @@ def borrarPerro(request, emailDueño, nombre):
     
     return redirect("losPerros")
 
-def borrarPerroA(request,nombre,zona):
-    perro = PerroAdopcion.objects.get(nombre=nombre,zona=zona)
+def borrarPerroA(request,usuario, nombre):
+    perro = PerroAdopcion.objects.get(usuario=usuario, nombre=nombre)
     perro.delete()
     messages.add_message(request, messages.SUCCESS, 'la publicación se elimino con éxito', extra_tags="tag1")
-    
+
     return redirect("ListarAdopciones")
 
 
