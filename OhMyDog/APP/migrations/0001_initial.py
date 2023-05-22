@@ -69,7 +69,6 @@ class Migration(migrations.Migration):
                 ('nombre', models.CharField(max_length=15)),
                 ('raza', models.CharField(max_length=30)),
                 ('edad', models.IntegerField()),
-                ('emailDueño', models.EmailField(max_length=30)),
             ],
         ),
         migrations.CreateModel(

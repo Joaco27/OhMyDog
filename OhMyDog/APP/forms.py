@@ -1,5 +1,6 @@
 from .models import *
 from django import forms
+import datetime as date
 
 from django.core.exceptions import ValidationError 
 
@@ -72,7 +73,7 @@ class Turnos_form(forms.ModelForm):
     # Meta sirve para enlazar con la BD
     class Meta:
         model = Turnos
-        fields = ['descripcion','raza', 'edad','nombre']
+        fields = ['descripcion','raza', 'edad','nombre','fecha']
     # Creamos los campos del formulario
     descripcion = forms.Textarea()
     nombre = forms.CharField(max_length=15, required=True, label='Nombre')
@@ -86,6 +87,16 @@ class Turnos_form(forms.ModelForm):
         data = self.cleaned_data["edad"]
         if data < 1 or data > 20:
             raise ValidationError("Edad invalida")
+        return data
+    
+    def clean_fecha(self):
+        data =self.cleaned_data["fecha"]
+        fecha = date.datetime.today()
+
+        data_str = data.strftime('%d/%m/%Y')
+        data_nueva = date.datetime.strptime(data_str, '%d/%m/%Y')
+        if data_nueva < fecha:
+            raise ValidationError("Coloque una fecha valida, superior a la fecha actual")
         return data
     
 class perroAdopcion_form(forms.ModelForm):

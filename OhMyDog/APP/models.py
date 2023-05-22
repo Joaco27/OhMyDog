@@ -33,7 +33,7 @@ class ContactoPaseador(models.Model):
     telUsuario = models.IntegerField()
     telPaseador = models.IntegerField()
     def __str__(self):
-        return f'El usuario {self.usuario} Tel:{self.telUsuario}) quiere contactar al paseador {self.paseador} Tel:{self.telPaseador}'
+        return f'El usuario {self.usuario} Tel:{self.telUsuario} quiere contactar al paseador {self.paseador} Tel:{self.telPaseador}'
     
     
 class Cuidador(models.Model):
