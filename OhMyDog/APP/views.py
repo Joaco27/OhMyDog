@@ -354,7 +354,11 @@ def listarClientes(request):
 
 def borrarCliente(request, usuario):
     cli = Cliente.objects.get(usuario=usuario)
+    adopciones = PerroAdopcion.objects.get(usuario=cli.usuario)
+    perros = Perro.objects.get(emailDueño=cli.mail)
     cli.delete()
+    adopciones.delete()
+    perros.delete()
     messages.add_message(request, messages.SUCCESS, 'Cliente Eliminado', extra_tags="tag1")
     
     return redirect("listarClientes")
