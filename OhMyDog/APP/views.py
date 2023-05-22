@@ -12,7 +12,7 @@ from itertools import chain
 usuario = {
     "nombre": "",
     "esCliente": False,
-    "esVeterinario": True,
+    "esVeterinario": False,
 }
 def getUsuario():
     return usuario
@@ -156,7 +156,7 @@ def ListarAdopciones(request):
     adop = PerroAdopcion.objects.all()
     context = {'context': adop,
                'usuario': usuario}
-    return render(request, 'paginas/ListarAdopciones.html', context)
+    return render(request, 'paginas/listarAdopciones.html', context)
 
 def misPerros(request): 
     usu = Cliente.objects.filter(usuario=usuario["nombre"]).first()
@@ -354,7 +354,11 @@ def listarClientes(request):
 
 def borrarCliente(request, usuario):
     cli = Cliente.objects.get(usuario=usuario)
+    adopciones = PerroAdopcion.objects.get(usuario=cli.usuario)
+    perros = Perro.objects.get(emailDueño=cli.mail)
     cli.delete()
+    adopciones.delete()
+    perros.delete()
     messages.add_message(request, messages.SUCCESS, 'Cliente Eliminado', extra_tags="tag1")
     
     return redirect("listarClientes")
@@ -369,11 +373,10 @@ def notiContacto(request):
     datosC = ContactoCuidador.objects.all()
     datosP = ContactoPaseador.objects.all()
     #d = chain(datosC,datosP)
-    
     context ={
         'usuario':usuario,
         'paseadores':datosP,
-        'cuiddores':datosC,
+        'cuidadores':datosC,
     }
     return render(request,'paginas/notiContactos.html', context)
 
