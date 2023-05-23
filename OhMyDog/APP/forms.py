@@ -117,7 +117,7 @@ class perroAdopcion_form(forms.ModelForm):
         data = self.cleaned_data["usuario"]
         ok = Cliente.objects.filter(usuario=data).exists()
         if ok==False:
-            raise ValidationError('no pertenece a ningun usuario')
+            raise ValidationError('nombre de usuario no registrado')
         return data
     
 class Cliente_form(forms.ModelForm):
