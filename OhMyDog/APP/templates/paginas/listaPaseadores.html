@@ -30,7 +30,16 @@
                     <a href="./contactarP/{{c.nombre}}/{{c.telefono}}" class="btn btn-success">Contactar</a>
                 {% else %}
                     {% if usuario.esVeterinario %}
-                        <a href="./borrarP/{{c.telefono}}" class="btn btn-danger">Borrar</a>
+                        <!-- <a href="./borrarP/{{c.telefono}}" class="btn btn-danger">Borrar</a> -->
+                        <!-- href="./borrarC/{{c.telefono}}" -->
+                        <button onclick="confirmar()" class="btn btn-danger">Borrar</button>
+                        <script>
+                          function confirmar(){
+                            let conf = window.confirm('Seguro que quieres borrar este elemento??')
+                            if(conf)
+                              window.location.href = "./borrarP/{{c.telefono}}"
+                          }
+                        </script>
                     {% else %}
                         <a href="./contactarPVisit/{{c.nombre}}/{{c.telefono}}" class="btn btn-success">Contactar</a>
                     {% endif %}
