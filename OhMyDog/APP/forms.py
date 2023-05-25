@@ -1,5 +1,6 @@
 from .models import *
 from django import forms
+import datetime as date
 
 from django.core.exceptions import ValidationError 
 
@@ -88,6 +89,16 @@ class Turnos_form(forms.ModelForm):
             raise ValidationError("Edad invalida")
         return data
     
+    def clean_fecha(self):
+        data =self.cleaned_data["fecha"]
+        fecha = date.datetime.today()
+
+        data_str = data.strftime('%d/%m/%Y')
+        data_nueva = date.datetime.strptime(data_str, '%d/%m/%Y')
+        if data_nueva < fecha:
+            raise ValidationError("Coloque una fecha valida, superior a la fecha actual")
+        return data
+    
 class perroAdopcion_form(forms.ModelForm):
     class Meta:
         model= PerroAdopcion
@@ -106,7 +117,7 @@ class perroAdopcion_form(forms.ModelForm):
         data = self.cleaned_data["usuario"]
         ok = Cliente.objects.filter(usuario=data).exists()
         if ok==False:
-            raise ValidationError('no pertenece a ningun usuario')
+            raise ValidationError('nombre de usuario no registrado')
         return data
     
 class Cliente_form(forms.ModelForm):
