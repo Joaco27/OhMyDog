@@ -24,6 +24,7 @@ class Paseador(models.Model):
     telefono = models.IntegerField()
     zona = models.CharField(max_length=20)
     disponibilidad = models.CharField(max_length=30)
+    dni = models.CharField(max_length=8)
     def __str__(self):
         return f'Paseador: {self.nombre} por {self.zona}'
 
@@ -33,7 +34,7 @@ class ContactoPaseador(models.Model):
     telUsuario = models.IntegerField()
     telPaseador = models.IntegerField()
     def __str__(self):
-        return f'El usuario {self.usuario} Tel:{self.telUsuario} quiere contactar al paseador {self.paseador} Tel:{self.telPaseador}'
+        return f'El usuario {self.usuario} Tel:{self.telUsuario} quiere contactar a {self.paseador} Tel:{self.telPaseador}'
     
     
 class Cuidador(models.Model):
@@ -41,6 +42,7 @@ class Cuidador(models.Model):
     telefono = models.IntegerField()
     zona = models.CharField(max_length=20)
     disponibilidad = models.CharField(max_length=30)
+    dni = models.CharField(max_length=8)
     def __str__(self):
         return f'Cuidador: {self.nombre} por {self.zona}'
     
@@ -50,7 +52,7 @@ class ContactoCuidador(models.Model):
     telUsuario = models.IntegerField()
     telCuidador = models.IntegerField()
     def __str__(self):
-        return f'El usuario {self.usuario} Tel:{self.telUsuario} quiere contactar al cuidador {self.cuidador} Tel:{self.telCuidador}'
+        return f'El usuario {self.usuario} Tel:{self.telUsuario} quiere contactar a {self.cuidador} Tel:{self.telCuidador}'
     
 class Turnos(models.Model):
     descripcion = models.TextField(max_length=400)
