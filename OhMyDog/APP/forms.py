@@ -88,7 +88,7 @@ class Turnos_form(forms.ModelForm):
     def clean_edad(self):
         data = self.cleaned_data["edad"]
         if data < 1 or data > 20:
-            raise ValidationError("Edad invalida")
+            raise ValidationError("Edad no permitida (1-20)")
         return data
     
     def clean_fecha(self):
@@ -162,7 +162,7 @@ class LogIn_form(forms.Form):
         usuario = self.cleaned_data['usuario']
         user = Cliente.objects.filter(usuario=usuario).first()
         if user is None:
-            raise ValidationError('Nombre de usuario incorrecto')
+            raise ValidationError('Nombre de usuario o contraseña incorrecta')
         return usuario
     
     def clean_contra(self):
@@ -171,7 +171,7 @@ class LogIn_form(forms.Form):
         if username:
             user = Cliente.objects.filter(usuario=username).first()
             if user is not None and not user.contra==password:
-                raise forms.ValidationError('Contraseña incorrecta')
+                raise forms.ValidationError('Nombre de usuario o contraseña incorrecta')
         return password
     
 class contacto_form(forms.Form):
