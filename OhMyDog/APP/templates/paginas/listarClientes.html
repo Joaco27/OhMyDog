@@ -26,7 +26,17 @@
             <td>{{ c.nombreC }}</td>
             <td>{{ c.telefono }}</td>
             <td>{{ c.mail }}</td>
-            <td><a href="./borrarCliente/{{c.usuario}}" class="btn btn-danger">Borrar</a></td>
+            <td>
+              <!-- <a href="./borrarCliente/{{c.usuario}}" class="btn btn-danger">Borrar</a> -->
+              <button onclick="confirmar()" class="btn btn-danger">Borrar</button>
+                        <script>
+                          function confirmar(){
+                            let conf = window.confirm('Seguro que quieres borrar este elemento??')
+                            if(conf)
+                              window.location.href = "./borrarCliente/{{c.usuario}}"
+                          }
+                        </script>
+            </td>
           </tr>
           {% endif %}
           {% endfor %}

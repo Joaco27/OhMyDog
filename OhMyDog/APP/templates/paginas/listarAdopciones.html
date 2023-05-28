@@ -19,9 +19,19 @@
             <p>Raza: {{ c.raza }}</p>
             <p>Descripcion: {{ c.descripcion }}</p>
             <p>Castrado: {{ c.castrado }}</p>
-            <a href="" class="btn btn-success">Contactar</a>
+            <p></p>
+            <a href="" class="btn btn-success">Informacion de contanto</a>
+            <p></p>
             {% if usuario.esVeterinario or usuario.nombre == c.usuario %}
-                <a href="./borrarPerroA/{{c.usuario}}/{{c.nombre}}" class="btn btn-danger">Borrar</a>
+                <!-- <a href="./borrarPerroA/{{c.usuario}}/{{c.nombre}}" class="btn btn-danger">Borrar</a> -->
+                <button onclick="confirmar()" class="btn btn-danger">Borrar</button>
+                <script>
+                  function confirmar(){
+                    let conf = window.confirm('Seguro que quieres borrar este elemento??')
+                    if(conf)
+                      window.location.href = "./borrarPerroA/{{c.usuario}}/{{c.nombre}}"
+                  }
+                </script>
             {% endif %}   
             <p>-----------------</p>
         {% endfor %}

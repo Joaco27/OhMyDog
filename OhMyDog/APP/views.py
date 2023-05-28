@@ -173,6 +173,10 @@ def losPerros(request):
 
 def contactarC(request, nombre, telefono):
     cli =  Cliente.objects.get(usuario=usuario["nombre"])
+    existe = ContactoCuidador.objects.filter(telCuidador=telefono,telUsuario=cli.telefono).exists()
+    if existe:
+        messages.add_message(request, messages.SUCCESS, 'Ya has contactado a este Cuidador', extra_tags="tag1")
+        return redirect("cuidadores")
     cuida = ContactoCuidador(
         cuidador =  nombre,
         telCuidador = telefono,
@@ -210,6 +214,10 @@ def contactarCVisit(request, nombre, telefono):
 
 def contactarP(request, nombre, telefono):
     cli =  Cliente.objects.get(usuario=usuario["nombre"])
+    existe = ContactoPaseador.objects.filter(telPaseador=telefono,telUsuario=cli.telefono).exists()
+    if existe:
+        messages.add_message(request, messages.SUCCESS, 'Ya has contactado a este Paseador', extra_tags="tag1")
+        return redirect("paseadores")
     pasea = ContactoPaseador(
         paseador =  nombre,
         telPaseador = telefono,

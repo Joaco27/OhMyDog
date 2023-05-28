@@ -43,37 +43,39 @@ class Perro_form(forms.ModelForm):
 class Paseador_form(forms.ModelForm):
     class Meta:
         model=Paseador
-        fields=['nombre', 'telefono', 'zona', 'disponibilidad']
+        fields=['nombre','dni', 'telefono', 'zona', 'disponibilidad']
     nombre = forms.CharField(max_length=50, required=True, label='Nombre')
+    dni = forms.CharField(max_length=8,required=True, label='DNI')
     telefono = forms.IntegerField(required=True, label='Telefono')
     zona = forms.CharField(max_length=20, required=True, label='Zona')
     disponibilidad = forms.CharField(max_length=30, required=True, label='Disponibilidad')
     
-    def clean_telefono(self):
-        data=self.cleaned_data["telefono"]
-        if len(str(data)) < 7 or len(str(data)) > 11:
-            raise ValidationError("Telefono invalido")
-        ok = Paseador.objects.filter(telefono=data).first()
+    def clean_dni(self):
+        data=self.cleaned_data["dni"]
+        if len(str(data)) < 8:
+            raise ValidationError("DNI no aceptado (debe tener 8 nros)")
+        ok = Paseador.objects.filter(dni=data).first()
         if ok is not None:
-            raise ValidationError("Telefono ya registrado")
+            raise ValidationError("DNI ya registrado")
         return data
     
 class Cuidador_form(forms.ModelForm):
     class Meta:
         model=Cuidador
-        fields=['nombre', 'telefono', 'zona', 'disponibilidad']
+        fields=['nombre','dni', 'telefono', 'zona', 'disponibilidad']
     nombre = forms.CharField(max_length=50, required=True, label='Nombre')
+    dni = forms.CharField(max_length=8,required=True, label='DNI')
     telefono = forms.IntegerField(required=True, label='Telefono')
     zona = forms.CharField(max_length=20, required=True, label='Zona')
     disponibilidad = forms.CharField(max_length=30, required=True, label='Disponibilidad')
     
-    def clean_telefono(self):
-        data=self.cleaned_data["telefono"]
-        if len(str(data)) < 7 or len(str(data)) > 11:
-            raise ValidationError("El telefono debe tener entre 7 y 11 caracters")
-        ok = Cuidador.objects.filter(telefono=data).first()
+    def clean_dni(self):
+        data=self.cleaned_data["dni"]
+        if len(str(data)) < 8:
+            raise ValidationError("DNI no aceptado (debe tener 8 nros)")
+        ok = Cuidador.objects.filter(dni=data).first()
         if ok is not None:
-            raise ValidationError("Telefono ya registrado")
+            raise ValidationError("DNI ya registrado")
         return data
     
 class Turnos_form(forms.ModelForm):
@@ -124,7 +126,7 @@ class perroAdopcion_form(forms.ModelForm):
         data = self.cleaned_data["usuario"]
         ok = Cliente.objects.filter(usuario=data).exists()
         if ok==False:
-            raise ValidationError('no pertenece a ningun usuario')
+            raise ValidationError('nombre de usuario no registrado')
         return data
     
 class Cliente_form(forms.ModelForm):

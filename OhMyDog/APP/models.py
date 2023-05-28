@@ -24,6 +24,7 @@ class Paseador(models.Model):
     telefono = models.IntegerField()
     zona = models.CharField(max_length=20)
     disponibilidad = models.CharField(max_length=30)
+    dni = models.CharField(max_length=8)
     def __str__(self):
         return f'Paseador: {self.nombre} por {self.zona}'
 
@@ -41,6 +42,7 @@ class Cuidador(models.Model):
     telefono = models.IntegerField()
     zona = models.CharField(max_length=20)
     disponibilidad = models.CharField(max_length=30)
+    dni = models.CharField(max_length=8)
     def __str__(self):
         return f'Cuidador: {self.nombre} por {self.zona}'
     

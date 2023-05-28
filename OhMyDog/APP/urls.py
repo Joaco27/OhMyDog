@@ -22,6 +22,7 @@ urlpatterns = [
     path('contactarPVisit/<str:nombre>/<int:telefono>/',views.contactarPVisit,name='contactarPVisit'),
     path('borrarP/<int:telefono>/',views.borrarP,name='borrarP'),
     
+    
     path('publicar',views.publicar,name='publicar'),
     path('publicarP',views.publicarP,name='publicarP'),
     path('publicarC',views.publicarC,name='publicarC'),
