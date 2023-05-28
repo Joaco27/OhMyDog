@@ -33,7 +33,7 @@ class ContactoPaseador(models.Model):
     telUsuario = models.IntegerField()
     telPaseador = models.IntegerField()
     def __str__(self):
-        return f'El usuario {self.usuario} Tel:{self.telUsuario} quiere contactar al paseador {self.paseador} Tel:{self.telPaseador}'
+        return f'El usuario {self.usuario} Tel:{self.telUsuario} quiere contactar a {self.paseador} Tel:{self.telPaseador}'
     
     
 class Cuidador(models.Model):
@@ -50,7 +50,7 @@ class ContactoCuidador(models.Model):
     telUsuario = models.IntegerField()
     telCuidador = models.IntegerField()
     def __str__(self):
-        return f'El usuario {self.usuario} Tel:{self.telUsuario} quiere contactar al cuidador {self.cuidador} Tel:{self.telCuidador}'
+        return f'El usuario {self.usuario} Tel:{self.telUsuario} quiere contactar a {self.cuidador} Tel:{self.telCuidador}'
     
 class Turnos(models.Model):
     descripcion = models.TextField(max_length=400)
