@@ -13,6 +13,10 @@
         <thead>
           <tr>
             <th>Nombre</th>
+            {% if usuario.esVeterinario %}
+            <th>DNI</th>
+            <th>Telefono</th>
+            {% endif %}
             <th>Zona</th>
             <th>Disponibilidad</th>
           </tr>
@@ -21,6 +25,10 @@
           {% for c in context %}
           <tr>
             <td>{{ c.nombre }}</td>
+            {% if usuario.esVeterinario %}
+            <td>{{ c.dni }}</td>
+            <td>{{ c.telefono }}</td>
+            {% endif %}
             <td>{{ c.zona }}</td>
             <td>{{ c.disponibilidad }}</td>
             <td>
