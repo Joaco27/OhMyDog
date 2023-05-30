@@ -32,7 +32,14 @@ class Perro_form(forms.ModelForm):
         if not ok :
             raise ValidationError('El email no pertenece a un dueño')
         return data
-    
+    def clean_nombre(self):
+        data = self.cleaned_data.get('nombre')
+        mail = self.data.get('emailDueño')
+        ok = Perro.objects.filter(nombre=data,emailDueño=mail).exists
+        print (ok)
+        if ok :
+            raise ValidationError('El nombre del perro ya se encuentra registrado para ese dueño')
+        return data
 class Paseador_form(forms.ModelForm):
     class Meta:
         model=Paseador
