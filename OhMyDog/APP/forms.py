@@ -32,41 +32,50 @@ class Perro_form(forms.ModelForm):
         if not ok :
             raise ValidationError('El email no pertenece a un dueño')
         return data
-    
+    def clean_nombre(self):
+        data = self.cleaned_data.get('nombre')
+        mail = self.data.get('emailDueño')
+        ok = Perro.objects.filter(nombre=data,emailDueño=mail).exists
+        print (ok)
+        if ok :
+            raise ValidationError('El nombre del perro ya se encuentra registrado para ese dueño')
+        return data
 class Paseador_form(forms.ModelForm):
     class Meta:
         model=Paseador
-        fields=['nombre', 'telefono', 'zona', 'disponibilidad']
+        fields=['nombre','dni', 'telefono', 'zona', 'disponibilidad']
     nombre = forms.CharField(max_length=50, required=True, label='Nombre')
+    dni = forms.CharField(max_length=8,required=True, label='DNI')
     telefono = forms.IntegerField(required=True, label='Telefono')
     zona = forms.CharField(max_length=20, required=True, label='Zona')
     disponibilidad = forms.CharField(max_length=30, required=True, label='Disponibilidad')
     
-    def clean_telefono(self):
-        data=self.cleaned_data["telefono"]
-        if len(str(data)) < 7 or len(str(data)) > 11:
-            raise ValidationError("Telefono invalido")
-        ok = Paseador.objects.filter(telefono=data).first()
+    def clean_dni(self):
+        data=self.cleaned_data["dni"]
+        if len(str(data)) < 8:
+            raise ValidationError("DNI no aceptado (debe tener 8 nros)")
+        ok = Paseador.objects.filter(dni=data).first()
         if ok is not None:
-            raise ValidationError("Telefono ya registrado")
+            raise ValidationError("DNI ya registrado")
         return data
     
 class Cuidador_form(forms.ModelForm):
     class Meta:
         model=Cuidador
-        fields=['nombre', 'telefono', 'zona', 'disponibilidad']
+        fields=['nombre','dni', 'telefono', 'zona', 'disponibilidad']
     nombre = forms.CharField(max_length=50, required=True, label='Nombre')
+    dni = forms.CharField(max_length=8,required=True, label='DNI')
     telefono = forms.IntegerField(required=True, label='Telefono')
     zona = forms.CharField(max_length=20, required=True, label='Zona')
     disponibilidad = forms.CharField(max_length=30, required=True, label='Disponibilidad')
     
-    def clean_telefono(self):
-        data=self.cleaned_data["telefono"]
-        if len(str(data)) < 7 or len(str(data)) > 11:
-            raise ValidationError("El telefono debe tener entre 7 y 11 caracters")
-        ok = Cuidador.objects.filter(telefono=data).first()
+    def clean_dni(self):
+        data=self.cleaned_data["dni"]
+        if len(str(data)) < 8:
+            raise ValidationError("DNI no aceptado (debe tener 8 nros)")
+        ok = Cuidador.objects.filter(dni=data).first()
         if ok is not None:
-            raise ValidationError("Telefono ya registrado")
+            raise ValidationError("DNI ya registrado")
         return data
     
 class Turnos_form(forms.ModelForm):
@@ -86,7 +95,7 @@ class Turnos_form(forms.ModelForm):
     def clean_edad(self):
         data = self.cleaned_data["edad"]
         if data < 1 or data > 20:
-            raise ValidationError("Edad invalida")
+            raise ValidationError("Edad no permitida (1-20)")
         return data
     
     def clean_fecha(self):
@@ -160,7 +169,7 @@ class LogIn_form(forms.Form):
         usuario = self.cleaned_data['usuario']
         user = Cliente.objects.filter(usuario=usuario).first()
         if user is None:
-            raise ValidationError('Nombre de usuario incorrecto')
+            raise ValidationError('Nombre de usuario o contraseña incorrecta')
         return usuario
     
     def clean_contra(self):
@@ -169,7 +178,7 @@ class LogIn_form(forms.Form):
         if username:
             user = Cliente.objects.filter(usuario=username).first()
             if user is not None and not user.contra==password:
-                raise forms.ValidationError('Contraseña incorrecta')
+                raise forms.ValidationError('Nombre de usuario o contraseña incorrecta')
         return password
     
 class contacto_form(forms.Form):

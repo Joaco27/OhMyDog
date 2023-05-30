@@ -13,8 +13,11 @@
         <thead>
           <tr>
             <th>Nombre</th>
+            {% if usuario.esVeterinario %}
+            <th>DNI</th>
+            <th>Telefono</th>
+            {% endif %}
             <th>Zona</th>
-            <th>Teléfono</th>
             <th>Disponibilidad</th>
           </tr>
         </thead>
@@ -22,15 +25,26 @@
           {% for c in context %}
           <tr>
             <td>{{ c.nombre }}</td>
-            <td>{{ c.zona }}</td>
+            {% if usuario.esVeterinario %}
+            <td>{{ c.dni }}</td>
             <td>{{ c.telefono }}</td>
+            {% endif %}
+            <td>{{ c.zona }}</td>
             <td>{{ c.disponibilidad }}</td>
             <td>
                 {% if usuario.esCliente %}
                     <a href="./contactarC/{{c.nombre}}/{{c.telefono}}" class="btn btn-success">Contactar</a>
                 {% else %}
                     {% if usuario.esVeterinario %}
-                        <a href="./borrarC/{{c.telefono}}" class="btn btn-danger">Borrar</a>
+                        <!-- href="./borrarC/{{c.telefono}}" -->
+                        <button onclick="confirmar()" class="btn btn-danger">Borrar</button>
+                        <script>
+                          function confirmar(){
+                            let conf = window.confirm('Seguro que quieres borrar este elemento??')
+                            if(conf)
+                              window.location.href = "./borrarC/{{c.telefono}}"
+                          }
+                        </script>
                     {% else %}
                         <a href="./contactarCVisit/{{c.nombre}}/{{c.telefono}}" class="btn btn-success">Contactar</a>
                     {% endif %}
