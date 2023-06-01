@@ -37,7 +37,7 @@ class Perro_form(forms.ModelForm):
         mail = self.data.get('emailDueño')
         ok = Perro.objects.filter(nombre=data,emailDueño=mail).exists
         print (ok)
-        if ok :
+        if not gitok :
             raise ValidationError('El nombre del perro ya se encuentra registrado para ese dueño')
         return data
 class Paseador_form(forms.ModelForm):
