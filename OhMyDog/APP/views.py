@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.urls import reverse
 from itertools import chain
 
+
 #Declarar funciones para hacer cuando se ingresan direcciones
 
 # Create your views here.
