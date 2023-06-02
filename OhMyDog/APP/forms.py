@@ -184,3 +184,27 @@ class contacto_form(forms.Form):
             raise ValidationError("El telefono debe tener entre 7 y 11 caracters")
         return data
     
+class perroPerdido_form(forms.Form):
+    class Meta:
+        model = PerroPerdido
+        fields = ['nombre', 'descripcion', 'zona', 'fechaD']
+    def __init__(self, *args, **kwargs):
+        opciones = kwargs.pop('opciones', [])
+        super(perroPerdido_form, self).__init__(*args, **kwargs)
+        self.fields['nombre'] = forms.ChoiceField(choices=[(opcion, opcion) for opcion in opciones])
+       
+    
+    nombre = forms.ChoiceField()
+    descripcion = forms.CharField(max_length=200, required=True, label='Descripcion')
+    zona = forms.CharField(max_length=20, required=True, label='Zona')
+    fechaD = forms.DateField(required = True, label='Fecha de Desaparicion',
+                            widget=forms.DateInput(attrs={"type": "date"}))
+    def clean_fechaD(self):
+        data =self.cleaned_data["fechaD"]
+        fecha = date.datetime.today()
+
+        data_str = data.strftime('%d/%m/%Y')
+        data_nueva = date.datetime.strptime(data_str, '%d/%m/%Y')
+        if data_nueva > fecha:
+            raise ValidationError("Coloque una fecha previa a la fecha actual")
+        return data

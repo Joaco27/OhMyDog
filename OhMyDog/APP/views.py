@@ -405,3 +405,44 @@ def terminarContactoP(request, nombreU, nombreP):
     messages.add_message(request, messages.SUCCESS, 'Consulta efectuada', extra_tags="tag1")
 
     return redirect("notiContacto")
+
+def listarPerdidos(request):
+    perdidos = PerroPerdido.objects.all()
+    context = {
+        'context':perdidos,
+        'usuario':usuario
+    }
+    return render(request, 'paginas/listarPerdidos.html', context)
+
+def publicarPerdido(request):
+    usu = Cliente.objects.get(usuario=usuario['nombre'])
+    if request.method == 'POST':
+        perros = Perro.objects.filter('nombre',emailDueño=usu.mail)
+        form = perroPerdido_form(request.POST, opciones=perros)
+        if form.is_valid():
+            
+            d = Cliente.objects.get('nombreC',usuario=usuario['nombre'])
+            p = Perro.objects.get(nombre=form.cleaned_data['nombre'])
+            
+            perdido = PerroPerdido(
+                usuario = usuario['nombre'],
+                dueño = d,
+                nombre = p.nombre,
+                raza = p.raza,
+                descripcion = form.cleaned_data['descripcion'],
+                zona = form.cleaned_data['zona'],
+                fechaD = form.cleaned_data['fechaD'],
+            )
+            
+            perdido.save()
+            messages.add_message(request, messages.SUCCESS, 'Se ha publicado la desaparicion', extra_tags="tag1")
+
+            return redirect("index")
+    else:
+        form = perroPerdido_form()
+    
+    context = {
+        'form': form,
+        'usuario' : usuario,
+    }
+    return render(request, 'paginas/publicarPerdido.html', context)

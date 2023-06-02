@@ -46,9 +46,13 @@ urlpatterns = [
     path('notiContacto', views.notiContacto,name='notiContacto'),
     path('borrarNotiC/<str:nombreU>/<str:nombreC>/',views.terminarContactoC,name='borrarNotiC'),
     path('borrarNotiP/<str:nombreU>/<str:nombreP>/',views.terminarContactoP,name='borrarNotiP'),
+    
     path('registrar',views.registrar,name='registrar'),
     path('registrarPerro',views.registrarPerro,name='registrarPerro'),
     path('losPerros',views.losPerros,name='losPerros'),
+    
+    path('publicarPerdido', views.publicarPerdido,name='publicarPerdido'),
+    path('listarPerdidos', views.listarPerdidos, name='listarPerdidos'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
