@@ -191,7 +191,7 @@ class perroPerdido_form(forms.Form):
     def __init__(self, *args, **kwargs):
         opciones = kwargs.pop('opciones', [])
         super(perroPerdido_form, self).__init__(*args, **kwargs)
-        self.fields['nombre'] = forms.ChoiceField(choices=[(opcion, opcion) for opcion in opciones])
+        self.fields['nombre'] = forms.ChoiceField(choices=[(opcion, opcion) for opcion in opciones],required=True)
        
     
     nombre = forms.ChoiceField()

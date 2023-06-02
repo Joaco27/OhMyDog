@@ -412,21 +412,24 @@ def listarPerdidos(request):
         'context':perdidos,
         'usuario':usuario
     }
-    return render(request, 'paginas/listarPerdidos.html', context)
+    return render(request, 'paginas/listaPerdidos.html', context)
 
 def publicarPerdido(request):
     usu = Cliente.objects.get(usuario=usuario['nombre'])
+    perros = Perro.objects.filter(emailDueño=usu.mail)
+    listaPerros =[""]
+    listaPerros += [p.nombre for p in perros]
+    print(listaPerros)
     if request.method == 'POST':
-        perros = Perro.objects.filter('nombre',emailDueño=usu.mail)
-        form = perroPerdido_form(request.POST, opciones=perros)
+        form = perroPerdido_form(request.POST, opciones=listaPerros)
         if form.is_valid():
             
-            d = Cliente.objects.get('nombreC',usuario=usuario['nombre'])
+            d = Cliente.objects.get(usuario=usuario['nombre'])
             p = Perro.objects.get(nombre=form.cleaned_data['nombre'])
             
             perdido = PerroPerdido(
                 usuario = usuario['nombre'],
-                dueño = d,
+                dueño = d.nombreC,
                 nombre = p.nombre,
                 raza = p.raza,
                 descripcion = form.cleaned_data['descripcion'],
@@ -439,10 +442,17 @@ def publicarPerdido(request):
 
             return redirect("index")
     else:
-        form = perroPerdido_form()
+        form = perroPerdido_form( opciones=listaPerros)
     
     context = {
         'form': form,
         'usuario' : usuario,
     }
     return render(request, 'paginas/publicarPerdido.html', context)
+
+def borrarPerroPerdido(request, dueño, nombre):
+    PerroPerdido.objects.filter(dueño=dueño,nombre=nombre).delete()
+    
+    messages.add_message(request, messages.SUCCESS, 'Perdida borrada', extra_tags="tag1")
+
+    return redirect("listarPerdidos")

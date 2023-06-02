@@ -11,16 +11,13 @@
         <p>No hay perros perdidos publicados</p>
     {% else %}
         {% for c in context %}
-        
-            <p>usuario: {{ c.usuario }}</p>
+            <p>Dueño: {{ c.dueño }}</p>
             <p>Nombre: {{ c.nombre }}</p>
-            <p>Peso: {{ c.peso }}</p>
             <p>Zona: {{ c.zona }}</p>
             <p>Raza: {{ c.raza }}</p>
             <p>Descripcion: {{ c.descripcion }}</p>
-            <p>Castrado: {{ c.castrado }}</p>
+            <p>Fecha de Desaparicion: {{ c.fechaD }}</p>
             <p></p>
-            <a href="" class="btn btn-success">Informacion de contanto</a>
             <p></p>
             {% if usuario.esVeterinario or usuario.nombre == c.usuario %}
                 <!-- <a href="./borrarPerroA/{{c.usuario}}/{{c.nombre}}" class="btn btn-danger">Borrar</a> -->
@@ -29,7 +26,7 @@
                   function confirmar(){
                     let conf = window.confirm('Seguro que quieres borrar este elemento??')
                     if(conf)
-                      window.location.href = "./borrarPerroA/{{c.usuario}}/{{c.nombre}}"
+                      window.location.href = "./borrarPerroPerdido/{{c.dueño}}/{{c.nombre}}"
                   }
                 </script>
             {% endif %}   

@@ -53,6 +53,7 @@ urlpatterns = [
     
     path('publicarPerdido', views.publicarPerdido,name='publicarPerdido'),
     path('listarPerdidos', views.listarPerdidos, name='listarPerdidos'),
+    path('borrarPerroPerdido/<str:dueño>/<str:nombre>/',views.borrarPerroPerdido, name='borrarPerroPerdido'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
