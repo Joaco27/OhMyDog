@@ -45,8 +45,11 @@ def registrarPerro(request):
     if request.method == 'POST':
         form = Perro_form(request.POST) 
         if form.is_valid(): 
-            
             form.save()
+            usr=Cliente.objects.get(onLine=True)
+            perro=Perro.objects.get(nombre=form.cleaned_data['nombre'])
+            perro.nombreD=usr.usuario
+            perro.save()
             messages.add_message(request, messages.SUCCESS, 'Perro registrado con exito', extra_tags="tag1")
 
             return redirect("index")
@@ -91,6 +94,9 @@ def LogIn(request):
             if usuario['nombre'] == "Veterinario":
                 usuario['esVeterinario'] = True
                 usuario['esCliente'] = False
+            usr=Cliente.objects.get(usuario=form.cleaned_data["usuario"])
+            usr.onLine = True
+            usr.save()
             messages.add_message(request, messages.SUCCESS, 'Iniciaste Sesion', extra_tags="tag1")
 
             return redirect("index")
@@ -104,6 +110,9 @@ def LogIn(request):
     return render(request, 'paginas/LogIn.html', context)
 
 def LogOut(request):
+    usr=Cliente.objects.get(usuario=usuario["nombre"])
+    usr.onLine = False
+    usr.save()
     usuario["nombre"] = ""
     usuario["contra"] = ""
     usuario['esCliente'] = False
@@ -160,7 +169,7 @@ def ListarAdopciones(request):
 
 def misPerros(request): 
     usu = Cliente.objects.filter(usuario=usuario["nombre"]).first()
-    lista = Perro.objects.filter(emailDueño=usu.mail)
+    lista = Perro.objects.filter(nombreD=usu.usuario)
     context = {'context': lista,
                'usuario': usuario}
     return render(request, 'paginas/misPerros.html', context)
@@ -316,20 +325,30 @@ def borrarP(request, telefono):
     return redirect("paseadores")
 
 def turnos(request):
+    usr=Cliente.objects.get(onLine=True)
     if request.method == 'POST':
         form = Turnos_form(request.POST)
         if form.is_valid():
-            
-            form.save() 
+            perro=Perro.objects.get(nombre=form.cleaned_data['perro'],nombreD=usr.usuario)
+            form.save()#primero guardo el form como viene (con los fields en null)
+            #despues lo vuelvo a traer y seteo lo que quiero
+            #como no deja modificar el form. hasta que este guardado, encontre esta solu
+            turno = Turnos.objects.get(descripcion=form.cleaned_data['descripcion'],perro=form.cleaned_data['perro'])
+            turno.nombre=usr.usuario
+            turno.raza=perro.raza
+            turno.edad=perro.edad
+            turno.save()
             messages.add_message(request, messages.SUCCESS, 'El veterinario se pondra en contacto pronto', extra_tags="tag1")
 
             return redirect("index")
     else:
         form = Turnos_form()
-    
+    perros=Perro.objects.filter(nombreD=usr.usuario)
+    print (perros)
     context = {
         'form': form,
         'usuario' : usuario,
+        'perros' : perros
     }
     return render(request, 'paginas/turnos.html', context)
 
@@ -389,6 +408,23 @@ def notiContacto(request):
         'cuidadores':datosC,
     }
     return render(request,'paginas/notiContactos.html', context)
+
+def notiTurnos(request):
+    turnos = Turnos.objects.all()
+    #d = chain(datosC,datosP)s
+    context ={
+        'usuario':usuario,
+        'turnos':turnos,
+    }
+    return render(request,'paginas/notiTurnos.html', context)
+
+def borrarNotificacionT(request, nombreU):
+    
+    Turnos.objects.filter(usuario=nombreU).delete()
+    
+    messages.add_message(request, messages.SUCCESS, 'Consulta efectuada', extra_tags="tag1")
+
+    return redirect("notiTurnos")
 
 def terminarContactoC(request, nombreU, nombreC):
     

@@ -40,15 +40,18 @@ urlpatterns = [
     path('borrarPerroA/<str:usuario>/<str:nombre>',views.borrarPerroA,name='borrarPerroA'),
     
     path('listarAdopciones',views.ListarAdopciones,name='ListarAdopciones'),
-    path('misPerros',views.misPerros,name='misPerros'),
+    
     
     path('notificaciones',views.notificaciones,name='notificaciones'),
     path('notiContacto', views.notiContacto,name='notiContacto'),
+    path('notiTurnos', views.notiTurnos,name='notiTurnos'),
     path('borrarNotiC/<str:nombreU>/<str:nombreC>/',views.terminarContactoC,name='borrarNotiC'),
     path('borrarNotiP/<str:nombreU>/<str:nombreP>/',views.terminarContactoP,name='borrarNotiP'),
     path('registrar',views.registrar,name='registrar'),
     path('registrarPerro',views.registrarPerro,name='registrarPerro'),
     path('losPerros',views.losPerros,name='losPerros'),
+    path('borrarNotificacionT/<str:nombreU>/',views.borrarNotificacionT,name='borrarNotificacionT'),
+    path('misPerros',views.misPerros,name='misPerros'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -1,0 +1,21 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+
+{% block titulo %} Solicitudes de Turno {% endblock %}
+
+{% block contenido %} 
+
+<div class="d-flex justify-content-center flex-column align-items-center">
+    {% if turnos|length == 0 %}
+        <p>Aun no hay consultas</p>
+    {% else %}
+        {% for c in turnos %}
+            <p>{{ c }}</p>
+            <a href="./borrarNotificacionT/{{c.nombreU}}" class="btn btn-success">Confirmado</a>
+            <p>-----------------</p>
+        {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock %}

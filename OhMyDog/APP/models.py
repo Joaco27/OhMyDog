@@ -1,4 +1,6 @@
+
 from django.db import models
+
 
 # Aca declaramos todas las tablas de la BD
 
@@ -8,8 +10,9 @@ class Perro(models.Model):
     raza = models.CharField(max_length=30)
     edad = models.IntegerField()
     emailDueño = models.EmailField(max_length=30)
+    nombreD = models.CharField(max_length=15)
     def __str__(self):
-        return f'Perro: {self.nombre} con {self.edad} años, raza {self.raza}, y emailD {self.emailDueño}'
+        return f'{self.nombre}'
     
 class Cliente(models.Model):
     nombreC = models.CharField(max_length=15)
@@ -17,6 +20,9 @@ class Cliente(models.Model):
     contra = models.CharField(max_length=30, null=True)
     mail = models.EmailField(max_length=30)
     telefono = models.IntegerField()
+    onLine= models.BooleanField(default=False)
+    def __str__(self):
+        return f'{self.nombreC}'
     
 
 class Paseador(models.Model):
@@ -56,10 +62,11 @@ class ContactoCuidador(models.Model):
     
 class Turnos(models.Model):
     descripcion = models.TextField(max_length=400)
-    nombre = models.CharField(max_length=30)
-    edad = models.IntegerField()
-    raza = models.CharField(max_length=30)
-    motivo = models.CharField(max_length=20)
+    nombre = models.CharField(max_length=30,null=True,blank=True)#hay que sacarlo
+    edad = models.IntegerField(null=True,blank=True)
+    raza = models.CharField(max_length=30,null=True,blank=True)
+    perro = models.CharField(max_length=100)
+    motivo = models.CharField(max_length=100)
     fecha = models.DateField()
     def __str__(self):
         return f'Turno de {self.nombre} de edad {self.edad} raza {self.raza} y descripcion {self.descripcion}'
