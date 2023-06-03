@@ -43,7 +43,7 @@ def registrarCliente(request):
 
 def registrarPerro(request):
     if request.method == 'POST':
-        form = Perro_form(request.POST) 
+        form = Perro_form(request.POST, request.FILES) 
         if form.is_valid(): 
             
             form.save()
@@ -430,11 +430,13 @@ def publicarPerdido(request):
             perdido = PerroPerdido(
                 usuario = usuario['nombre'],
                 dueño = d.nombreC,
+                telDueño = usu.telefono,
                 nombre = p.nombre,
                 raza = p.raza,
                 descripcion = form.cleaned_data['descripcion'],
                 zona = form.cleaned_data['zona'],
                 fechaD = form.cleaned_data['fechaD'],
+                imagen = p.imagen,
             )
             
             perdido.save()

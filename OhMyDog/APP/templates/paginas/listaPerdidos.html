@@ -11,26 +11,31 @@
         <p>No hay perros perdidos publicados</p>
     {% else %}
         {% for c in context %}
-            <p>Dueño: {{ c.dueño }}</p>
-            <p>Nombre: {{ c.nombre }}</p>
-            <p>Zona: {{ c.zona }}</p>
-            <p>Raza: {{ c.raza }}</p>
-            <p>Descripcion: {{ c.descripcion }}</p>
-            <p>Fecha de Desaparicion: {{ c.fechaD }}</p>
-            <p></p>
-            <p></p>
-            {% if usuario.esVeterinario or usuario.nombre == c.usuario %}
-                <!-- <a href="./borrarPerroA/{{c.usuario}}/{{c.nombre}}" class="btn btn-danger">Borrar</a> -->
-                <button onclick="confirmar()" class="btn btn-danger">Borrar</button>
-                <script>
-                  function confirmar(){
-                    let conf = window.confirm('Seguro que quieres borrar este elemento??')
-                    if(conf)
-                      window.location.href = "./borrarPerroPerdido/{{c.dueño}}/{{c.nombre}}"
-                  }
-                </script>
-            {% endif %}   
-            <p>-----------------</p>
+        <div class="flex row border border-5 border-dark rounded">
+            <div class="col">
+                <p><strong>Nombre:</strong> {{ c.nombre }}</p>
+                <p><strong>Raza:</strong> {{ c.raza }}</p>
+                <img src="{{c.imagen.url}}" alt="FOTO" height="150" width="150">
+            </div>
+            <div class="col">
+                <p><strong>Dueño:</strong> {{ c.dueño }}</p>
+                <p><strong>Telefono:</strong> {{ c.telDueño }}</p>
+                <p><strong>Zona:</strong> {{ c.zona }}</p>
+                <p><strong>Descripcion:</strong> {{ c.descripcion }}</p>
+                <p><strong>Fecha de Desaparicion:</strong> {{ c.fechaD }}</p>
+                {% if usuario.esVeterinario or usuario.nombre == c.usuario %}
+                    <!-- <a href="./borrarPerroA/{{c.usuario}}/{{c.nombre}}" class="btn btn-danger">Borrar</a> -->
+                    <button onclick="confirmar()" class="btn btn-danger">Borrar</button>
+                    <script>
+                    function confirmar(){
+                        let conf = window.confirm('Seguro que quieres borrar este elemento??')
+                        if(conf)
+                        window.location.href = "./borrarPerroPerdido/{{c.dueño}}/{{c.nombre}}"
+                    }
+                    </script>
+                {% endif %}
+            </div>
+        </div>   
         {% endfor %}
     {% endif %}
     

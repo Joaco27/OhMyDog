@@ -10,16 +10,14 @@ class Perro_form(forms.ModelForm):
     # Meta sirve para enlazar con la BD
     class Meta:
         model = Perro
-        fields = ['nombre','raza', 'edad', 'emailDueño']
+        fields = ['nombre','raza', 'edad', 'emailDueño','imagen']
     # Creamos los campos del formulario
     nombre = forms.CharField(max_length=15, required=True, label='Nombre')
     raza = forms.CharField(max_length=15, required=True, label='Raza')
     edad = forms.IntegerField(required=True, label='Edad')
     emailDueño = forms.EmailField(max_length=30, required=True, label='Email Dueño')
+    imagen = forms.ImageField(required=True, label="Imagen", widget=forms.ClearableFileInput(attrs={'class': 'form-control-file'}))
 
-    # Clean son validaciones 
-    # Se debe respetar que en el nombre de la validacion este
-    # el nombre del campo , osea clean_<nombre de campo>
     def clean_edad(self):
         data = self.cleaned_data["edad"]
         if data < 1 or data > 20:
@@ -195,7 +193,7 @@ class perroPerdido_form(forms.Form):
        
     
     nombre = forms.ChoiceField()
-    descripcion = forms.CharField(max_length=200, required=True, label='Descripcion')
+    descripcion = forms.CharField(max_length=200, required=True, label='Descripcion', widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
     zona = forms.CharField(max_length=20, required=True, label='Zona')
     fechaD = forms.DateField(required = True, label='Fecha de Desaparicion',
                             widget=forms.DateInput(attrs={"type": "date"}))
