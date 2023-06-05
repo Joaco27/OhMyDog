@@ -49,6 +49,7 @@ def registrarPerro(request):
             usr=Cliente.objects.get(onLine=True)
             perro=Perro.objects.get(nombre=form.cleaned_data['nombre'])
             perro.nombreD=usr.usuario
+            perro.emailDueño=usr.mail
             perro.save()
             messages.add_message(request, messages.SUCCESS, 'Perro registrado con exito', extra_tags="tag1")
 

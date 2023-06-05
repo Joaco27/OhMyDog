@@ -87,12 +87,11 @@ class Turnos_form(forms.ModelForm):
     #intentamos inicializar el form antes
 
     #creamos las choices para perros
-    usr=Cliente.objects.get(onLine=True)
-    print ('holaaaaa')
-    print (usr)
     choice=[]
-    for i in Perro.objects.filter(nombreD=usr.usuario):
-        choice.append((i,i))
+    if Cliente.objects.filter(onLine=True).exists() :
+        usr=Cliente.objects.get(onLine=True)
+        for i in Perro.objects.filter(nombreD=usr.usuario):
+            choice.append((i,i))
     # Creamos los campos del formulario
     descripcion = forms.Textarea()
     nombre = forms.CharField(max_length=15, label='Nombre',widget=forms.HiddenInput,required=False) #hay que sacarlo
@@ -144,7 +143,7 @@ class Cliente_form(forms.ModelForm):
     contra = forms.CharField(max_length=20, required=True, label='Contraseña',widget=forms.PasswordInput)
     mail = forms.EmailField(max_length=30, required=True, label='Mail')
     telefono = forms.IntegerField(required=True, label='Telefono')
-    onLine = forms.BooleanField(show_hidden_initial=True)
+    onLine = forms.BooleanField(show_hidden_initial=True,widget=forms.HiddenInput(),required=False)
     
     def clean_usuario(self):
         data = self.cleaned_data["usuario"]
