@@ -10,13 +10,11 @@ class Perro_form(forms.ModelForm):
     # Meta sirve para enlazar con la BD
     class Meta:
         model = Perro
-        fields = ['nombre','raza', 'edad', 'emailDueño','imagen']
+        fields = ['nombre','raza', 'edad']
     # Creamos los campos del formulario
     nombre = forms.CharField(max_length=15, required=True, label='Nombre')
     raza = forms.CharField(max_length=15, required=True, label='Raza')
     edad = forms.IntegerField(required=True, label='Edad')
-    emailDueño = forms.EmailField(max_length=30, required=True, label='Email Dueño')
-    imagen = forms.ImageField(required=True, label="Imagen", widget=forms.ClearableFileInput(attrs={'class': 'form-control-file'}))
 
     def clean_edad(self):
         data = self.cleaned_data["edad"]
@@ -24,12 +22,12 @@ class Perro_form(forms.ModelForm):
             raise ValidationError("Edad invalida")
         return data
     
-    def clean_emailDueño(self):
-        data = self.cleaned_data.get('emailDueño')
-        ok = Cliente.objects.filter(mail=data).exists()
-        if not ok :
-            raise ValidationError('El email no pertenece a un dueño')
-        return data
+    # def clean_emailDueño(self):
+    #     data = self.cleaned_data.get('emailDueño')
+    #     ok = Cliente.objects.filter(mail=data).exists()
+    #     if not ok :
+    #         raise ValidationError('El email no pertenece a un dueño')
+    #     return data
     
 class Paseador_form(forms.ModelForm):
     class Meta:
@@ -174,7 +172,7 @@ class LogIn_form(forms.Form):
     
 class contacto_form(forms.Form):
     usuario = forms.CharField(max_length=40, required=True, label='Nombre')
-    telefono = forms.IntegerField(required=True)
+    telefono = forms.IntegerField(required=True, label='Telefono')
             
     def clean_telefono(self):
         data=self.cleaned_data["telefono"]
@@ -185,7 +183,7 @@ class contacto_form(forms.Form):
 class perroPerdido_form(forms.Form):
     class Meta:
         model = PerroPerdido
-        fields = ['nombre', 'descripcion', 'zona', 'fechaD']
+        fields = ['nombre', 'descripcion', 'zona', 'fechaD','imagen']
     def __init__(self, *args, **kwargs):
         opciones = kwargs.pop('opciones', [])
         super(perroPerdido_form, self).__init__(*args, **kwargs)
@@ -195,8 +193,10 @@ class perroPerdido_form(forms.Form):
     nombre = forms.ChoiceField()
     descripcion = forms.CharField(max_length=200, required=True, label='Descripcion', widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
     zona = forms.CharField(max_length=20, required=True, label='Zona')
-    fechaD = forms.DateField(required = True, label='Fecha de Desaparicion',
+    fechaD = forms.DateField(initial=date.date.today(), required = True, label='Fecha de Desaparicion',
                             widget=forms.DateInput(attrs={"type": "date"}))
+    imagen = forms.ImageField(required=True, label="Imagen", widget=forms.ClearableFileInput(attrs={'class': 'form-control-file'}))
+
     def clean_fechaD(self):
         data =self.cleaned_data["fechaD"]
         fecha = date.datetime.today()

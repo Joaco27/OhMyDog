@@ -22,21 +22,6 @@
                 <p><strong>Zona:</strong> {{ c.zona }}</p>
                 <p><strong>Descripcion:</strong> {{ c.descripcion }}</p>
                 <p><strong>Fecha de Desaparicion:</strong> {{ c.fechaD }}</p>
-                {% if usuario.esVeterinario %}
-                    <p><strong>Telefono:</strong> {{ c.telDueño }}</p>
-                {% else %}
-                    {% if usuario.esCliente and usuario.nombre != c.usuario %}
-                        <a href="./contactarPerd/{{c.nombre}}/{{c.telDueño}}" class="btn btn-success">Contactar</a>
-                        <br>
-                    {% else %}
-                        {% if usuario.nombre != c.usuario %}
-                            <a href="./contactarPerdVisit/{{c.nombre}}/{{c.telDueño}}" class="btn btn-success">Contactar</a>
-                            <br>
-                        {% endif %}
-                    {% endif %}
-                {% endif %}
-
-                {% if usuario.esVeterinario or usuario.nombre == c.usuario %}
                     <button onclick="confirmar()" class="btn btn-danger">Borrar</button>
                     <script>
                     function confirmar(){
@@ -45,7 +30,6 @@
                         window.location.href = "./borrarPerroPerdido/{{c.dueño}}/{{c.nombre}}"
                     }
                     </script>
-                {% endif %}
             </div>
         </div>   
         {% endfor %}
