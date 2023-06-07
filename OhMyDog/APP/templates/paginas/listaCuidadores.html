@@ -9,34 +9,20 @@
     {% if context|length == 0 %}
         <p>No hay Cuidadores Publicados</p>
     {% else %}
-    <table class="table">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            {% if usuario.esVeterinario %}
-            <th>DNI</th>
-            <th>Telefono</th>
-            {% endif %}
-            <th>Zona</th>
-            <th>Disponibilidad</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for c in context %}
-          <tr>
-            <td>{{ c.nombre }}</td>
-            {% if usuario.esVeterinario %}
-            <td>{{ c.dni }}</td>
-            <td>{{ c.telefono }}</td>
-            {% endif %}
-            <td>{{ c.zona }}</td>
-            <td>{{ c.disponibilidad }}</td>
-            <td>
+    {% for c in context %}
+          <div class="container w-25 justify-content-center align-items-center border border-5 border-dark rounded">
+            <div class="col justify-content-center align-items-center">
+              <p><strong>Nombre:</strong> {{ c.nombre }}</p>
+                {% if usuario.esVeterinario %}
+                  <p><strong>DNI:</strong> {{ c.dni }}</p>
+                  <p><strong>Telefono:</strong> {{ c.telefono }}</p>
+                {% endif %}
+                <p><strong>Zona:</strong> {{ c.zona }}</p>
+                <p><strong>Disponibilidad:</strong> {{ c.disponibilidad }}</p>
                 {% if usuario.esCliente %}
                     <a href="./contactarC/{{c.nombre}}/{{c.telefono}}" class="btn btn-success">Contactar</a>
                 {% else %}
                     {% if usuario.esVeterinario %}
-                        <!-- href="./borrarC/{{c.telefono}}" -->
                         <button onclick="confirmar()" class="btn btn-danger">Borrar</button>
                         <script>
                           function confirmar(){
@@ -48,12 +34,10 @@
                     {% else %}
                         <a href="./contactarCVisit/{{c.nombre}}/{{c.telefono}}" class="btn btn-success">Contactar</a>
                     {% endif %}
-                {% endif %}        
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-    </table>
+                {% endif %}
+            </div>
+          </div>   
+         {% endfor %}
     {% endif %}
 </div>
 

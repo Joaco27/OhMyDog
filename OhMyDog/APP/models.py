@@ -8,6 +8,7 @@ class Perro(models.Model):
     raza = models.CharField(max_length=30)
     edad = models.IntegerField()
     emailDueño = models.EmailField(max_length=30)
+    # imagen = models.ImageField(upload_to='imagenes/', null=True)
     def __str__(self):
         return f'Perro: {self.nombre} con {self.edad} años, raza {self.raza}, y emailD {self.emailDueño}'
     
@@ -75,3 +76,23 @@ class PerroAdopcion(models.Model):
     castrado = models.CharField(max_length=2)
     def __str__(self):
         return f'se publico el perro {self.nombre}'
+    
+class PerroPerdido(models.Model):
+    usuario = models.CharField(max_length=30)
+    dueño = models.CharField(max_length=30)
+    telDueño = models.IntegerField()
+    nombre = models.CharField(max_length=30)
+    raza= models.CharField(max_length=20)
+    descripcion= models.CharField(max_length=30)
+    zona= models.CharField(max_length=50)
+    fechaD= models.DateTimeField()
+    imagen = models.ImageField(upload_to='imagenes/',null=True)
+    
+    
+class ContactoPerdido(models.Model):
+    nombreP = models.CharField(max_length=30)
+    telDueño = models.IntegerField()
+    encontro = models.CharField(max_length=30)
+    telEncontro = models.IntegerField()
+    def __str__(self):
+        return f'{self.encontro} encontro a {self.nombreP} contactalo al Telefono:{self.telEncontro}'

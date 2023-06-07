@@ -22,7 +22,7 @@ urlpatterns = [
     path('contactarPVisit/<str:nombre>/<int:telefono>/',views.contactarPVisit,name='contactarPVisit'),
     path('borrarP/<int:telefono>/',views.borrarP,name='borrarP'),
     
-    
+    path('publicaciones', views.publicaciones,name='publicaciones'),
     path('publicar',views.publicar,name='publicar'),
     path('publicarP',views.publicarP,name='publicarP'),
     path('publicarC',views.publicarC,name='publicarC'),
@@ -46,9 +46,19 @@ urlpatterns = [
     path('notiContacto', views.notiContacto,name='notiContacto'),
     path('borrarNotiC/<str:nombreU>/<str:nombreC>/',views.terminarContactoC,name='borrarNotiC'),
     path('borrarNotiP/<str:nombreU>/<str:nombreP>/',views.terminarContactoP,name='borrarNotiP'),
+    
     path('registrar',views.registrar,name='registrar'),
     path('registrarPerro',views.registrarPerro,name='registrarPerro'),
     path('losPerros',views.losPerros,name='losPerros'),
+    
+    path('publicarPerdido', views.publicarPerdido,name='publicarPerdido'),
+    path('listarPerdidos', views.listarPerdidos, name='listarPerdidos'),
+    path('borrarPerroPerdido/<str:dueño>/<str:nombre>/',views.borrarPerroPerdido, name='borrarPerroPerdido'),
+    path('contactarPerd/<str:nombre>/<int:telDueño>/',views.contactarPerd, name='contactarPerd'),
+    path('contactarPerdVisit/<str:nombre>/<int:telDueño>/',views.contactarPerdVisit, name='contactarPerdVisit'),
+    path('notiPerdidos', views.notiPerdidos, name='notiPerdidos'),
+    path('borrarNotiPerd/<str:nombreP>/<str:encontro>/',views.terminarPerd,name='borrarNotiPerd'),
+    path('misPerdidos', views.misPerdidos, name='misPerdidos'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
