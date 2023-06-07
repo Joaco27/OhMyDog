@@ -11,7 +11,7 @@ class Perro(models.Model):
     edad = models.IntegerField()
     emailDueño = models.EmailField(max_length=30)
     # imagen = models.ImageField(upload_to='imagenes/', null=True)
-    nombreD = models.CharField(max_length=15)
+    
     def __str__(self):
         return f'{self.nombre}'
     
