@@ -1,7 +1,6 @@
 from .models import *
 from django import forms
 import datetime as date
-
 from django.core.exceptions import ValidationError 
 
 # Aca creamos los formularios
@@ -22,13 +21,20 @@ class Perro_form(forms.ModelForm):
             raise ValidationError("Edad invalida")
         return data
     
-    # def clean_emailDueño(self):
-    #     data = self.cleaned_data.get('emailDueño')
-    #     ok = Cliente.objects.filter(mail=data).exists()
-    #     if not ok :
-    #         raise ValidationError('El email no pertenece a un dueño')
-    #     return data
-    
+    def clean_emailDueño(self):
+        data = self.cleaned_data.get('emailDueño')
+        ok = Cliente.objects.filter(mail=data).exists()
+        if not ok :
+            raise ValidationError('El email no pertenece a un dueño')
+        return data
+    def clean_nombre(self):
+        data = self.cleaned_data.get('nombre')
+        mail = self.data.get('emailDueño')
+        ok = Perro.objects.filter(nombre=data,emailDueño=mail).exists
+        print (ok)
+        if ok :
+            raise ValidationError('El nombre del perro ya se encuentra registrado para ese dueño')
+        return data
 class Paseador_form(forms.ModelForm):
     class Meta:
         model=Paseador
@@ -71,21 +77,25 @@ class Turnos_form(forms.ModelForm):
     # Meta sirve para enlazar con la BD
     class Meta:
         model = Turnos
-        fields = ['descripcion','raza', 'edad','nombre','fecha']
+        fields = ['descripcion','raza', 'edad','nombre','perro','motivo','fecha']
+    #intentamos inicializar el form antes
+
+    #creamos las choices para perros
+    choice=[]
+    if Cliente.objects.filter(onLine=True).exists() :
+        usr=Cliente.objects.get(onLine=True)
+        for i in Perro.objects.filter(nombreD=usr.usuario):
+            choice.append((i,i))
     # Creamos los campos del formulario
     descripcion = forms.Textarea()
-    nombre = forms.CharField(max_length=15, required=True, label='Nombre')
-    raza = forms.CharField(max_length=15, required=True, label='Raza')
-    edad = forms.IntegerField(required=True, label='Edad')
-    motivo = forms.Select()
-    fecha = forms.DateField(required = True, label='Seleccione la fecha de su turno',
+    nombre = forms.CharField(max_length=15, label='Nombre',widget=forms.HiddenInput,required=False) #hay que sacarlo
+    raza = forms.CharField(max_length=15, label='Raza',widget=forms.HiddenInput,required=False) #fuera
+    edad = forms.IntegerField(label='Edad',widget=forms.HiddenInput,required=False) #fuera
+    perro = forms.ChoiceField(widget= forms.RadioSelect,label='Seleccion su perro',choices=choice)
+    motivo = forms.ChoiceField(widget=forms.RadioSelect, label='motivo', choices=[('castrar', 'castrar'), ('vacunar', 'vacunar'), ('revision', 'Revision'), ('otro', 'Otro')])
+    fecha = forms.DateField( label='Seleccione la fecha de su turno',
                             widget=forms.DateInput(attrs={"type": "date"}))
     # Clean son validaciones 
-    def clean_edad(self):
-        data = self.cleaned_data["edad"]
-        if data < 1 or data > 20:
-            raise ValidationError("Edad no permitida (1-20)")
-        return data
     
     def clean_fecha(self):
         data =self.cleaned_data["fecha"]
@@ -121,12 +131,13 @@ class perroAdopcion_form(forms.ModelForm):
 class Cliente_form(forms.ModelForm):
     class Meta:
         model = Cliente
-        fields = ['nombreC','usuario','contra','mail','telefono']
+        fields = ['nombreC','usuario','contra','mail','telefono','onLine']
     nombreC = forms.CharField(max_length=40, required=True, label='Nombre Completo')
     usuario = forms.CharField(max_length=20, required=True, label='Nombre de Usuario')
     contra = forms.CharField(max_length=20, required=True, label='Contraseña',widget=forms.PasswordInput)
     mail = forms.EmailField(max_length=30, required=True, label='Mail')
     telefono = forms.IntegerField(required=True, label='Telefono')
+    onLine = forms.BooleanField(show_hidden_initial=True,widget=forms.HiddenInput(),required=False)
     
     def clean_usuario(self):
         data = self.cleaned_data["usuario"]
