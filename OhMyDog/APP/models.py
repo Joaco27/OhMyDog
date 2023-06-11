@@ -95,4 +95,6 @@ class ContactoPerdido(models.Model):
     encontro = models.CharField(max_length=30)
     telEncontro = models.IntegerField()
     def __str__(self):
+        if self.nombreP == 'Desconocido':
+            return f'{self.encontro} es dueño del perro reportado, contactalo al Telefono:{self.telEncontro}'
         return f'{self.encontro} encontro a {self.nombreP} contactalo al Telefono:{self.telEncontro}'
