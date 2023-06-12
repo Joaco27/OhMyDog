@@ -52,14 +52,15 @@ urlpatterns = [
 
     path('misPerros',views.misPerros,name='misPerros'),
     path('listarHistorialV',views.listarHistorialV,name='listarHistorialV'),
-    path('listarHistorialC/<str:nombre>/<str:emailDueño>/',views.listarHistorialC,name='listarHistorialC'),
+    path('listarHistorialC',views.listarHistorialC,name='listarHistorialC'),
     path('cargarHistorial',views.cargarHistorial,name='cargarHistorial'),
 
 
 
 
     path('validate', views.validate, name = 'validate'),
-    path('cargar', views.cargar, name = 'cargar'),
+    path('validateC', views.validateC, name = 'validateC'),
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -17,6 +17,12 @@ usuario = {
 def getUsuario():
     return usuario
 
+infoHistorial = {
+    "nombre": "",
+    "nombreP": "",
+    "mailD": "",
+}
+
 def index(request):
     context ={
         'usuario':usuario
@@ -457,80 +463,70 @@ def listarHistorialV(request,nombre):
     }
     return render(request, 'paginas/listarHistorialV.html', context)
 
-def validate(request):
+def validate(request):#extrae el nombre y email del perro y hace de conector con los historiales y su creacion
    if request.method == 'POST':
-      username= request.POST["nombre"]#tendria que ser un GET pero bueno, funciona
-      print(username)
-      usernameD = request.POST["nombreD"]
-      print (usernameD)
-      his = Historial.objects.all().filter(nombreP=username)
-      print (his)
+      nombre= request.POST["nombre"]#tendria que ser un GET pero bueno, funciona
+      emailD = request.POST["emailD"]
+      infoHistorial['nombreP']= request.POST["nombre"]
+      infoHistorial['mailD']= request.POST["emailD"]
+      his = Historial.objects.all().filter(nombreP=nombre,mailD=emailD)
       context = {
         'context':his,
         'usuario':usuario
     }
       return render(request, 'paginas/listarHistorialV.html', context)#aca me tendria que mandar a listarHistorialV
 
-def cargar(request):
-   if request.method == 'POST':#tendria que ser un GET pero bueno, funciona
-      nombreP= request.POST["nombre"]
-      print(nombreP)
-      emailD= request.POST["emailD"]
-      print(emailD)
-      raza= request.POST["raza"]
-      print(raza)
-      edad= request.POST["edad"]
-      print(edad)
-      his = Historial.objects.all().filter(nombreP=nombreP)
-      print (his)
+
+def validateC(request):#extrae el nombre y email del perro y hace de conector con los historiales y su creacion
+   if request.method == 'POST':
+      nombre= request.POST["nombre"]#tendria que ser un GET pero bueno, funciona
+      emailD = request.POST["emailD"]
+      infoHistorial['nombreP']= request.POST["nombre"]
+      infoHistorial['mailD']= request.POST["emailD"]
+      his = Historial.objects.all().filter(nombreP=nombre,mailD=emailD)
       context = {
         'context':his,
-        'usuario':usuario,
-        'nombreP':nombreP,
-        'emailD':emailD,
-        'raza':raza,
-        'edad':edad
+        'usuario':usuario
     }
-      return render(request, 'paginas/cargarHistorial.html', context)
+      return render(request, 'paginas/listarHistorialC.html', context)
 
-def listarHistorialC(request , nombre , emailDueño):
-    #usu=Cliente.objects.get(usuario=usuario['nombre'])
-    his = Historial.objects.all().filter(nombreP=nombre, mailD=emailDueño)
+
+def listarHistorialC(request):
+    his = Historial.objects.all().filter(nombreP=infoHistorial['nombreP'], mailD= infoHistorial['mailD'])
     context = {
         'context':his,
         'usuario':usuario
     }
     return render(request, 'paginas/listarHistorialC.html', context)
 
+
+
+
 def cargarHistorial(request):
     if request.method == 'POST':
         form = Historial_form(request.POST)
-
         if form.is_valid(): 
-            nombreP= request.POST["nombre"]
-            print(nombreP)
-            emailD= request.POST["emailD"]
-            print(emailD)
-            raza= request.POST["raza"]
-            print(raza)
-            edad= request.POST["edad"]
-            print(edad)
-            his=Historial.objects.get(descripcion=form.cleaned_data['descripcion'] ,
-                                       diagnostico_presuntivo=form.cleaned_data['diagnostico_presuntivo'] ,
-                                       proxima_visita=form.cleaned_data['proxima_visita'] )
+            print(form.cleaned_data['descripcion'])
             form.save()
-            his.nombreP=nombreP
-            his.mailD=emailD
-            his.edad=edad
-            his.raza=raza
+            his=Historial.objects.get(descripcion=form.cleaned_data['descripcion'] ,
+                                    diagnostico_presuntivo=form.cleaned_data['diagnostico_presuntivo'] ,
+                                    proxima_visita=form.cleaned_data['proxima_visita'] )
+                
+            perro=Perro.objects.get(nombre=infoHistorial['nombreP'],emailDueño=infoHistorial['mailD'])
+            his.nombreP=perro.nombre
+            his.mailD=perro.emailDueño
+            his.edad=perro.edad
+            his.raza=perro.raza
+            print(his)
             his.save()
             messages.add_message(request, messages.SUCCESS, 'Historial cargado con exito', extra_tags="tag1")
 
             return redirect("index")
     else:
         form = Historial_form()
-        
+            
     context = {
+
         'form': form,
         'usuario':usuario,
     }

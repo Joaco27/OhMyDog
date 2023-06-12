@@ -16,7 +16,6 @@ class Perro_form(forms.ModelForm):
     edad = forms.IntegerField(required=True, label='Edad')
     emailDueño = forms.EmailField(max_length=30, required=False, label='Email Dueño',widget=forms.HiddenInput())#hay que sacarlo
     nombreD = forms.CharField(initial='class',max_length=15, required=False, label='NombreD',widget=forms.HiddenInput())
-
     # Clean son validaciones 
     # Se debe respetar que en el nombre de la validacion este
     # el nombre del campo , osea clean_<nombre de campo>
@@ -205,7 +204,6 @@ class Historial_form(forms.ModelForm):
     mailD = forms.EmailField(max_length=30 ,required=False,widget=forms.HiddenInput)
     raza = forms.CharField(max_length=30,required=False,widget=forms.HiddenInput)
     edad = forms.IntegerField(required=False,widget=forms.HiddenInput)
-    sexo = forms.BooleanField(required=True)
     descripcion = forms.CharField( max_length=400,required=True,
                                    widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
     motivo  = forms.CharField(max_length=30,required=True)

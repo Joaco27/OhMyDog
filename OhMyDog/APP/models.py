@@ -84,11 +84,10 @@ class PerroAdopcion(models.Model):
         return f'se publico el perro {self.nombre}'
 
 class Historial(models.Model):
-    nombreP = models.CharField(max_length=30)
-    mailD = models.EmailField(max_length=30)
-    raza = models.CharField(max_length=30)
-    edad = models.IntegerField()
-    sexo = models.BooleanField()
+    nombreP = models.CharField(max_length=30,null=True,blank=True)
+    mailD = models.EmailField(max_length=30,null=True,blank=True)
+    raza = models.CharField(max_length=30,null=True,blank=True)
+    edad = models.IntegerField(null=True,blank=True)
     descripcion = models.CharField(max_length=400)
     motivo  = models.CharField(max_length=30)
     fecha = models.DateField()

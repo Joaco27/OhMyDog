@@ -6,15 +6,15 @@
 {% block contenido %} 
 
 <div class="d-flex justify-content-center flex-column align-items-center">
-  <form action="cargar" method="POST">
+  <form action="{% url 'cargarHistorial' %}" method="Cargar">
     {% csrf_token %}
     <input type="hidden" value="{{context.nombre}}" name="nombre" ><br><br>
     <input type="hidden" value="{{context.emailD}}" name="emailD" ><br><br>
     <input type="hidden" value="{{context.raza}}" name="raza" ><br><br>
     <input type="hidden" value="{{context.edad}}" name="edad" ><br><br>
-    #tengo que pasar la info del perro
     <input type="submit" value="Cargar Historial">
   </form>
+  <a href="./cargarHistorial" class="nav-item nav-link active text-white">cargar historial</a>
   
     {% if context|length == 0 %}
         <p>No hay Historias Cargadas</p>
@@ -26,7 +26,7 @@
             <th>Email del Dueño </th>
             <th>Raza</th>
             <th>Edad</th>
-            <th>Sexo</th>
+            <th>Sex</th>
             <th>Descripcion</th>
             <th>Motivo</th>
             <th>Fecha de Consulta</th>
@@ -42,11 +42,11 @@
         <tbody>
           {% for c in context %}
           <tr>
-            <td>{{ c.nombre }}</td>
-            <td>{{ c.emailD }}</td>
+            <td>{{ c.nombreP }}</td>
+            <td>{{ c.mailD }}</td>
             <td>{{ c.raza }}</td>
             <td>{{ c.edad }}</td>
-            <td>{{ c.sexo }}</td>
+            <td>{{ c.sex }}</td>
             <td>{{ c.descripcion }}</td>
             <td>{{ c.motivo }}</td>
             <td>{{ c.fecha }}</td>
