@@ -409,7 +409,6 @@ def notiContacto(request):
 
 def notiTurnos(request):
     turnos = Turnos.objects.all()
-    #d = chain(datosC,datosP)s
     context ={
         'usuario':usuario,
         'turnos':turnos,
