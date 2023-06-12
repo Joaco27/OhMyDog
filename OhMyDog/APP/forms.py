@@ -73,25 +73,21 @@ class Cuidador_form(forms.ModelForm):
             raise ValidationError("DNI ya registrado")
         return data
     
-class Turnos_form(forms.ModelForm):
+class Turnos_form(forms.Form):
     # Meta sirve para enlazar con la BD
     class Meta:
         model = Turnos
         fields = ['descripcion','raza', 'edad','nombre','perro','motivo','fecha']
-    #intentamos inicializar el form antes
+    def __init__(self, *args, **kwargs):
+        opciones = kwargs.pop('opciones', [])
+        super(Turnos_form, self).__init__(*args, **kwargs)
+        self.fields['perro'] = forms.ChoiceField(choices=[(opcion, opcion) for opcion in opciones],required=True)
 
-    #creamos las choices para perros
-    choice=[]
-    if Cliente.objects.filter(onLine=True).exists() :
-        usr=Cliente.objects.get(onLine=True)
-        for i in Perro.objects.filter(nombreD=usr.usuario):
-            choice.append((i,i))
-    # Creamos los campos del formulario
     descripcion = forms.Textarea()
     nombre = forms.CharField(max_length=15, label='Nombre',widget=forms.HiddenInput,required=False) #hay que sacarlo
     raza = forms.CharField(max_length=15, label='Raza',widget=forms.HiddenInput,required=False) #fuera
     edad = forms.IntegerField(label='Edad',widget=forms.HiddenInput,required=False) #fuera
-    perro = forms.ChoiceField(widget= forms.RadioSelect,label='Seleccion su perro',choices=choice)
+    perro = forms.ChoiceField()
     motivo = forms.ChoiceField(widget=forms.RadioSelect, label='motivo', choices=[('castrar', 'castrar'), ('vacunar', 'vacunar'), ('revision', 'Revision'), ('otro', 'Otro')])
     fecha = forms.DateField( label='Seleccione la fecha de su turno',
                             widget=forms.DateInput(attrs={"type": "date"}))
@@ -131,13 +127,13 @@ class perroAdopcion_form(forms.ModelForm):
 class Cliente_form(forms.ModelForm):
     class Meta:
         model = Cliente
-        fields = ['nombreC','usuario','contra','mail','telefono','onLine']
+        fields = ['nombreC','usuario','contra','mail','telefono']
     nombreC = forms.CharField(max_length=40, required=True, label='Nombre Completo')
     usuario = forms.CharField(max_length=20, required=True, label='Nombre de Usuario')
     contra = forms.CharField(max_length=20, required=True, label='Contraseña',widget=forms.PasswordInput)
     mail = forms.EmailField(max_length=30, required=True, label='Mail')
     telefono = forms.IntegerField(required=True, label='Telefono')
-    onLine = forms.BooleanField(show_hidden_initial=True,widget=forms.HiddenInput(),required=False)
+    #onLine = forms.BooleanField(show_hidden_initial=True,widget=forms.HiddenInput(),required=False)
     
     def clean_usuario(self):
         data = self.cleaned_data["usuario"]

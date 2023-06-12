@@ -99,7 +99,7 @@ def LogIn(request):
                 usuario['esVeterinario'] = True
                 usuario['esCliente'] = False
             usr=Cliente.objects.get(usuario=form.cleaned_data["usuario"])
-            usr.onLine = True
+            #usr.onLine = True
             usr.save()
             messages.add_message(request, messages.SUCCESS, 'Iniciaste Sesion', extra_tags="tag1")
 
@@ -115,7 +115,7 @@ def LogIn(request):
 
 def LogOut(request):
     usr=Cliente.objects.get(usuario=usuario["nombre"])
-    usr.onLine = False
+    #usr.onLine = False
     usr.save()
     usuario["nombre"] = ""
     usuario["contra"] = ""
@@ -173,7 +173,7 @@ def ListarAdopciones(request):
 
 def misPerros(request): 
     usu = Cliente.objects.filter(usuario=usuario["nombre"]).first()
-    lista = Perro.objects.filter(nombreD=usu.usuario)
+    lista = Perro.objects.filter(emailDueño=usu.mail)
     context = {'context': lista,
                'usuario': usuario}
     return render(request, 'paginas/misPerros.html', context)
@@ -216,7 +216,6 @@ def contactarCVisit(request, nombre, telefono):
             return redirect("index")
     else:
         form = contacto_form()
-    #url_params = reverse('contactarCVisit',args=[nombre,telefono])
     context = {
         'form': form,
         'usuario':usuario,
@@ -258,7 +257,6 @@ def contactarPVisit(request, nombre, telefono):
     else:
         form = contacto_form()
         
-    #url_params = reverse('contactarPVisit',args=[nombre,telefono])
     context = {
         'form': form,
         'usuario':usuario,
@@ -329,11 +327,14 @@ def borrarP(request, telefono):
     return redirect("paseadores")
 
 def turnos(request):
-    usr=Cliente.objects.get(onLine=True)
+    usr = Cliente.objects.get(usuario=usuario['nombre'])
+    perros = Perro.objects.filter(emailDueño=usr.mail)
+    listaPerros =[""]
+    listaPerros += [p.nombre for p in perros]
     if request.method == 'POST':
-        form = Turnos_form(request.POST)
+        form = Turnos_form(request.POST, opciones=listaPerros)
         if form.is_valid():
-            perro=Perro.objects.get(nombre=form.cleaned_data['perro'],nombreD=usr.usuario)
+            perro=Perro.objects.get(nombre=form.cleaned_data['perro'],emailDueño=usr.mail)
             form.save()#primero guardo el form como viene (con los fields en null)
             #despues lo vuelvo a traer y seteo lo que quiero
             #como no deja modificar el form. hasta que este guardado, encontre esta solu
@@ -346,8 +347,8 @@ def turnos(request):
 
             return redirect("index")
     else:
-        form = Turnos_form()
-    perros=Perro.objects.filter(nombreD=usr.usuario)
+        form = Turnos_form(opciones=listaPerros)
+    perros=Perro.objects.filter(emailDueño=usr.mail)
     print (perros)
     context = {
         'form': form,

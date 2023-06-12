@@ -10,8 +10,6 @@ class Perro(models.Model):
     raza = models.CharField(max_length=30)
     edad = models.IntegerField()
     emailDueño = models.EmailField(max_length=30)
-    # imagen = models.ImageField(upload_to='imagenes/', null=True)
-    nombreD = models.CharField(max_length=15)
     def __str__(self):
         return f'{self.nombre}'
     
@@ -21,7 +19,7 @@ class Cliente(models.Model):
     contra = models.CharField(max_length=30, null=True)
     mail = models.EmailField(max_length=30)
     telefono = models.IntegerField()
-    onLine= models.BooleanField(default=False,null=True,blank=True)
+    #onLine= models.BooleanField(default=False,null=True,blank=True)
     def __str__(self):
         return f'{self.nombreC}'
     
