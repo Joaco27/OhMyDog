@@ -10,6 +10,7 @@ class Perro(models.Model):
     raza = models.CharField(max_length=30)
     edad = models.IntegerField()
     emailDueño = models.EmailField(max_length=30)
+    sexo = models.CharField(max_length=15,null=True,blank=True)
     def __str__(self):
         return f'{self.nombre}'
     
@@ -65,6 +66,7 @@ class Turnos(models.Model):
     edad = models.IntegerField(null=True,blank=True)
     raza = models.CharField(max_length=30,null=True,blank=True)
     perro = models.CharField(max_length=100)
+    sexo = models.CharField(max_length=15,null=True,blank=True)
     motivo = models.CharField(max_length=100)
     fecha = models.DateField()
     def __str__(self):
