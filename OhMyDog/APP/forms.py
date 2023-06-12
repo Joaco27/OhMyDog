@@ -211,5 +211,5 @@ class perroPerdido_form(forms.Form):
         data_str = data.strftime('%d/%m/%Y')
         data_nueva = date.datetime.strptime(data_str, '%d/%m/%Y')
         if data_nueva > fecha:
-            raise ValidationError("Coloque una fecha previa a la fecha actual")
+            raise ValidationError("Coloque una fecha previa a la fecha actual o actual")
         return data
