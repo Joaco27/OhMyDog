@@ -30,7 +30,7 @@ class Perro_form(forms.ModelForm):
     def clean_nombre(self):
         data = self.cleaned_data.get('nombre')
         mail = self.data.get('emailDueño')
-        ok = Perro.objects.filter(nombre=data,emailDueño=mail).exists
+        ok = Perro.objects.filter(nombre=data,emailDueño=mail).exists()
         print (ok)
         if ok :
             raise ValidationError('El nombre del perro ya se encuentra registrado para ese dueño')

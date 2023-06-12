@@ -98,9 +98,6 @@ def LogIn(request):
             if usuario['nombre'] == "Veterinario":
                 usuario['esVeterinario'] = True
                 usuario['esCliente'] = False
-            usr=Cliente.objects.get(usuario=form.cleaned_data["usuario"])
-            #usr.onLine = True
-            usr.save()
             messages.add_message(request, messages.SUCCESS, 'Iniciaste Sesion', extra_tags="tag1")
 
             return redirect("index")
@@ -114,11 +111,7 @@ def LogIn(request):
     return render(request, 'paginas/LogIn.html', context)
 
 def LogOut(request):
-    usr=Cliente.objects.get(usuario=usuario["nombre"])
-    #usr.onLine = False
-    usr.save()
     usuario["nombre"] = ""
-    usuario["contra"] = ""
     usuario['esCliente'] = False
     usuario['esVeterinario'] = False
     

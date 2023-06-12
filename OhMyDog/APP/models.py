@@ -68,7 +68,7 @@ class Turnos(models.Model):
     motivo = models.CharField(max_length=100)
     fecha = models.DateField()
     def __str__(self):
-        return f'Turno de {self.nombre} de edad {self.edad} raza {self.raza} y descripcion {self.descripcion}'
+        return f'Turno de {self.perro} de edad {self.edad} raza {self.raza} y descripcion {self.descripcion}'
     
 class PerroAdopcion(models.Model):
     usuario = models.CharField(max_length=30)
