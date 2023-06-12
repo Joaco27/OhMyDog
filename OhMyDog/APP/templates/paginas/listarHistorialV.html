@@ -1,0 +1,57 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+{% block titulo %} Historias Clinicas {% endblock %}
+
+{% block contenido %} 
+
+<div class="d-flex justify-content-center flex-column align-items-center">
+    {% if context|length == 0 %}
+        <p>No hay Historias Cargadas</p>
+    {% else %}
+    <table class="table">
+        <thead>
+          <tr>
+            <th>Nombre del Perro</th>
+            <th>Email del Dueño </th>
+            <th>Raza</th>
+            <th>Edad</th>
+            <th>Sexo</th>
+            <th>Descripcion</th>
+            <th>Motivo</th>
+            <th>Fecha de Consulta</th>
+            <th>Castrado</th>
+            <th>Color de Pelo</th>
+            <th>Pulsaciones</th>
+            <th>Estudio Complementario</th>
+            <th>Diagnostico Presuntivo</th>
+            <th>Tratamiento</th>
+            <th>Fecha de Proxima Visita</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in context %}
+          <tr>
+            <td>{{ c.nombre }}</td>
+            <td>{{ c.emailD }}</td>
+            <td>{{ c.raza }}</td>
+            <td>{{ c.edad }}</td>
+            <td>{{ c.sexo }}</td>
+            <td>{{ c.descripcion }}</td>
+            <td>{{ c.motivo }}</td>
+            <td>{{ c.fecha }}</td>
+            <td>{{ c.castrado }}</td>
+            <td>{{ c.color_pelo }}</td>
+            <td>{{ c.pulsaciones }}</td>
+            <td>{{ c.estudios_complementarios }}</td>
+            <td>{{ c.diagnostico_presuntivo }}</td>
+            <td>{{ c.tratamiento }}</td>
+            <td>{{ c.proxima_visita }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+
+{% endblock %}

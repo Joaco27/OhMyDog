@@ -29,7 +29,6 @@ urlpatterns = [
     
     path('turnos',views.turnos,name='turnos'),
     path('publicarAdopcion',views.publicarAdopcion,name='publicarAdopcion'),
-    
     path('registrarCliente',views.registrarCliente,name='registrarCliente'),
     path('LogIn',views.LogIn,name='LogIn'),
     path('LogOut',views.LogOut,name='LogOut'),
@@ -38,10 +37,7 @@ urlpatterns = [
     path('borrarPerro/<str:emailDueño>/<str:nombre>',views.borrarPerro,name='borrarPerro'),
     path('borrarPerroC/<str:emailDueño>/<str:nombre>',views.borrarPerroC,name='borrarPerroC'),
     path('borrarPerroA/<str:usuario>/<str:nombre>',views.borrarPerroA,name='borrarPerroA'),
-    
     path('listarAdopciones',views.ListarAdopciones,name='ListarAdopciones'),
-    
-    
     path('notificaciones',views.notificaciones,name='notificaciones'),
     path('notiContacto', views.notiContacto,name='notiContacto'),
     path('notiTurnos', views.notiTurnos,name='notiTurnos'),
@@ -50,8 +46,13 @@ urlpatterns = [
     path('registrar',views.registrar,name='registrar'),
     path('registrarPerro',views.registrarPerro,name='registrarPerro'),
     path('losPerros',views.losPerros,name='losPerros'),
-    path('borrarNotificacionT/<str:nombreU>/',views.borrarNotificacionT,name='borrarNotificacionT'),
+
+    path('borrarNotiT/<str:nombre>/',views.borrarNotiT,name='borrarNotiT'),
+
     path('misPerros',views.misPerros,name='misPerros'),
+    path('listarHistorialV/<slug:nombre>/<slug:nombreD>/',views.listarHistorialV,name='listarHistorialV'),
+    path('listarHistorialC/<str:nombre>/<str:emailDueño>/',views.listarHistorialC,name='listarHistorialC'),
+    path('cargarHistorial',views.cargarHistorial,name='cargarHistorial'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

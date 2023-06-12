@@ -359,7 +359,7 @@ def publicarAdopcion(request):
         form = perroAdopcion_form(request.POST)
         if form.is_valid():
             
-            form.save() 
+            form.save()
             messages.add_message(request, messages.SUCCESS, 'Se ha publicado perro en adopcion', extra_tags="tag1")
 
             return redirect("index")
@@ -410,22 +410,25 @@ def notiContacto(request):
     }
     return render(request,'paginas/notiContactos.html', context)
 
+
+
 def notiTurnos(request):
     turnos = Turnos.objects.all()
-    #d = chain(datosC,datosP)s
     context ={
         'usuario':usuario,
         'turnos':turnos,
     }
     return render(request,'paginas/notiTurnos.html', context)
 
-def borrarNotificacionT(request, nombreU):
+def borrarNotiT(request, nombre):
     
-    Turnos.objects.filter(usuario=nombreU).delete()
+    tur=Turnos.objects.filter(nombre=nombre).delete()
     
     messages.add_message(request, messages.SUCCESS, 'Consulta efectuada', extra_tags="tag1")
 
-    return redirect("notiTurnos")
+    return redirect('notiTurnos')
+
+
 
 def terminarContactoC(request, nombreU, nombreC):
     
@@ -442,3 +445,42 @@ def terminarContactoP(request, nombreU, nombreP):
     messages.add_message(request, messages.SUCCESS, 'Consulta efectuada', extra_tags="tag1")
 
     return redirect("notiContacto")
+
+
+
+def listarHistorialV(request,nombre,nom):
+    his = Historial.objects.all().filter(nombreP=nombre)
+    print (nombre)
+    context = {
+        'context':his,
+        'usuario':usuario
+    }
+    return render(request, 'paginas/listarHistorialV.html', context)
+
+def listarHistorialC(request , nombre , emailDueño):
+    #usu=Cliente.objects.get(usuario=usuario['nombre'])
+    his = Historial.objects.all().filter(nombreP=nombre, mailD=emailDueño)
+    context = {
+        'context':his,
+        'usuario':usuario
+    }
+    return render(request, 'paginas/listarHistorialC.html', context)
+
+def cargarHistorial(request):
+    if request.method == 'POST':
+        form = Historial_form(request.POST)
+
+        if form.is_valid(): 
+            form.save()
+            messages.add_message(request, messages.SUCCESS, 'Historial cargado con exito', extra_tags="tag1")
+
+            return redirect("index")
+    else:
+        form = Historial_form()
+        
+    context = {
+        'form': form,
+        'usuario':usuario,
+    }
+    return render(request, 'paginas/cargarHistorial.html', context)
+

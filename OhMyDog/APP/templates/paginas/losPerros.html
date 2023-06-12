@@ -15,7 +15,7 @@
             <th>Nombre</th>
             <th>Raza</th>
             <th>Edad</th>
-            <th>Email</th>
+            <th>Nombre del Dueño</th>
           </tr>
         </thead>
         <tbody>
@@ -25,7 +25,8 @@
             <td>{{ c.nombre }}</td>
             <td>{{ c.raza }}</td>
             <td>{{ c.edad }}</td>
-            <td>{{ c.emailDueño }}</td>
+            <td>{{ c.nombreD }}</td>
+            <td><a href="./listarHistorialV/{{c.nombre}}/{{c.nombreD}}"  class="btn btn-danger">Historial</a></td>
             <td><a href="./borrarPerro/{{c.emailDueño}}/{{c.nombre}}" class="btn btn-danger">Borrar</a></td>
           </tr>
           {% endif %}

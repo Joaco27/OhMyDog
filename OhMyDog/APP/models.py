@@ -82,3 +82,20 @@ class PerroAdopcion(models.Model):
     castrado = models.CharField(max_length=2)
     def __str__(self):
         return f'se publico el perro {self.nombre}'
+
+class Historial(models.Model):
+    nombreP = models.CharField(max_length=30)
+    mailD = models.EmailField(max_length=30)
+    raza = models.CharField(max_length=30)
+    edad = models.IntegerField()
+    sexo = models.BooleanField()
+    descripcion = models.CharField(max_length=400)
+    motivo  = models.CharField(max_length=30)
+    fecha = models.DateField()
+    castrado = models.BooleanField(default=False)
+    color_pelo  = models.CharField(max_length=30)
+    pulsaciones  = models.CharField(max_length=30)
+    estudios_complementarios =models.CharField(max_length=400)
+    diagnostico_presuntivo = models.CharField(max_length=400)
+    tratamiento = models.CharField(max_length=400)
+    proxima_visita = models.DateField()

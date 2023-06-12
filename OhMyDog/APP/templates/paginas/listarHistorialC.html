@@ -1,0 +1,37 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+{% block titulo %} Historias Clinicas {% endblock %}
+
+{% block contenido %} 
+
+<div class="d-flex justify-content-center flex-column align-items-center">
+    {% if context|length == 0 %}
+        <a href="./cargarHistorial" class="nav-item nav-link active text-white">Crear Historial Clinico</a>
+        <p>No hay Historias Cargadas</p>
+    {% else %}
+          <a href="./cargarHistorial" class="nav-item nav-link active
+           text-white">Crear Historial Clinico</a>
+          {% for c in context %}
+          <tr>
+            <th>Nombre del Perro :</th><td>{{ c.nombre }}</td>
+            <th>Email del Dueño </th><td>{{ c.emailD }}</td>
+            <th>Raza</th><td>{{ c.raza }}</td>
+            <th>Edad</th><td>{{ c.edad }}</td>
+            <th>Sexo</th> <td>{{ c.sexo }}</td>
+            <th>Descripcion</th><td>{{ c.descripcion }}</td>
+            <th>Motivo</th><td>{{ c.motivo }}</td>
+            <th>Fecha de Consulta</th><td>{{ c.fecha }}</td>
+            <th>Castrado</th><td>{{ c.castrado }}</td>
+            <th>Color de Pelo</th><td>{{ c.color_pelo }}</td>
+            <th>Pulsaciones</th><td>{{ c.pulsaciones }}</td>
+            <th>Estudio Complementario</th><td>{{ c.estudios_complementarios }}</td>
+            <th>Diagnostico Presuntivo</th><td>{{ c.diagnostico_presuntivo }}</td>
+            <th>Tratamiento</th><td>{{ c.tratamiento }}</td>
+            <th>Fecha de Proxima Visita</th><td>{{ c.proxima_visita }}</td>
+          </tr>
+          {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock %}

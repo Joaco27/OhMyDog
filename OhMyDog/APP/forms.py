@@ -197,3 +197,28 @@ class contacto_form(forms.Form):
             raise ValidationError("El telefono debe tener entre 7 y 11 caracters")
         return data
     
+class Historial_form(forms.ModelForm):
+    class Meta:
+        model = Historial
+        fields = '__all__'
+    nombreP = forms.CharField(max_length=30,required=True)
+    mailD = forms.EmailField(max_length=30 ,required=True)
+    raza = forms.CharField(max_length=30,required=True)
+    edad = forms.IntegerField(required=True)
+    sexo = forms.BooleanField(required=True)
+    descripcion = forms.CharField( max_length=400,required=True,
+                                   widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
+    motivo  = forms.CharField(max_length=30,required=True)
+    fecha = forms.DateField( label='Fecha Actual',
+                            widget=forms.DateInput(attrs={"type": "date"}))
+    castrado = forms.BooleanField()
+    color_pelo  = forms.CharField(max_length=30,required=True)
+    pulsaciones  = forms.CharField(max_length=30,required=True)
+    estudios_complementarios = forms.CharField( max_length=400,required=True, 
+                                               widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
+    diagnostico_presuntivo = forms.CharField( max_length=400,required=True, widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
+    tratamiento = forms.CharField( max_length=400,required=True,
+                                   widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
+    proxima_visita = forms.DateField( label='Proxima Visita',
+                            widget=forms.DateInput(attrs={"type": "date"}))
+    

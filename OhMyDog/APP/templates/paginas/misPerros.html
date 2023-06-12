@@ -15,7 +15,6 @@
             <th>Nombre</th>
             <th>Raza</th>
             <th>Edad</th>
-            <th>Email</th>
           </tr>
         </thead>
         <tbody>
@@ -25,7 +24,7 @@
             <td>{{ c.nombre }}</td>
             <td>{{ c.raza }}</td>
             <td>{{ c.edad }}</td>
-            <td>{{ c.emailDueño }}</td>
+            <td><a href="./listarHistorialC/{{c.nombre}}/{{c.emailDueño}}" class="btn btn-danger">Historial</a></td>
             <td><a href="./borrarPerroC/{{c.emailDueño}}/{{c.nombre}}" class="btn btn-danger">Borrar</a></td>
           </tr>
           {% endif %}
