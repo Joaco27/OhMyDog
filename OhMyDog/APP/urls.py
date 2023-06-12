@@ -49,10 +49,17 @@ urlpatterns = [
 
     path('borrarNotiT/<str:nombre>/',views.borrarNotiT,name='borrarNotiT'),
 
+
     path('misPerros',views.misPerros,name='misPerros'),
-    path('listarHistorialV/<slug:nombre>/<slug:nombreD>/',views.listarHistorialV,name='listarHistorialV'),
+    path('listarHistorialV',views.listarHistorialV,name='listarHistorialV'),
     path('listarHistorialC/<str:nombre>/<str:emailDueño>/',views.listarHistorialC,name='listarHistorialC'),
     path('cargarHistorial',views.cargarHistorial,name='cargarHistorial'),
+
+
+
+
+    path('validate', views.validate, name = 'validate'),
+    path('cargar', views.cargar, name = 'cargar'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

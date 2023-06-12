@@ -6,6 +6,16 @@
 {% block contenido %} 
 
 <div class="d-flex justify-content-center flex-column align-items-center">
+  <form action="cargar" method="POST">
+    {% csrf_token %}
+    <input type="hidden" value="{{context.nombre}}" name="nombre" ><br><br>
+    <input type="hidden" value="{{context.emailD}}" name="emailD" ><br><br>
+    <input type="hidden" value="{{context.raza}}" name="raza" ><br><br>
+    <input type="hidden" value="{{context.edad}}" name="edad" ><br><br>
+    #tengo que pasar la info del perro
+    <input type="submit" value="Cargar Historial">
+  </form>
+  
     {% if context|length == 0 %}
         <p>No hay Historias Cargadas</p>
     {% else %}

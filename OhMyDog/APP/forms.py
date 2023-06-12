@@ -201,10 +201,10 @@ class Historial_form(forms.ModelForm):
     class Meta:
         model = Historial
         fields = '__all__'
-    nombreP = forms.CharField(max_length=30,required=True)
-    mailD = forms.EmailField(max_length=30 ,required=True)
-    raza = forms.CharField(max_length=30,required=True)
-    edad = forms.IntegerField(required=True)
+    nombreP = forms.CharField(max_length=30,required=False,widget=forms.HiddenInput)
+    mailD = forms.EmailField(max_length=30 ,required=False,widget=forms.HiddenInput)
+    raza = forms.CharField(max_length=30,required=False,widget=forms.HiddenInput)
+    edad = forms.IntegerField(required=False,widget=forms.HiddenInput)
     sexo = forms.BooleanField(required=True)
     descripcion = forms.CharField( max_length=400,required=True,
                                    widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))

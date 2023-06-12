@@ -17,6 +17,10 @@
 <div class="d-flex justify-content-center">
         <form action= "{% url 'cargarHistorial' %}" method="POST">
             {% csrf_token %}
+            <input type="hidden" value="{{context.nombre}}" name="nombre" ><br><br>
+            <input type="hidden" value="{{context.emailD}}" name="emailD" ><br><br>
+            <input type="hidden" value="{{context.raza}}" name="raza" ><br><br>
+            <input type="hidden" value="{{context.edad}}" name="edad" ><br><br>
             {% if form.errors %}
                     <div class="alert alert-danger">
                         {% for field, errors in form.errors.items %}
