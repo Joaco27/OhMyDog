@@ -5,6 +5,7 @@ from .forms import *
 from django.contrib import messages
 from django.urls import reverse
 from itertools import chain
+from datetime import date as dt
 
 
 #Declarar funciones para hacer cuando se ingresan direcciones
@@ -484,7 +485,7 @@ def terminarContactoP(request, nombreU, nombreP):
     return redirect("notiContacto")
 
 
-def ContactarAdop(request, nombre):
+def ContactarAdop(request, nombre, dueño):
     cli =  Cliente.objects.get(usuario=usuario["nombre"])
     existe = ContactoAdop.objects.filter(nombre=nombre,telUsuario=cli.telefono).exists()
     if existe:
@@ -492,6 +493,7 @@ def ContactarAdop(request, nombre):
         return redirect("listarAdopciones")
     adopcion = ContactoAdop(
         nombre =  nombre,
+        dueño=dueño,
         usuario = cli.nombreC,
         telUsuario = cli.telefono,
     )
@@ -500,12 +502,13 @@ def ContactarAdop(request, nombre):
     messages.add_message(request, messages.SUCCESS, 'Pronto se pondran en contacto con usted', extra_tags="tag1")
     return redirect("index")
 
-def contactarAVisit(request, nombre):
+def contactarAVisit(request, nombre, dueño):
     if request.method == 'POST':
         form = contacto_form(request.POST) 
         if form.is_valid():
             contactoNuevo = ContactoAdop(
                 nombre = nombre,
+                dueño=dueño,
                 usuario = form.cleaned_data.get('usuario'),
                 telUsuario = form.cleaned_data.get('telefono')
             )
@@ -607,7 +610,7 @@ def contactarPerdVisit(request, nombre, telDueño):
                 nombreP = nombre,
                 telDueño = telDueño,
                 encontro = form.cleaned_data.get('usuario'),
-                telEncontro = form.cleaned_data.get('telefono')
+                telEncontro = form.cleaned_data.get('telefono'),
             )
             contactoNuevo.save()
             messages.add_message(request, messages.SUCCESS, 'Le informaremos al Dueño', extra_tags="tag1")
@@ -620,7 +623,7 @@ def contactarPerdVisit(request, nombre, telDueño):
         'usuario':usuario,
         'nombre' : nombre,    
         }
-    return render(request, 'paginas/contactarAVisitante.html', context)
+    return render(request, 'paginas/contactarPerdVisit.html', context)
 
 def notificacionAdopcion(request):
     context ={
@@ -630,7 +633,7 @@ def notificacionAdopcion(request):
     
 def notiAdopContacto(request):
     cli = Cliente.objects.get(usuario = usuario["nombre"])
-    noti = ContactoAdop.objects.filter(nombre=cli.usuario)
+    noti = ContactoAdop.objects.filter(dueño=cli.usuario)
     context ={
         'usuario':usuario,
         'context': noti,
@@ -646,7 +649,9 @@ def eliminarContactoA(request, usuario, nombre):
     return redirect("notiAdopContacto")
 
 def calendar(request):
+    mes = dt.today().month
     events = Event.objects.all().order_by('date')
+    fecha = Event.objects.filter(title='mi perrito')
     return render(request, 'paginas/calendar.html', {'events': events, 'usuario':usuario})
 
 def add_event(request):

@@ -9,13 +9,14 @@ class Perro_form(forms.ModelForm):
     # Meta sirve para enlazar con la BD
     class Meta:
         model = Perro
-        fields = ['nombre','raza', 'edad']
+        fields = ['nombre','raza', 'edad','sexo']
     # Creamos los campos del formulario
     nombre = forms.CharField(max_length=15, required=True, label='Nombre')
     raza = forms.CharField(max_length=15, required=True, label='Raza')
     edad = forms.IntegerField(required=True, label='Edad')
     emailDueño = forms.EmailField(max_length=30, required=False, label='Email Dueño',widget=forms.HiddenInput())#hay que sacarlo
-    nombreD = forms.CharField(initial='class',max_length=15, required=False, label='NombreD',widget=forms.HiddenInput())
+    opciones = ['Macho','Hembra']
+    sexo = forms.ChoiceField(choices=[(l, l) for l in opciones],required=True)
     # Clean son validaciones 
     # Se debe respetar que en el nombre de la validacion este
     # el nombre del campo , osea clean_<nombre de campo>

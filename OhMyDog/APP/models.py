@@ -84,6 +84,7 @@ class PerroAdopcion(models.Model):
     
 class ContactoAdop(models.Model):
     nombre = models.CharField(max_length=30)
+    dueño = models.CharField(max_length=30)
     usuario = models.CharField(max_length=30)
     telUsuario = models.IntegerField()
     def __str__(self):
@@ -97,7 +98,7 @@ class Event(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return self.title
+        return f'{self.date}'
     
 class PerroPerdido(models.Model):
     usuario = models.CharField(max_length=30)

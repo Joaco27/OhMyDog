@@ -11,8 +11,7 @@
         <p>No hay perros en adopcion publicados</p>
     {% else %}
         {% for c in context %}
-        
-            <p>usuario: {{ c.usuario }}</p>
+
             <p>Nombre: {{ c.nombre }}</p>
             <p>Zona: {{ c.zona }}</p>
             <p>Raza: {{ c.raza }}</p>
@@ -20,9 +19,11 @@
             <p></p>
             <p></p>
             {% if usuario.esCliente or usuario.esVeterinario%}
-                    <a href="./ContactarAdop/{{c.usuario}}" class="btn btn-success">Informacion de contanto</a>
+                {% if usuario.nombre != c.usuario%}
+                    <a href="./ContactarAdop/{{c.nombre}}/{{c.usuario}}" class="btn btn-success">Contactar</a>
+                {% endif %}
             {% else %}
-                    <a href="./contactarAVisit/{{c.usuario}}" class="btn btn-success">Informacion de contanto</a>
+                    <a href="./contactarAVisit/{{c.nombre}}/{{c.usuario}}" class="btn btn-success">Contactar</a>
             {% endif %}
             {% if usuario.esVeterinario or usuario.nombre == c.usuario %}
                 <!-- <a href="./borrarPerroA/{{c.usuario}}/{{c.nombre}}" class="btn btn-danger">Borrar</a> -->

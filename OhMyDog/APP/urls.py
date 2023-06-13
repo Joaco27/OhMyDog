@@ -31,8 +31,8 @@ urlpatterns = [
     path('publicarAdopcion',views.publicarAdopcion,name='publicarAdopcion'),
 
 
-    path('ContactarAdop/<str:nombre>/',views.ContactarAdop,name='ContactarAdop'),
-    path('contactarAVisit/<str:nombre>/',views.contactarAVisit,name='contactarAVisit'),
+    path('ContactarAdop/<str:nombre>/<str:dueño>/',views.ContactarAdop,name='ContactarAdop'),
+    path('contactarAVisit/<str:nombre>/<str:dueño>/',views.contactarAVisit,name='contactarAVisit'),
     path('borrarNotiAdop/<str:usuario>/<str:nombre>/',views.eliminarContactoA,name='borrarNotiAdop'),
     path('notificacionAdopcion',views.notificacionAdopcion,name='notificacionAdopcion'),
     path('notiAdopContacto', views.notiAdopContacto,name='notiAdopContacto'),
