@@ -172,7 +172,7 @@ def ListarAdopciones(request):
     return render(request, 'paginas/listarAdopciones.html', context)
 
 def misPerros(request): 
-    usu = Cliente.objects.filter(usuario=usuario["nombre"]).first()
+    usu = Cliente.objects.get(usuario=usuario["nombre"])
     lista = Perro.objects.filter(emailDueño=usu.mail)
     context = {'context': lista,
                'usuario': usuario}
