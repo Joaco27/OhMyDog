@@ -14,7 +14,11 @@ class Perro_form(forms.ModelForm):
     nombre = forms.CharField(max_length=15, required=True, label='Nombre')
     raza = forms.CharField(max_length=15, required=True, label='Raza')
     edad = forms.IntegerField(required=True, label='Edad')
-
+    emailDueño = forms.EmailField(max_length=30, required=False, label='Email Dueño',widget=forms.HiddenInput())#hay que sacarlo
+    nombreD = forms.CharField(initial='class',max_length=15, required=False, label='NombreD',widget=forms.HiddenInput())
+    # Clean son validaciones 
+    # Se debe respetar que en el nombre de la validacion este
+    # el nombre del campo , osea clean_<nombre de campo>
     def clean_edad(self):
         data = self.cleaned_data["edad"]
         if data < 1 or data > 20:
@@ -213,3 +217,27 @@ class perroPerdido_form(forms.Form):
         if data_nueva > fecha:
             raise ValidationError("Coloque una fecha previa a la fecha actual o actual")
         return data
+class Historial_form(forms.ModelForm):
+    class Meta:
+        model = Historial
+        fields = '__all__'
+    nombreP = forms.CharField(max_length=30,required=False,widget=forms.HiddenInput)
+    mailD = forms.EmailField(max_length=30 ,required=False,widget=forms.HiddenInput)
+    raza = forms.CharField(max_length=30,required=False,widget=forms.HiddenInput)
+    edad = forms.IntegerField(required=False,widget=forms.HiddenInput)
+    descripcion = forms.CharField( max_length=400,required=True,
+                                   widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
+    motivo  = forms.CharField(max_length=30,required=True)
+    fecha = forms.DateField( label='Fecha Actual',
+                            widget=forms.DateInput(attrs={"type": "date"}))
+    castrado = forms.BooleanField()
+    color_pelo  = forms.CharField(max_length=30,required=True)
+    pulsaciones  = forms.CharField(max_length=30,required=True)
+    estudios_complementarios = forms.CharField( max_length=400,required=True, 
+                                               widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
+    diagnostico_presuntivo = forms.CharField( max_length=400,required=True, widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
+    tratamiento = forms.CharField( max_length=400,required=True,
+                                   widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
+    proxima_visita = forms.DateField( label='Proxima Visita',
+                            widget=forms.DateInput(attrs={"type": "date"}))
+    

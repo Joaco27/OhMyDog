@@ -15,18 +15,23 @@
             <th>Nombre</th>
             <th>Raza</th>
             <th>Edad</th>
-            <th>Email</th>
           </tr>
         </thead>
         <tbody>
           {% for c in context %}
           {% if c.usuario != 'Veterinario' %}
           <tr>
-            <td>{{ c.nombre }}</td>
-            <td>{{ c.raza }}</td>
-            <td>{{ c.edad }}</td>
-            <td>{{ c.emailDueño }}</td>
-            <td><a href="./borrarPerroC/{{c.emailDueño}}/{{c.nombre}}" class="btn btn-danger">Borrar</a></td>
+            <form action="validateC" method="post">
+              {% csrf_token %}
+              <td>{{ c.nombre }}</td>
+              <td>{{ c.raza }}</td>
+              <td>{{ c.edad }}</td>
+              <td>{{ c.nombreD }}</td>
+              <td><input type="hidden" value="{{c.nombre}}" name="nombre" ><br><br>
+              <td><input type="hidden" value="{{c.emailDueño}}" name = "emailD"><br><br>
+              <td><input type="submit" value="Historial">
+              <td><a href="./borrarPerro/{{c.emailDueño}}/{{c.nombre}}" class="btn btn-danger">Borrar</a></td>
+            </form>
           </tr>
           {% endif %}
           {% endfor %}
