@@ -64,26 +64,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='Historial',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('nombreP', models.CharField(blank=True, max_length=30, null=True)),
-                ('mailD', models.EmailField(blank=True, max_length=30, null=True)),
-                ('raza', models.CharField(blank=True, max_length=30, null=True)),
-                ('edad', models.IntegerField(blank=True, null=True)),
-                ('descripcion', models.CharField(max_length=400)),
-                ('motivo', models.CharField(max_length=30)),
-                ('fecha', models.DateField()),
-                ('castrado', models.BooleanField(default=False)),
-                ('color_pelo', models.CharField(max_length=30)),
-                ('pulsaciones', models.CharField(max_length=30)),
-                ('estudios_complementarios', models.CharField(max_length=400)),
-                ('diagnostico_presuntivo', models.CharField(max_length=400)),
-                ('tratamiento', models.CharField(max_length=400)),
-                ('proxima_visita', models.DateField()),
-            ],
-        ),
-        migrations.CreateModel(
             name='Paseador',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
