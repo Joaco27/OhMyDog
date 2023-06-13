@@ -8,10 +8,10 @@
 <div class="d-flex justify-content-center flex-column align-items-center">
   <form action="{% url 'cargarHistorial' %}" method="Cargar">
     {% csrf_token %}
-    <input type="hidden" value="{{context.nombre}}" name="nombre" ><br><br>
-    <input type="hidden" value="{{context.emailD}}" name="emailD" ><br><br>
-    <input type="hidden" value="{{context.raza}}" name="raza" ><br><br>
-    <input type="hidden" value="{{context.edad}}" name="edad" ><br><br>
+    <input type="hidden" value="{{context.nombre}}" name="nombre" >
+    <input type="hidden" value="{{context.emailD}}" name="emailD" >
+    <input type="hidden" value="{{context.raza}}" name="raza" >
+    <input type="hidden" value="{{context.edad}}" name="edad" >
     <input type="submit" value="Cargar Historial">
   </form>
   <a href="./cargarHistorial" class="nav-item nav-link active text-white">cargar historial</a>
@@ -22,14 +22,8 @@
     <table class="table">
         <thead>
           <tr>
-            <th>Nombre del Perro</th>
-            <th>Raza</th>
-            <th>Edad</th>
             <th>Descripcion</th>
-            <th>Motivo</th>
             <th>Fecha de Consulta</th>
-            <th>Castrado</th>
-            <th>Pulsaciones</th>
             <th>Estudio Complementario</th>
             <th>Diagnostico Presuntivo</th>
             <th>Tratamiento</th>
@@ -39,14 +33,8 @@
         <tbody>
           {% for c in context %}
           <tr>
-            <td>{{ c.nombreP }}</td>
-            <td>{{ c.raza }}</td>
-            <td>{{ c.edad }}</td>
             <td>{{ c.descripcion }}</td>
-            <td>{{ c.motivo }}</td>
             <td>{{ c.fecha }}</td>
-            <td>{{ c.castrado }}</td>
-            <td>{{ c.pulsaciones }}</td>
             <td>{{ c.estudios_complementarios }}</td>
             <td>{{ c.diagnostico_presuntivo }}</td>
             <td>{{ c.tratamiento }}</td>

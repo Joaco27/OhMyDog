@@ -214,7 +214,7 @@ class perroPerdido_form(forms.Form):
         if data_nueva > fecha:
             raise ValidationError("Coloque una fecha previa a la fecha actual o actual")
         return data
-class Historial_form(forms.ModelForm):
+class Historial_form(forms.Form):
     class Meta:
         model = Historial
         fields = '__all__'
@@ -224,11 +224,10 @@ class Historial_form(forms.ModelForm):
     edad = forms.IntegerField(required=False,widget=forms.HiddenInput)
     descripcion = forms.CharField( max_length=400,required=True,
                                    widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
-    motivo  = forms.CharField(max_length=30,required=True)
     fecha = forms.DateField( label='Fecha Actual',
                             widget=forms.DateInput(attrs={"type": "date"}))
-    castrado = forms.BooleanField()
-    color_pelo  = forms.CharField(max_length=30,required=True)
+    lista = ['NO','SI']
+    castrado = forms.ChoiceField(choices=[(l, l) for l in lista],required=True)
     pulsaciones  = forms.CharField(max_length=30,required=True)
     estudios_complementarios = forms.CharField( max_length=400,required=True, 
                                                widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
@@ -236,5 +235,5 @@ class Historial_form(forms.ModelForm):
     tratamiento = forms.CharField( max_length=400,required=True,
                                    widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
     proxima_visita = forms.DateField( label='Proxima Visita',
-                            widget=forms.DateInput(attrs={"type": "date"}))
+                            widget=forms.DateInput(attrs={"type": "date"}), required=False)
     

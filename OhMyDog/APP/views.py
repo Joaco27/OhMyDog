@@ -612,7 +612,7 @@ def validate(request):#extrae el nombre y email del perro y hace de conector con
       emailD = request.POST["emailD"]
       infoHistorial['nombreP']= request.POST["nombre"]
       infoHistorial['mailD']= request.POST["emailD"]
-      his = Historial.objects.all().filter(nombreP=nombre,mailD=emailD)
+      his = Historial.objects.filter(nombreP=nombre,mailD=emailD)
       context = {
         'context':his,
         'usuario':usuario
@@ -649,17 +649,21 @@ def cargarHistorial(request):
     if request.method == 'POST':
         form = Historial_form(request.POST)
         if form.is_valid(): 
-            print(form.cleaned_data['descripcion'])
-            form.save()
-            his=Historial.objects.get(descripcion=form.cleaned_data['descripcion'] ,
-                                    diagnostico_presuntivo=form.cleaned_data['diagnostico_presuntivo'] ,
-                                    proxima_visita=form.cleaned_data['proxima_visita'] )
-                
-            perro=Perro.objects.get(nombre=infoHistorial['nombreP'],emailDueño=infoHistorial['mailD'])
-            his.nombreP=perro.nombre
-            his.mailD=perro.emailDueño
-            his.edad=perro.edad
-            his.raza=perro.raza
+            prro = Perro.objects.get(nombre=infoHistorial['nombreP'], emailDueño=infoHistorial['mailD'])
+            his = Historial(
+                nombreP = prro.nombre,
+                mailD = prro.emailDueño,
+                raza = prro.raza,
+                edad = prro.edad,
+                descripcion = form.cleaned_data['descripcion'],
+                fecha = form.cleaned_data['fecha'],
+                castrado = form.cleaned_data['castrado'],
+                pulsaciones  = form.cleaned_data['pulsaciones'],
+                estudios_complementarios = form.cleaned_data['estudios_complementarios'],
+                diagnostico_presuntivo = form.cleaned_data['diagnostico_presuntivo'],
+                tratamiento = form.cleaned_data['tratamiento'],
+                proxima_visita = form.cleaned_data['proxima_visita'],
+            )
             print(his)
             his.save()
             messages.add_message(request, messages.SUCCESS, 'Historial cargado con exito', extra_tags="tag1")
