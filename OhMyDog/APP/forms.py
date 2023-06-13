@@ -25,12 +25,12 @@ class Perro_form(forms.ModelForm):
             raise ValidationError("Edad invalida")
         return data
     
-    def clean_emailDueño(self):
-        data = self.cleaned_data.get('emailDueño')
-        ok = Cliente.objects.filter(mail=data).exists()
-        if not ok :
-            raise ValidationError('El email no pertenece a un dueño')
-        return data
+    # def clean_emailDueño(self):
+    #     data = self.cleaned_data.get('emailDueño')
+    #     ok = Cliente.objects.filter(mail=data).exists()
+    #     if not ok :
+    #         raise ValidationError('El email no pertenece a un dueño')
+    #     return data
     def clean_nombre(self):
         data = self.cleaned_data.get('nombre')
         mail = self.data.get('emailDueño')

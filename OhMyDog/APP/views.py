@@ -657,7 +657,7 @@ def add_event(request):
             return redirect('calendar')
     else:
         form = EventForm()
-    return render(request, 'paginas/add_event.html', {'form': form})
+    return render(request, 'paginas/add_event.html', {'form': form, 'usuario': usuario})
 
 def delete_event(request, event_id):
     event = Event.objects.get(pk=event_id)
