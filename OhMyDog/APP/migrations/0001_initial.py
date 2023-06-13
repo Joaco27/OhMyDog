@@ -73,15 +73,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='Event',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200)),
-                ('date', models.DateField()),
-                ('description', models.TextField()),
-            ],
-        ),
-        migrations.CreateModel(
             name='Historial',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -121,6 +112,7 @@ class Migration(migrations.Migration):
                 ('castrado', models.CharField(default='NO', max_length=2)),
                 ('sexo', models.CharField(blank=True, max_length=15, null=True)),
                 ('emailDueño', models.EmailField(max_length=30)),
+                ('sexo', models.CharField(blank=True, max_length=15, null=True)),
             ],
         ),
         migrations.CreateModel(
@@ -132,6 +124,21 @@ class Migration(migrations.Migration):
                 ('raza', models.CharField(max_length=30)),
                 ('descripcion', models.CharField(max_length=30)),
                 ('zona', models.CharField(default='NO', max_length=50)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='PerroPerdido',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('usuario', models.CharField(max_length=30)),
+                ('dueño', models.CharField(max_length=30)),
+                ('telDueño', models.IntegerField()),
+                ('nombre', models.CharField(max_length=30)),
+                ('raza', models.CharField(max_length=20)),
+                ('descripcion', models.CharField(max_length=30)),
+                ('zona', models.CharField(max_length=50)),
+                ('fechaD', models.DateTimeField()),
+                ('imagen', models.ImageField(null=True, upload_to='imagenes/')),
             ],
         ),
         migrations.CreateModel(
