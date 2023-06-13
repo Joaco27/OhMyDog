@@ -1,7 +1,6 @@
 from .models import *
 from django import forms
 import datetime as date
-
 from django.core.exceptions import ValidationError 
 
 # Aca creamos los formularios
@@ -10,13 +9,13 @@ class Perro_form(forms.ModelForm):
     # Meta sirve para enlazar con la BD
     class Meta:
         model = Perro
-        fields = ['nombre','raza', 'edad', 'emailDueño']
+        fields = ['nombre','raza', 'edad']
     # Creamos los campos del formulario
     nombre = forms.CharField(max_length=15, required=True, label='Nombre')
     raza = forms.CharField(max_length=15, required=True, label='Raza')
     edad = forms.IntegerField(required=True, label='Edad')
-    emailDueño = forms.EmailField(max_length=30, required=True, label='Email Dueño')
-
+    emailDueño = forms.EmailField(max_length=30, required=False, label='Email Dueño',widget=forms.HiddenInput())#hay que sacarlo
+    nombreD = forms.CharField(initial='class',max_length=15, required=False, label='NombreD',widget=forms.HiddenInput())
     # Clean son validaciones 
     # Se debe respetar que en el nombre de la validacion este
     # el nombre del campo , osea clean_<nombre de campo>
@@ -35,7 +34,7 @@ class Perro_form(forms.ModelForm):
     def clean_nombre(self):
         data = self.cleaned_data.get('nombre')
         mail = self.data.get('emailDueño')
-        ok = Perro.objects.filter(nombre=data,emailDueño=mail).exists
+        ok = Perro.objects.filter(nombre=data,emailDueño=mail).exists()
         print (ok)
         if ok :
             raise ValidationError('El nombre del perro ya se encuentra registrado para ese dueño')
@@ -78,25 +77,22 @@ class Cuidador_form(forms.ModelForm):
             raise ValidationError("DNI ya registrado")
         return data
     
-class Turnos_form(forms.ModelForm):
+class Turnos_form(forms.Form):
     # Meta sirve para enlazar con la BD
     class Meta:
         model = Turnos
-        fields = ['descripcion','raza', 'edad','nombre','fecha']
-    # Creamos los campos del formulario
-    descripcion = forms.Textarea()
-    nombre = forms.CharField(max_length=15, required=True, label='Nombre')
-    raza = forms.CharField(max_length=15, required=True, label='Raza')
-    edad = forms.IntegerField(required=True, label='Edad')
-    motivo = forms.Select()
-    fecha = forms.DateField(required = True, label='Seleccione la fecha de su turno',
+        fields = ['descripcion','perro','motivo','fecha']
+    def __init__(self, *args, **kwargs):
+        opciones = kwargs.pop('opciones', [])
+        super(Turnos_form, self).__init__(*args, **kwargs)
+        self.fields['perro'] = forms.ChoiceField(choices=[(opcion, opcion) for opcion in opciones],required=True)
+
+    descripcion = forms.CharField(max_length=50, required=True)
+    perro = forms.ChoiceField()
+    motivo = forms.ChoiceField(widget=forms.RadioSelect, label='motivo', choices=[('castrar', 'castrar'), ('vacunar', 'vacunar'), ('revision', 'Revision'), ('otro', 'Otro')])
+    fecha = forms.DateField( label='Seleccione la fecha de su turno',
                             widget=forms.DateInput(attrs={"type": "date"}))
     # Clean son validaciones 
-    def clean_edad(self):
-        data = self.cleaned_data["edad"]
-        if data < 1 or data > 20:
-            raise ValidationError("Edad no permitida (1-20)")
-        return data
     
     def clean_fecha(self):
         data =self.cleaned_data["fecha"]
@@ -138,6 +134,7 @@ class Cliente_form(forms.ModelForm):
     contra = forms.CharField(max_length=20, required=True, label='Contraseña',widget=forms.PasswordInput)
     mail = forms.EmailField(max_length=30, required=True, label='Mail')
     telefono = forms.IntegerField(required=True, label='Telefono')
+    #onLine = forms.BooleanField(show_hidden_initial=True,widget=forms.HiddenInput(),required=False)
     
     def clean_usuario(self):
         data = self.cleaned_data["usuario"]
@@ -183,11 +180,61 @@ class LogIn_form(forms.Form):
     
 class contacto_form(forms.Form):
     usuario = forms.CharField(max_length=40, required=True, label='Nombre')
-    telefono = forms.IntegerField(required=True)
+    telefono = forms.IntegerField(required=True, label='Telefono')
             
     def clean_telefono(self):
         data=self.cleaned_data["telefono"]
         if len(str(data)) < 7 or len(str(data)) > 11:
             raise ValidationError("El telefono debe tener entre 7 y 11 caracters")
         return data
+    
+class perroPerdido_form(forms.Form):
+    class Meta:
+        model = PerroPerdido
+        fields = ['nombre', 'descripcion', 'zona', 'fechaD','imagen']
+    def __init__(self, *args, **kwargs):
+        opciones = kwargs.pop('opciones', [])
+        super(perroPerdido_form, self).__init__(*args, **kwargs)
+        self.fields['nombre'] = forms.ChoiceField(choices=[(opcion, opcion) for opcion in opciones],required=True)
+       
+    
+    nombre = forms.ChoiceField()
+    descripcion = forms.CharField(max_length=200, required=True, label='Descripcion', widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
+    zona = forms.CharField(max_length=20, required=True, label='Zona')
+    fechaD = forms.DateField(initial=date.date.today(), required = True, label='Fecha de Desaparicion',
+                            widget=forms.DateInput(attrs={"type": "date"}))
+    imagen = forms.ImageField(required=True, label="Imagen", widget=forms.ClearableFileInput(attrs={'class': 'form-control-file'}))
+
+    def clean_fechaD(self):
+        data =self.cleaned_data["fechaD"]
+        fecha = date.datetime.today()
+
+        data_str = data.strftime('%d/%m/%Y')
+        data_nueva = date.datetime.strptime(data_str, '%d/%m/%Y')
+        if data_nueva > fecha:
+            raise ValidationError("Coloque una fecha previa a la fecha actual o actual")
+        return data
+class Historial_form(forms.ModelForm):
+    class Meta:
+        model = Historial
+        fields = '__all__'
+    nombreP = forms.CharField(max_length=30,required=False,widget=forms.HiddenInput)
+    mailD = forms.EmailField(max_length=30 ,required=False,widget=forms.HiddenInput)
+    raza = forms.CharField(max_length=30,required=False,widget=forms.HiddenInput)
+    edad = forms.IntegerField(required=False,widget=forms.HiddenInput)
+    descripcion = forms.CharField( max_length=400,required=True,
+                                   widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
+    motivo  = forms.CharField(max_length=30,required=True)
+    fecha = forms.DateField( label='Fecha Actual',
+                            widget=forms.DateInput(attrs={"type": "date"}))
+    castrado = forms.BooleanField()
+    color_pelo  = forms.CharField(max_length=30,required=True)
+    pulsaciones  = forms.CharField(max_length=30,required=True)
+    estudios_complementarios = forms.CharField( max_length=400,required=True, 
+                                               widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
+    diagnostico_presuntivo = forms.CharField( max_length=400,required=True, widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
+    tratamiento = forms.CharField( max_length=400,required=True,
+                                   widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
+    proxima_visita = forms.DateField( label='Proxima Visita',
+                            widget=forms.DateInput(attrs={"type": "date"}))
     

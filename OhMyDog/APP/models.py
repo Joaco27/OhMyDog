@@ -1,4 +1,6 @@
+from datetime import datetime as dt
 from django.db import models
+
 
 # Aca declaramos todas las tablas de la BD
 
@@ -8,8 +10,9 @@ class Perro(models.Model):
     raza = models.CharField(max_length=30)
     edad = models.IntegerField()
     emailDueño = models.EmailField(max_length=30)
+    sexo = models.CharField(max_length=15,null=True,blank=True)
     def __str__(self):
-        return f'Perro: {self.nombre} con {self.edad} años, raza {self.raza}, y emailD {self.emailDueño}'
+        return f'{self.nombre}'
     
 class Cliente(models.Model):
     nombreC = models.CharField(max_length=15)
@@ -17,6 +20,9 @@ class Cliente(models.Model):
     contra = models.CharField(max_length=30, null=True)
     mail = models.EmailField(max_length=30)
     telefono = models.IntegerField()
+    #onLine= models.BooleanField(default=False,null=True,blank=True)
+    def __str__(self):
+        return f'{self.nombreC}'
     
 
 class Paseador(models.Model):
@@ -56,13 +62,16 @@ class ContactoCuidador(models.Model):
     
 class Turnos(models.Model):
     descripcion = models.TextField(max_length=400)
-    nombre = models.CharField(max_length=30)
-    edad = models.IntegerField()
-    raza = models.CharField(max_length=30)
-    motivo = models.CharField(max_length=20)
+    nombre = models.CharField(max_length=30,null=True,blank=True)
+    edad = models.IntegerField(null=True,blank=True)
+    raza = models.CharField(max_length=30,null=True,blank=True)
+    perro = models.CharField(max_length=100,null=True,blank=True)
+    sexo = models.CharField(max_length=15,null=True,blank=True)
+    motivo = models.CharField(max_length=100)
     fecha = models.DateField()
+    telDueño = models.IntegerField()
     def __str__(self):
-        return f'Turno de {self.nombre} de edad {self.edad} raza {self.raza} y descripcion {self.descripcion}'
+        return f'Turno de {self.perro} de edad {self.edad} raza {self.raza} y descripcion {self.descripcion}, NRO del Dueño {self.telDueño}'
     
 class PerroAdopcion(models.Model):
     usuario = models.CharField(max_length=30)
@@ -75,3 +84,41 @@ class PerroAdopcion(models.Model):
     castrado = models.CharField(max_length=2)
     def __str__(self):
         return f'se publico el perro {self.nombre}'
+    
+class PerroPerdido(models.Model):
+    usuario = models.CharField(max_length=30)
+    dueño = models.CharField(max_length=30)
+    telDueño = models.IntegerField()
+    nombre = models.CharField(max_length=30)
+    raza= models.CharField(max_length=20)
+    descripcion= models.CharField(max_length=30)
+    zona= models.CharField(max_length=50)
+    fechaD= models.DateTimeField()
+    imagen = models.ImageField(upload_to='imagenes/',null=True)
+    
+    
+class ContactoPerdido(models.Model):
+    nombreP = models.CharField(max_length=30)
+    telDueño = models.IntegerField()
+    encontro = models.CharField(max_length=30)
+    telEncontro = models.IntegerField()
+    def __str__(self):
+        if self.nombreP == 'Desconocido':
+            return f'{self.encontro} es dueño del perro reportado, contactalo al Telefono:{self.telEncontro}'
+        return f'{self.encontro} encontro a {self.nombreP} contactalo al Telefono:{self.telEncontro}'
+
+class Historial(models.Model):
+    nombreP = models.CharField(max_length=30,null=True,blank=True)
+    mailD = models.EmailField(max_length=30,null=True,blank=True)
+    raza = models.CharField(max_length=30,null=True,blank=True)
+    edad = models.IntegerField(null=True,blank=True)
+    descripcion = models.CharField(max_length=400)
+    motivo  = models.CharField(max_length=30)
+    fecha = models.DateField()
+    castrado = models.BooleanField(default=False)
+    color_pelo  = models.CharField(max_length=30)
+    pulsaciones  = models.CharField(max_length=30)
+    estudios_complementarios =models.CharField(max_length=400)
+    diagnostico_presuntivo = models.CharField(max_length=400)
+    tratamiento = models.CharField(max_length=400)
+    proxima_visita = models.DateField()
