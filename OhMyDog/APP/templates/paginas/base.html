@@ -32,21 +32,23 @@
         </div>
             <!-- <a href="./formulario" class="nav-item nav-link active text-white">Form</a>
             <a href="./listarAlgo" class="nav-item nav-link active text-white">Listar Algo</a> -->
-            
+            <a href="./calendar" class="nav-item nav-link active text-white">Veterinaria de turno</a>
             {% if usuario.esVeterinario %}
+                <a href="./notificaciones" class="nav-item nav-link active text-white">Notificaciones</a>
                 <a href="./listarClientes" class="nav-item nav-link active text-white">Listar Clientes</a>
                 <a href="./registrar" class="nav-item nav-link active text-white">Registrar</a>
                 <a href="./losPerros" class="nav-item nav-link active text-white">Perros</a>
+                
             {% endif %}
 
             {% if usuario.esCliente %}
+                <a href="./notificacionAdopcion" class="nav-item nav-link active text-white">Notificacion adopcion</a>
                 <a href="./turnos" class="nav-item nav-link active text-white">Solicitar Turno</a>
                 <a href="./misPerros" class="nav-item nav-link active text-white">Mis Perros</a>
                 <a href="./registrarPerro" class="nav-item nav-link active text-white">Registrar mi Perro</a>
             {% endif %}
 
             {% if usuario.esCliente or usuario.esVeterinario %}
-                <a href="./notificaciones" class="nav-item nav-link active text-white">Notificaciones</a>
                 <a href="./publicar" class="nav-item nav-link active text-white">Publicar</a>
                 <a href="./LogOut" class="nav-item nav-link active text-white"><strong>{{ usuario.nombre }}</strong><br>Cerrar Sesion</a>
             {% else %}

@@ -3,10 +3,13 @@ from django.db import models
 # Aca declaramos todas las tablas de la BD
 
 # Create your models here.
+
 class Perro(models.Model):
     nombre = models.CharField(max_length=15)
     raza = models.CharField(max_length=30)
     edad = models.IntegerField()
+    peso = models.IntegerField( default=0)
+    castrado = models.CharField(max_length=2, default='NO')
     emailDueño = models.EmailField(max_length=30)
     def __str__(self):
         return f'Perro: {self.nombre} con {self.edad} años, raza {self.raza}, y emailD {self.emailDueño}'
@@ -64,14 +67,29 @@ class Turnos(models.Model):
     def __str__(self):
         return f'Turno de {self.nombre} de edad {self.edad} raza {self.raza} y descripcion {self.descripcion}'
     
+
 class PerroAdopcion(models.Model):
     usuario = models.CharField(max_length=30)
     nombre = models.CharField(max_length=30)
-    peso= models.IntegerField()
-    #edad= models.IntegerField()
-    raza= models.CharField(max_length=20)
-    descripcion= models.CharField(max_length=30)
-    zona= models.CharField(max_length=50)
-    castrado = models.CharField(max_length=2)
+    raza = models.CharField(max_length=30)
+    descripcion = models.CharField(max_length=30)
+    zona = models.CharField(max_length=50)
     def __str__(self):
         return f'se publico el perro {self.nombre}'
+    
+class ContactoAdop(models.Model):
+    nombre = models.CharField(max_length=30)
+    usuario = models.CharField(max_length=30)
+    telUsuario = models.IntegerField()
+    def __str__(self):
+        return f'El usuario {self.usuario} Tel:{self.telUsuario} quiere contactarse por el perro {self.nombre}'
+    
+
+
+class Event(models.Model):
+    title = models.CharField(max_length=200)
+    date = models.DateField()
+    description = models.TextField()
+
+    def __str__(self):
+        return self.title

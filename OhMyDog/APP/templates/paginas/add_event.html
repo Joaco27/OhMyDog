@@ -1,0 +1,27 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+
+{% block titulo %} Agregar evento {% endblock %}
+
+{% block contenido %} 
+    <h1>Agregar evento</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="{{ form.title.id_for_label }}">Nombre</label>
+            {{ form.title}}
+          </div>
+        <div>
+          <label for="{{ form.date.id_for_label }}">Fecha</label>
+          {{ form.date }}
+        </div>
+        <div>
+          <label for="{{ form.description.id_for_label }}">Dirección</label>
+          {{ form.description }}
+        </div>
+        <button type="submit">Guardar</button>
+    </form>
+      
+{% endblock %}

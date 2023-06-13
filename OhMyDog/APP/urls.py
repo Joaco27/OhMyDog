@@ -29,7 +29,15 @@ urlpatterns = [
     
     path('turnos',views.turnos,name='turnos'),
     path('publicarAdopcion',views.publicarAdopcion,name='publicarAdopcion'),
-    
+
+
+    path('ContactarAdop/<str:nombre>/',views.ContactarAdop,name='ContactarAdop'),
+    path('contactarAVisit/<str:nombre>/',views.contactarAVisit,name='contactarAVisit'),
+    path('borrarNotiAdop/<str:usuario>/<str:nombre>/',views.eliminarContactoA,name='borrarNotiAdop'),
+    path('notificacionAdopcion',views.notificacionAdopcion,name='notificacionAdopcion'),
+    path('notiAdopContacto', views.notiAdopContacto,name='notiAdopContacto'),
+
+
     path('registrarCliente',views.registrarCliente,name='registrarCliente'),
     path('LogIn',views.LogIn,name='LogIn'),
     path('LogOut',views.LogOut,name='LogOut'),
@@ -39,7 +47,7 @@ urlpatterns = [
     path('borrarPerroC/<str:emailDueño>/<str:nombre>',views.borrarPerroC,name='borrarPerroC'),
     path('borrarPerroA/<str:usuario>/<str:nombre>',views.borrarPerroA,name='borrarPerroA'),
     
-    path('listarAdopciones',views.ListarAdopciones,name='ListarAdopciones'),
+    path('listarAdopciones',views.ListarAdopciones,name='listarAdopciones'),
     path('misPerros',views.misPerros,name='misPerros'),
     
     path('notificaciones',views.notificaciones,name='notificaciones'),
@@ -49,6 +57,13 @@ urlpatterns = [
     path('registrar',views.registrar,name='registrar'),
     path('registrarPerro',views.registrarPerro,name='registrarPerro'),
     path('losPerros',views.losPerros,name='losPerros'),
+
+
+    path('calendar', views.calendar, name='calendar'),
+    path('add', views.add_event, name='add_event'),
+    path('delete/<int:event_id>', views.delete_event, name='delete_event'),
+
+    
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
