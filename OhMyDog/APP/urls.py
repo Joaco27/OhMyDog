@@ -57,7 +57,7 @@ urlpatterns = [
     path('borrarNotiPerd/<str:nombreP>/<str:encontro>/',views.terminarPerd,name='borrarNotiPerd'),
     path('misPerdidos', views.misPerdidos, name='misPerdidos'),
 
-    path('borrarNotiT/<str:nombre>/',views.borrarNotiT,name='borrarNotiT'),
+    path('borrarNotiT/<str:nombre>/<str:perro>/',views.borrarNotiT,name='borrarNotiT'),
 
 
     path('misPerros',views.misPerros,name='misPerros'),

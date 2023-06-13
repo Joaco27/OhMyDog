@@ -81,16 +81,13 @@ class Turnos_form(forms.Form):
     # Meta sirve para enlazar con la BD
     class Meta:
         model = Turnos
-        fields = ['descripcion','raza', 'edad','nombre','perro','motivo','fecha']
+        fields = ['descripcion','perro','motivo','fecha']
     def __init__(self, *args, **kwargs):
         opciones = kwargs.pop('opciones', [])
         super(Turnos_form, self).__init__(*args, **kwargs)
         self.fields['perro'] = forms.ChoiceField(choices=[(opcion, opcion) for opcion in opciones],required=True)
 
-    descripcion = forms.Textarea()
-    nombre = forms.CharField(max_length=15, label='Nombre',widget=forms.HiddenInput,required=False) #hay que sacarlo
-    raza = forms.CharField(max_length=15, label='Raza',widget=forms.HiddenInput,required=False) #fuera
-    edad = forms.IntegerField(label='Edad',widget=forms.HiddenInput,required=False) #fuera
+    descripcion = forms.CharField(max_length=50, required=True)
     perro = forms.ChoiceField()
     motivo = forms.ChoiceField(widget=forms.RadioSelect, label='motivo', choices=[('castrar', 'castrar'), ('vacunar', 'vacunar'), ('revision', 'Revision'), ('otro', 'Otro')])
     fecha = forms.DateField( label='Seleccione la fecha de su turno',

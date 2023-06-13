@@ -1,4 +1,4 @@
-
+from datetime import datetime as dt
 from django.db import models
 
 
@@ -62,15 +62,16 @@ class ContactoCuidador(models.Model):
     
 class Turnos(models.Model):
     descripcion = models.TextField(max_length=400)
-    nombre = models.CharField(max_length=30,null=True,blank=True)#hay que sacarlo
+    nombre = models.CharField(max_length=30,null=True,blank=True)
     edad = models.IntegerField(null=True,blank=True)
     raza = models.CharField(max_length=30,null=True,blank=True)
-    perro = models.CharField(max_length=100)
+    perro = models.CharField(max_length=100,null=True,blank=True)
     sexo = models.CharField(max_length=15,null=True,blank=True)
     motivo = models.CharField(max_length=100)
     fecha = models.DateField()
+    telDueño = models.IntegerField()
     def __str__(self):
-        return f'Turno de {self.perro} de edad {self.edad} raza {self.raza} y descripcion {self.descripcion}'
+        return f'Turno de {self.perro} de edad {self.edad} raza {self.raza} y descripcion {self.descripcion}, NRO del Dueño {self.telDueño}'
     
 class PerroAdopcion(models.Model):
     usuario = models.CharField(max_length=30)

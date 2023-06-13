@@ -12,16 +12,10 @@
 <table class="table">
   <thead>
     <tr>
-      <th>Nombre del Perro</th>
-      <th>Email del Dueño </th>
-      <th>Raza</th>
-      <th>Edad</th>
-      <th>Sex</th>
       <th>Descripcion</th>
       <th>Motivo</th>
       <th>Fecha de Consulta</th>
       <th>Castrado</th>
-      <th>Color de Pelo</th>
       <th>Pulsaciones</th>
       <th>Estudio Complementario</th>
       <th>Diagnostico Presuntivo</th>
@@ -32,16 +26,10 @@
   <tbody>
     {% for c in context %}
     <tr>
-      <td>{{ c.nombreP }}</td>
-      <td>{{ c.mailD }}</td>
-      <td>{{ c.raza }}</td>
-      <td>{{ c.edad }}</td>
-      <td>{{ c.sex }}</td>
       <td>{{ c.descripcion }}</td>
       <td>{{ c.motivo }}</td>
       <td>{{ c.fecha }}</td>
       <td>{{ c.castrado }}</td>
-      <td>{{ c.color_pelo }}</td>
       <td>{{ c.pulsaciones }}</td>
       <td>{{ c.estudios_complementarios }}</td>
       <td>{{ c.diagnostico_presuntivo }}</td>

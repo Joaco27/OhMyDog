@@ -325,6 +325,7 @@ def borrarP(request, telefono):
     
     return redirect("paseadores")
 
+
 def turnos(request):
     usr = Cliente.objects.get(usuario=usuario['nombre'])
     perros = Perro.objects.filter(emailDueño=usr.mail)
@@ -334,13 +335,21 @@ def turnos(request):
         form = Turnos_form(request.POST, opciones=listaPerros)
         if form.is_valid():
             perro=Perro.objects.get(nombre=form.cleaned_data['perro'],emailDueño=usr.mail)
-            form.save()#primero guardo el form como viene (con los fields en null)
-            #despues lo vuelvo a traer y seteo lo que quiero
-            #como no deja modificar el form. hasta que este guardado, encontre esta solu
-            turno = Turnos.objects.get(descripcion=form.cleaned_data['descripcion'],perro=form.cleaned_data['perro'])
-            turno.nombre=usr.usuario
-            turno.raza=perro.raza
-            turno.edad=perro.edad
+            t = Turnos.objects.filter(perro=form.cleaned_data['perro'],nombre=usr.nombreC).exists()
+            if t:
+                messages.add_message(request, messages.SUCCESS, 'Ya solicitaste turno para este perro', extra_tags="tag1")
+                return redirect('turnos')
+            turno = Turnos (
+                descripcion = form.cleaned_data['descripcion'] ,
+                nombre = usr.nombreC,
+                edad = perro.edad,
+                raza = perro.raza,
+                perro = form.cleaned_data['perro'],
+                sexo = perro.sexo,
+                motivo = form.cleaned_data['motivo'],
+                fecha = form.cleaned_data['fecha'],
+                telDueño = usr.telefono,
+            )
             turno.save()
             messages.add_message(request, messages.SUCCESS, 'El veterinario se pondra en contacto pronto', extra_tags="tag1")
 
@@ -385,12 +394,9 @@ def listarClientes(request):
 
 def borrarCliente(request, usuario):
     cli = Cliente.objects.get(usuario=usuario)
-    if PerroAdopcion.objects.filter(usuario=cli.usuario).exists():
-        adopciones = PerroAdopcion.objects.get(usuario=cli.usuario)
-        adopciones.delete()
-    if Perro.objects.filter(emailDueño=cli.mail).exists():
-        perros = Perro.objects.get(emailDueño=cli.mail)
-        perros.delete()
+    PerroAdopcion.objects.filter(usuario=cli.usuario).delete()
+    PerroPerdido.objects.filter(usuario=cli.usuario).delete()
+    Perro.objects.filter(emailDueño=cli.mail).delete()
     cli.delete()
     messages.add_message(request, messages.SUCCESS, 'Cliente Eliminado', extra_tags="tag1")
     
@@ -423,9 +429,9 @@ def notiTurnos(request):
     }
     return render(request,'paginas/notiTurnos.html', context)
 
-def borrarNotiT(request, nombre):
+def borrarNotiT(request, nombre, perro):
     
-    tur=Turnos.objects.filter(nombre=nombre).delete()
+    tur=Turnos.objects.filter(nombre=nombre, perro=perro).delete()
     
     messages.add_message(request, messages.SUCCESS, 'Consulta efectuada', extra_tags="tag1")
 
@@ -484,6 +490,10 @@ def publicarPerdido(request):
             )
             else:
                 p = Perro.objects.get(nombre=form.cleaned_data['nombre'], emailDueño=d.mail)
+                perroEx = PerroPerdido.objects.filter(usuario=usuario['nombre'],nombre=p.nombre).exists()
+                if perroEx:
+                    messages.add_message(request, messages.SUCCESS, 'Ya publicaste esta desaparicion', extra_tags="tag1")
+                    return redirect('publicarPerdido')
                 perdido = PerroPerdido(
                     usuario = usuario['nombre'],
                     dueño = d.nombreC,
