@@ -1,18 +1,20 @@
-from datetime import datetime as dt
 from django.db import models
-
+from datetime import datetime as dt
 
 # Aca declaramos todas las tablas de la BD
 
 # Create your models here.
+
 class Perro(models.Model):
     nombre = models.CharField(max_length=15)
     raza = models.CharField(max_length=30)
     edad = models.IntegerField()
-    emailDueño = models.EmailField(max_length=30)
+    peso = models.IntegerField( default=0)
+    castrado = models.CharField(max_length=2, default='NO')
     sexo = models.CharField(max_length=15,null=True,blank=True)
+    emailDueño = models.EmailField(max_length=30)
     def __str__(self):
-        return f'{self.nombre}'
+        return f'Perro: {self.nombre} con {self.edad} años, raza {self.raza}, y emailD {self.emailDueño}'
     
 class Cliente(models.Model):
     nombreC = models.CharField(max_length=15)
@@ -20,9 +22,6 @@ class Cliente(models.Model):
     contra = models.CharField(max_length=30, null=True)
     mail = models.EmailField(max_length=30)
     telefono = models.IntegerField()
-    #onLine= models.BooleanField(default=False,null=True,blank=True)
-    def __str__(self):
-        return f'{self.nombreC}'
     
 
 class Paseador(models.Model):
@@ -72,18 +71,33 @@ class Turnos(models.Model):
     telDueño = models.IntegerField()
     def __str__(self):
         return f'Turno de {self.perro} de edad {self.edad} raza {self.raza} y descripcion {self.descripcion}, NRO del Dueño {self.telDueño}'
-    
+      
+
 class PerroAdopcion(models.Model):
     usuario = models.CharField(max_length=30)
     nombre = models.CharField(max_length=30)
-    peso= models.IntegerField()
-    #edad= models.IntegerField()
-    raza= models.CharField(max_length=20)
-    descripcion= models.CharField(max_length=30)
-    zona= models.CharField(max_length=50)
-    castrado = models.CharField(max_length=2)
+    raza = models.CharField(max_length=30)
+    descripcion = models.CharField(max_length=30)
+    zona = models.CharField(max_length=50, default='NO')
     def __str__(self):
         return f'se publico el perro {self.nombre}'
+    
+class ContactoAdop(models.Model):
+    nombre = models.CharField(max_length=30)
+    usuario = models.CharField(max_length=30)
+    telUsuario = models.IntegerField()
+    def __str__(self):
+        return f'El usuario {self.usuario} Tel:{self.telUsuario} quiere contactarse por el perro {self.nombre}'
+    
+
+
+class Event(models.Model):
+    title = models.CharField(max_length=200)
+    date = models.DateField()
+    description = models.TextField()
+
+    def __str__(self):
+        return self.title
     
 class PerroPerdido(models.Model):
     usuario = models.CharField(max_length=30)
@@ -95,8 +109,8 @@ class PerroPerdido(models.Model):
     zona= models.CharField(max_length=50)
     fechaD= models.DateTimeField()
     imagen = models.ImageField(upload_to='imagenes/',null=True)
-    
-    
+
+   
 class ContactoPerdido(models.Model):
     nombreP = models.CharField(max_length=30)
     telDueño = models.IntegerField()

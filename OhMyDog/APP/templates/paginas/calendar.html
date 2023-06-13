@@ -1,0 +1,43 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+
+{% block titulo %} Calendario {% endblock %}
+
+{% block contenido %} 
+    <h1>Calendario</h1>
+
+
+    {% if usuario.esVeterinario %}
+        <a href="{% url 'add_event' %}">Agregar evento</a>
+    {%endif%}
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Fecha</th>
+                <th>direccion</th>
+                
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr>
+                <td>{{ event.title }}</td>
+                <td>{{ event.date }}</td>
+                <td>{{ event.description }}</td>
+                
+                <td>
+                    {% if usuario.esVeterinario %}
+                        <a href="{% url 'delete_event' event.id %}">Eliminar</a>
+                    {%endif%}
+                
+                </td>
+                
+            </tr>
+            
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

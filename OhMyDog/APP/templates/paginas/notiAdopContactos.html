@@ -1,0 +1,21 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+
+{% block titulo %} Contactos {% endblock %}
+
+{% block contenido %} 
+
+<div class="d-flex justify-content-center flex-column align-items-center">
+    {% if context|length == 0  %}
+            <p>Aun no hay consultas</p>
+    {% else %}
+        {% for c in context %}
+            <p>{{ c }}</p>
+            <a href="./borrarNotiAdop/{{c.usuario}}/{{c.nombre}}" class="btn btn-success">Confirmado</a>
+            <p>-----------------</p>
+        {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock %}

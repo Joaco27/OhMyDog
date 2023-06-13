@@ -1,0 +1,20 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+
+{% block titulo %} Notificaciones adopcion {% endblock %}
+
+{% block contenido %} 
+<div class="d-flex justify-content-center flex-column align-items-center">
+    {% if usuario.esCliente %}
+        <a href="./notiAdopContacto" class="btn btn-success">Contacto adopcion</a>
+        
+        <p>----------------</p>
+
+        <a href="./notiPerdidos" class="btn btn-success">Reportes</a>
+        
+        <p>----------------</p>
+    {% endif %}
+</div>
+
+{% endblock %}

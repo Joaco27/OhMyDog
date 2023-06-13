@@ -103,28 +103,22 @@ class Turnos_form(forms.Form):
         if data_nueva < fecha:
             raise ValidationError("Coloque una fecha valida, superior a la fecha actual")
         return data
-    
-class perroAdopcion_form(forms.ModelForm):
+
+class perroAdopcion_form(forms.Form):
     class Meta:
         model= PerroAdopcion
-        fields=['usuario','nombre', 'peso', 'raza', 'descripcion', 'zona', 'castrado']
-
-    usuario= forms.CharField(max_length=30, required=True, label='usuario')
-    nombre = forms.CharField(max_length=50, required=True, label='nombre')
-    peso = forms.IntegerField(required=True, label='peso')
-    #edad = forms.IntegerField(required=True, label='edad')
-    zona = forms.CharField(max_length=50, required=True, label='zona')
-    raza= forms.CharField(max_length=20, required=True, label='raza')
-    descripcion= forms.CharField(max_length=30, required=True, label='description')
-    castrado= forms.CharField(max_length=2,required=True, label='castrado')
-
-    def clean_usuario(self):
-        data = self.cleaned_data["usuario"]
-        ok = Cliente.objects.filter(usuario=data).exists()
-        if ok==False:
-            raise ValidationError('nombre de usuario no registrado')
-        return data
+        fields=['nombre','descripcion', 'zona']
+    def __init__(self, *args, **kwargs):
+        opciones = kwargs.pop('opciones', [])
+        super(perroAdopcion_form, self).__init__(*args, **kwargs)
+        self.fields['nombre'] = forms.ChoiceField(choices=[(opcion, opcion) for opcion in opciones],required=True)
     
+    
+    nombre = forms.ChoiceField()
+    zona = forms.CharField(max_length=50, required=True, label='zona')
+    descripcion= forms.CharField(max_length=30, required=True, label='description')
+
+
 class Cliente_form(forms.ModelForm):
     class Meta:
         model = Cliente
@@ -188,6 +182,12 @@ class contacto_form(forms.Form):
             raise ValidationError("El telefono debe tener entre 7 y 11 caracters")
         return data
     
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ['title', 'date', 'description']
+
 class perroPerdido_form(forms.Form):
     class Meta:
         model = PerroPerdido
@@ -214,6 +214,7 @@ class perroPerdido_form(forms.Form):
         if data_nueva > fecha:
             raise ValidationError("Coloque una fecha previa a la fecha actual o actual")
         return data
+    
 class Historial_form(forms.ModelForm):
     class Meta:
         model = Historial
