@@ -5,34 +5,40 @@
 
 {% block contenido %} 
 
-<div class="d-flex justify-content-center flex-column align-items-center">
-    {% if context|length == 0 %}
-        <p>No hay Perros Registrados</p>
-    {% else %}
-    <table class="table">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Raza</th>
-            <th>Edad</th>
-            <th>Email</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for c in context %}
-          {% if c.usuario != 'Veterinario' %}
-          <tr>
-            <td>{{ c.nombre }}</td>
-            <td>{{ c.raza }}</td>
-            <td>{{ c.edad }}</td>
-            <td>{{ c.emailDueño }}</td>
-            <td><a href="./borrarPerro/{{c.emailDueño}}/{{c.nombre}}" class="btn btn-danger">Borrar</a></td>
-          </tr>
-          {% endif %}
-          {% endfor %}
-        </tbody>
-    </table>
-    {% endif %}
-</div>
-
+  <div class="d-flex justify-content-center flex-column align-items-center">
+      {% if context|length == 0 %}
+          <p>No hay Perros Registrados</p>
+      {% else %}
+      <table class="table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Raza</th>
+              <th>Edad</th>
+              <th>Nombre del Dueño</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in context %}
+            {% if c.usuario != 'Veterinario' %}
+            <tr>
+              <form action="validate" method="post">
+                {% csrf_token %}
+                <td>{{ c.nombre }}</td>
+                <td>{{ c.raza }}</td>
+                <td>{{ c.edad }}</td>
+                <td>{{ c.nombreD }}</td>
+                <td><input type="hidden" value="{{c.nombre}}" name="nombre" ><br><br>
+                <td><input type="hidden" value="{{c.emailDueño}}" name = "emailD"><br><br>
+                <td><input type="submit" value="Historial">
+                <td><a href="./borrarPerro/{{c.emailDueño}}/{{c.nombre}}" class="btn btn-danger">Borrar</a></td>
+              </form>
+              </tr>
+            {% endif %}
+            {% endfor %}
+          </tbody>
+      </table>
+      {% endif %}
+  </div>
+</form>
 {% endblock %}

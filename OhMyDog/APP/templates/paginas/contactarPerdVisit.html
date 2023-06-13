@@ -2,7 +2,7 @@
 {% load static %}
 
 
-{% block titulo %} Solicitar Turno {% endblock %}
+{% block titulo %} Reportar {% endblock %}
 
 {% block contenido %} 
 <style>
@@ -11,14 +11,14 @@
     }
 </style>
 <div class="d-flex justify-content-center">
-    <h1>Ingresa los datos para solicitar un turno</h1>
+    <h1>Ingrese los datos para informar al dueño</h1>
 </div>
 <br>
 <div class="d-flex justify-content-center">
-    <form action= "{% url 'turnos' %}" method="POST">
+    <form action= "{% url 'contactarPerdVisit' nombre telDueño %}" method="POST">
         {% csrf_token %}
         {% if form.errors %}
-                <div class="alert alert-danger ">
+                <div class="alert alert-danger">
                     {% for field, errors in form.errors.items %}
                         {% for error in errors %}
                             {{ error }} <br>

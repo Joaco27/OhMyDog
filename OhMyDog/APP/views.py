@@ -18,6 +18,12 @@ usuario = {
 def getUsuario():
     return usuario
 
+infoHistorial = {
+    "nombre": "",
+    "nombreP": "",
+    "mailD": "",
+}
+
 def index(request):
     context ={
         'usuario':usuario
@@ -46,8 +52,14 @@ def registrarPerro(request):
     if request.method == 'POST':
         form = Perro_form(request.POST) 
         if form.is_valid(): 
-            
-            form.save()
+            usr=Cliente.objects.get(usuario=usuario['nombre'])
+            perro = Perro(
+                nombre = form.cleaned_data['nombre'],
+                raza = form.cleaned_data['raza'],
+                edad = form.cleaned_data['edad'],
+                emailDueño = usr.mail,
+            )
+            perro.save()
             messages.add_message(request, messages.SUCCESS, 'Perro registrado con exito', extra_tags="tag1")
 
             return redirect("index")
@@ -59,6 +71,7 @@ def registrarPerro(request):
         'usuario':usuario
     }
     return render(request, 'paginas/registrarPerro.html', context)
+
 
 def borrarPerro(request, emailDueño, nombre):
     perro = Perro.objects.get(emailDueño=emailDueño, nombre=nombre)
@@ -106,7 +119,6 @@ def LogIn(request):
 
 def LogOut(request):
     usuario["nombre"] = ""
-    usuario["contra"] = ""
     usuario['esCliente'] = False
     usuario['esVeterinario'] = False
     
@@ -204,7 +216,6 @@ def contactarCVisit(request, nombre, telefono):
             return redirect("index")
     else:
         form = contacto_form()
-    #url_params = reverse('contactarCVisit',args=[nombre,telefono])
     context = {
         'form': form,
         'usuario':usuario,
@@ -246,7 +257,6 @@ def contactarPVisit(request, nombre, telefono):
     else:
         form = contacto_form()
         
-    #url_params = reverse('contactarPVisit',args=[nombre,telefono])
     context = {
         'form': form,
         'usuario':usuario,
@@ -316,21 +326,43 @@ def borrarP(request, telefono):
     
     return redirect("paseadores")
 
+
 def turnos(request):
+    usr = Cliente.objects.get(usuario=usuario['nombre'])
+    perros = Perro.objects.filter(emailDueño=usr.mail)
+    listaPerros =[""]
+    listaPerros += [p.nombre for p in perros]
     if request.method == 'POST':
-        form = Turnos_form(request.POST)
+        form = Turnos_form(request.POST, opciones=listaPerros)
         if form.is_valid():
-            
-            form.save() 
+            perro=Perro.objects.get(nombre=form.cleaned_data['perro'],emailDueño=usr.mail)
+            t = Turnos.objects.filter(perro=form.cleaned_data['perro'],nombre=usr.nombreC).exists()
+            if t:
+                messages.add_message(request, messages.SUCCESS, 'Ya solicitaste turno para este perro', extra_tags="tag1")
+                return redirect('turnos')
+            turno = Turnos (
+                descripcion = form.cleaned_data['descripcion'] ,
+                nombre = usr.nombreC,
+                edad = perro.edad,
+                raza = perro.raza,
+                perro = form.cleaned_data['perro'],
+                sexo = perro.sexo,
+                motivo = form.cleaned_data['motivo'],
+                fecha = form.cleaned_data['fecha'],
+                telDueño = usr.telefono,
+            )
+            turno.save()
             messages.add_message(request, messages.SUCCESS, 'El veterinario se pondra en contacto pronto', extra_tags="tag1")
 
             return redirect("index")
     else:
-        form = Turnos_form()
-    
+        form = Turnos_form(opciones=listaPerros)
+    perros=Perro.objects.filter(emailDueño=usr.mail)
+    print (perros)
     context = {
         'form': form,
         'usuario' : usuario,
+        'perros' : perros
     }
     return render(request, 'paginas/turnos.html', context)
 
@@ -367,7 +399,7 @@ def publicarAdopcion(request):
                 )
             
             adop.save()
-            messages.add_message(request, messages.SUCCESS, 'Se ha publicado ', extra_tags="tag1")
+            messages.add_message(request, messages.SUCCESS, 'Se ha publicado perro en adopcion ', extra_tags="tag1")
 
             return redirect("index")
     else:
@@ -390,6 +422,7 @@ def listarClientes(request):
 def borrarCliente(request, usuario):
     cli = Cliente.objects.get(usuario=usuario)
     PerroAdopcion.objects.filter(usuario=cli.usuario).delete()
+    PerroPerdido.objects.filter(usuario=cli.usuario).delete()
     Perro.objects.filter(emailDueño=cli.mail).delete()
     cli.delete()
     messages.add_message(request, messages.SUCCESS, 'Cliente Eliminado', extra_tags="tag1")
@@ -412,6 +445,26 @@ def notiContacto(request):
         'cuidadores':datosC,
     }
     return render(request,'paginas/notiContactos.html', context)
+
+
+
+def notiTurnos(request):
+    turnos = Turnos.objects.all()
+    context ={
+        'usuario':usuario,
+        'turnos':turnos,
+    }
+    return render(request,'paginas/notiTurnos.html', context)
+
+def borrarNotiT(request, nombre, perro):
+    
+    tur=Turnos.objects.filter(nombre=nombre, perro=perro).delete()
+    
+    messages.add_message(request, messages.SUCCESS, 'Consulta efectuada', extra_tags="tag1")
+
+    return redirect('notiTurnos')
+
+
 
 def terminarContactoC(request, nombreU, nombreC):
     
@@ -457,6 +510,105 @@ def contactarAVisit(request, nombre):
             )
             contactoNuevo.save()
             messages.add_message(request, messages.SUCCESS, 'Pronto se pondran en contacto con usted', extra_tags="tag1")
+def listarPerdidos(request):
+    perdidos = PerroPerdido.objects.all()
+    context = {
+        'context':perdidos,
+        'usuario':usuario
+    }
+    return render(request, 'paginas/listaPerdidos.html', context)
+
+def publicarPerdido(request):
+    usu = Cliente.objects.get(usuario=usuario['nombre'])
+    perros = Perro.objects.filter(emailDueño=usu.mail)
+    listaPerros =["","Encontrado"]
+    listaPerros += [p.nombre for p in perros]
+    print(listaPerros)
+    if request.method == 'POST':
+        form = perroPerdido_form(request.POST, request.FILES,opciones=listaPerros)
+        if form.is_valid():
+            
+            d = Cliente.objects.get(usuario=usuario['nombre'])
+            p = Perro.objects.filter(nombre=form.cleaned_data['nombre'], emailDueño=d.mail).exists()
+            
+            if not p:
+                perdido = PerroPerdido(
+                usuario = usuario['nombre'],
+                dueño = d.nombreC,
+                telDueño = usu.telefono,
+                nombre = 'Desconocido',
+                raza = 'Desconocido',
+                descripcion = form.cleaned_data['descripcion'],
+                zona = form.cleaned_data['zona'],
+                fechaD = form.cleaned_data['fechaD'],
+                imagen = form.cleaned_data['imagen'],
+            )
+            else:
+                p = Perro.objects.get(nombre=form.cleaned_data['nombre'], emailDueño=d.mail)
+                perroEx = PerroPerdido.objects.filter(usuario=usuario['nombre'],nombre=p.nombre).exists()
+                if perroEx:
+                    messages.add_message(request, messages.SUCCESS, 'Ya publicaste esta desaparicion', extra_tags="tag1")
+                    return redirect('publicarPerdido')
+                perdido = PerroPerdido(
+                    usuario = usuario['nombre'],
+                    dueño = d.nombreC,
+                    telDueño = usu.telefono,
+                    nombre = p.nombre,
+                    raza = p.raza,
+                    descripcion = form.cleaned_data['descripcion'],
+                    zona = form.cleaned_data['zona'],
+                    fechaD = form.cleaned_data['fechaD'],
+                    imagen = form.cleaned_data['imagen'],
+                )
+            
+            perdido.save()
+            messages.add_message(request, messages.SUCCESS, 'Se ha publicado la desaparicion', extra_tags="tag1")
+
+            return redirect("index")
+    else:
+        form = perroPerdido_form( opciones=listaPerros)
+    
+    context = {
+        'form': form,
+        'usuario' : usuario,
+    }
+    return render(request, 'paginas/publicarPerdido.html', context)
+
+def borrarPerroPerdido(request, dueño, nombre):
+    PerroPerdido.objects.filter(dueño=dueño,nombre=nombre).delete()
+    
+    messages.add_message(request, messages.SUCCESS, 'Perdida borrada', extra_tags="tag1")
+
+    return redirect("listarPerdidos")
+
+def contactarPerd(request, nombre, telDueño):
+    cli =  Cliente.objects.get(usuario=usuario["nombre"])
+    existe = ContactoPerdido.objects.filter(telDueño=telDueño,telEncontro=cli.telefono,nombreP=nombre).exists()
+    if existe:
+        messages.add_message(request, messages.SUCCESS, 'Ya has reportado a este perro', extra_tags="tag1")
+        return redirect("listarPerdidos")
+    perd = ContactoPerdido(
+        nombreP =  nombre,
+        telDueño = telDueño,
+        encontro = cli.nombreC,
+        telEncontro = cli.telefono,
+    )
+    perd.save()
+    messages.add_message(request, messages.SUCCESS, 'Le informaremos al Dueño', extra_tags="tag1")
+    return redirect("index")
+
+def contactarPerdVisit(request, nombre, telDueño):
+    if request.method == 'POST':
+        form = contacto_form(request.POST) 
+        if form.is_valid():
+            contactoNuevo = ContactoPerdido(
+                nombreP = nombre,
+                telDueño = telDueño,
+                encontro = form.cleaned_data.get('usuario'),
+                telEncontro = form.cleaned_data.get('telefono')
+            )
+            contactoNuevo.save()
+            messages.add_message(request, messages.SUCCESS, 'Le informaremos al Dueño', extra_tags="tag1")
 
             return redirect("index")
     else:
@@ -509,3 +661,120 @@ def delete_event(request, event_id):
     event = Event.objects.get(pk=event_id)
     event.delete()
     return redirect('calendar')
+
+"""      
+  'nombre' : nombre,
+        'telDueño' : telDueño,    
+        }
+    return render(request, 'paginas/contactarPerdVisit.html', context)
+"""
+
+def notiPerdidos(request):
+    cli =  Cliente.objects.get(usuario=usuario["nombre"])
+    noti = ContactoPerdido.objects.filter(telDueño=cli.telefono)
+    context = {
+        'context' : noti,
+        'usuario' : usuario,
+    }
+    return render(request, 'paginas/notiPerdidos.html', context)
+
+def terminarPerd(request, nombreP, encontro):
+    ContactoPerdido.objects.filter(nombreP=nombreP,encontro=encontro).delete()
+    
+    messages.add_message(request, messages.SUCCESS, 'Reporte efectuada', extra_tags="tag1")
+
+    return redirect("notiPerdidos")
+
+def publicaciones(request):
+    context = {
+        'usuario' : usuario,
+    }
+    return render(request,'paginas/publicaciones.html', context)
+
+def misPerdidos(request):
+    perd = PerroPerdido.objects.filter(usuario=usuario['nombre'])
+    context = {
+        'context' : perd,
+        'usuario' : usuario,
+    }
+    return render(request,'paginas/misperdidos.html',context)
+
+
+def listarHistorialV(request,nombre):
+    his = Historial.objects.all().filter(nombreP=nombre)
+    print (nombre)
+    context = {
+        'context':his,
+        'usuario':usuario
+    }
+    return render(request, 'paginas/listarHistorialV.html', context)
+
+def validate(request):#extrae el nombre y email del perro y hace de conector con los historiales y su creacion
+   if request.method == 'POST':
+      nombre= request.POST["nombre"]#tendria que ser un GET pero bueno, funciona
+      emailD = request.POST["emailD"]
+      infoHistorial['nombreP']= request.POST["nombre"]
+      infoHistorial['mailD']= request.POST["emailD"]
+      his = Historial.objects.all().filter(nombreP=nombre,mailD=emailD)
+      context = {
+        'context':his,
+        'usuario':usuario
+    }
+      return render(request, 'paginas/listarHistorialV.html', context)#aca me tendria que mandar a listarHistorialV
+
+
+def validateC(request):#extrae el nombre y email del perro y hace de conector con los historiales y su creacion
+   if request.method == 'POST':
+      nombre= request.POST["nombre"]#tendria que ser un GET pero bueno, funciona
+      emailD = request.POST["emailD"]
+      infoHistorial['nombreP']= request.POST["nombre"]
+      infoHistorial['mailD']= request.POST["emailD"]
+      his = Historial.objects.all().filter(nombreP=nombre,mailD=emailD)
+      context = {
+        'context':his,
+        'usuario':usuario
+    }
+      return render(request, 'paginas/listarHistorialC.html', context)
+
+
+def listarHistorialC(request):
+    his = Historial.objects.all().filter(nombreP=infoHistorial['nombreP'], mailD= infoHistorial['mailD'])
+    context = {
+        'context':his,
+        'usuario':usuario
+    }
+    return render(request, 'paginas/listarHistorialC.html', context)
+
+
+
+
+def cargarHistorial(request):
+    if request.method == 'POST':
+        form = Historial_form(request.POST)
+        if form.is_valid(): 
+            print(form.cleaned_data['descripcion'])
+            form.save()
+            his=Historial.objects.get(descripcion=form.cleaned_data['descripcion'] ,
+                                    diagnostico_presuntivo=form.cleaned_data['diagnostico_presuntivo'] ,
+                                    proxima_visita=form.cleaned_data['proxima_visita'] )
+                
+            perro=Perro.objects.get(nombre=infoHistorial['nombreP'],emailDueño=infoHistorial['mailD'])
+            his.nombreP=perro.nombre
+            his.mailD=perro.emailDueño
+            his.edad=perro.edad
+            his.raza=perro.raza
+            print(his)
+            his.save()
+            messages.add_message(request, messages.SUCCESS, 'Historial cargado con exito', extra_tags="tag1")
+
+            return redirect("index")
+    else:
+        form = Historial_form()
+            
+    context = {
+
+        'form': form,
+        'usuario':usuario,
+    }
+    return render(request, 'paginas/cargarHistorial.html', context)
+
