@@ -422,7 +422,8 @@ def listarClientes(request):
 def borrarCliente(request, usuario):
     cli = Cliente.objects.get(usuario=usuario)
     PerroAdopcion.objects.filter(usuario=cli.usuario).delete()
-    PerroPerdido.objects.filter(usuario=cli.usuario).delete()
+    
+    # PerroPerdido.objects.filter(usuario=cli.usuario).delete()
     Perro.objects.filter(emailDueño=cli.mail).delete()
     cli.delete()
     messages.add_message(request, messages.SUCCESS, 'Cliente Eliminado', extra_tags="tag1")
@@ -510,11 +511,12 @@ def contactarAVisit(request, nombre):
             )
             contactoNuevo.save()
             messages.add_message(request, messages.SUCCESS, 'Pronto se pondran en contacto con usted', extra_tags="tag1")
+
 def listarPerdidos(request):
     perdidos = PerroPerdido.objects.all()
     context = {
         'context':perdidos,
-        'usuario':usuario
+        'usuario':usuario,
     }
     return render(request, 'paginas/listaPerdidos.html', context)
 

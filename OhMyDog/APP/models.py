@@ -78,7 +78,7 @@ class PerroAdopcion(models.Model):
     nombre = models.CharField(max_length=30)
     raza = models.CharField(max_length=30)
     descripcion = models.CharField(max_length=30)
-    zona = models.CharField(max_length=50)
+    zona = models.CharField(max_length=50, default='NO')
     def __str__(self):
         return f'se publico el perro {self.nombre}'
     

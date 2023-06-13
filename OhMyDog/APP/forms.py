@@ -187,6 +187,7 @@ class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ['title', 'date', 'description']
+
 class perroPerdido_form(forms.Form):
     class Meta:
         model = PerroPerdido
@@ -213,6 +214,7 @@ class perroPerdido_form(forms.Form):
         if data_nueva > fecha:
             raise ValidationError("Coloque una fecha previa a la fecha actual o actual")
         return data
+    
 class Historial_form(forms.ModelForm):
     class Meta:
         model = Historial
