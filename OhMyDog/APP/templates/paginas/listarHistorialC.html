@@ -13,10 +13,7 @@
   <thead>
     <tr>
       <th>Descripcion</th>
-      <th>Motivo</th>
       <th>Fecha de Consulta</th>
-      <th>Castrado</th>
-      <th>Pulsaciones</th>
       <th>Estudio Complementario</th>
       <th>Diagnostico Presuntivo</th>
       <th>Tratamiento</th>
@@ -27,10 +24,7 @@
     {% for c in context %}
     <tr>
       <td>{{ c.descripcion }}</td>
-      <td>{{ c.motivo }}</td>
       <td>{{ c.fecha }}</td>
-      <td>{{ c.castrado }}</td>
-      <td>{{ c.pulsaciones }}</td>
       <td>{{ c.estudios_complementarios }}</td>
       <td>{{ c.diagnostico_presuntivo }}</td>
       <td>{{ c.tratamiento }}</td>
