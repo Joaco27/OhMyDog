@@ -105,3 +105,19 @@ class ContactoPerdido(models.Model):
         if self.nombreP == 'Desconocido':
             return f'{self.encontro} es dueño del perro reportado, contactalo al Telefono:{self.telEncontro}'
         return f'{self.encontro} encontro a {self.nombreP} contactalo al Telefono:{self.telEncontro}'
+
+class Historial(models.Model):
+    nombreP = models.CharField(max_length=30,null=True,blank=True)
+    mailD = models.EmailField(max_length=30,null=True,blank=True)
+    raza = models.CharField(max_length=30,null=True,blank=True)
+    edad = models.IntegerField(null=True,blank=True)
+    descripcion = models.CharField(max_length=400)
+    motivo  = models.CharField(max_length=30)
+    fecha = models.DateField()
+    castrado = models.BooleanField(default=False)
+    color_pelo  = models.CharField(max_length=30)
+    pulsaciones  = models.CharField(max_length=30)
+    estudios_complementarios =models.CharField(max_length=400)
+    diagnostico_presuntivo = models.CharField(max_length=400)
+    tratamiento = models.CharField(max_length=400)
+    proxima_visita = models.DateField()
