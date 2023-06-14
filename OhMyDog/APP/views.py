@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.urls import reverse
 from itertools import chain
 from datetime import date as dt
-
+from datetime import *
 
 #Declarar funciones para hacer cuando se ingresan direcciones
 
@@ -54,11 +54,13 @@ def registrarPerro(request):
         form = Perro_form(request.POST) 
         if form.is_valid(): 
             usr=Cliente.objects.get(usuario=usuario['nombre'])
+            edad = (datetime.now().year - form.cleaned_data['fechaNacimiento'].year)
             perro = Perro(
                 nombre = form.cleaned_data['nombre'],
                 raza = form.cleaned_data['raza'],
-                edad = form.cleaned_data['edad'],
+                edad = edad,
                 emailDueño = usr.mail,
+                sexo = form.cleaned_data['sexo'],
             )
             perro.save()
             messages.add_message(request, messages.SUCCESS, 'Perro registrado con exito', extra_tags="tag1")
@@ -351,6 +353,7 @@ def turnos(request):
                 motivo = form.cleaned_data['motivo'],
                 fecha = form.cleaned_data['fecha'],
                 telDueño = usr.telefono,
+                fHoraria = form.cleaned_data['fHoraria']
             )
             turno.save()
             messages.add_message(request, messages.SUCCESS, 'El veterinario se pondra en contacto pronto', extra_tags="tag1")

@@ -9,29 +9,37 @@ class Perro_form(forms.ModelForm):
     # Meta sirve para enlazar con la BD
     class Meta:
         model = Perro
-        fields = ['nombre','raza', 'edad','sexo']
+        fields = ['nombre','raza', 'edad','sexo','fechaNacimiento']
     # Creamos los campos del formulario
     nombre = forms.CharField(max_length=15, required=True, label='Nombre')
     raza = forms.CharField(max_length=15, required=True, label='Raza')
-    edad = forms.IntegerField(required=True, label='Edad')
+    edad = forms.IntegerField(required=False, label='Edad',widget=forms.HiddenInput())
     emailDueño = forms.EmailField(max_length=30, required=False, label='Email Dueño',widget=forms.HiddenInput())#hay que sacarlo
     opciones = ['Macho','Hembra']
+    fechaNacimiento = forms.DateField(label='Fecha de Nacimiento (si no conoce la fecha ingrese una aproximada)'
+                                      ,widget=forms.DateInput(attrs={"type": "date"}))
     sexo = forms.ChoiceField(choices=[(l, l) for l in opciones],required=True)
     # Clean son validaciones 
     # Se debe respetar que en el nombre de la validacion este
     # el nombre del campo , osea clean_<nombre de campo>
-    def clean_edad(self):
-        data = self.cleaned_data["edad"]
-        if data < 1 or data > 20:
-            raise ValidationError("Edad invalida")
+
+
+    usuario = {
+        "nombre": "",
+        "esCliente": False,
+        "esVeterinario": False,
+    }
+
+    def clean_fechaNacimiento(self):
+        data =self.cleaned_data["fechaNacimiento"]
+        fecha = date.datetime.today()
+
+        data_str = data.strftime('%d/%m/%Y')
+        data_nueva = date.datetime.strptime(data_str, '%d/%m/%Y')
+        if data_nueva > fecha:
+            raise ValidationError("Coloque una fecha valida, inferior a la fecha actual")
         return data
     
-    # def clean_emailDueño(self):
-    #     data = self.cleaned_data.get('emailDueño')
-    #     ok = Cliente.objects.filter(mail=data).exists()
-    #     if not ok :
-    #         raise ValidationError('El email no pertenece a un dueño')
-    #     return data
     def clean_nombre(self):
         data = self.cleaned_data.get('nombre')
         mail = self.data.get('emailDueño')
@@ -82,17 +90,18 @@ class Turnos_form(forms.Form):
     # Meta sirve para enlazar con la BD
     class Meta:
         model = Turnos
-        fields = ['descripcion','perro','motivo','fecha']
-    def __init__(self, *args, **kwargs):
-        opciones = kwargs.pop('opciones', [])
-        super(Turnos_form, self).__init__(*args, **kwargs)
-        self.fields['perro'] = forms.ChoiceField(choices=[(opcion, opcion) for opcion in opciones],required=True)
+        fields = ['descripcion','perro','motivo','fecha','fHoraria']
+    def __init__(self, *args, **kwargs):#definimos una funcion que tiene self, arfs y kwargs
+        opciones = kwargs.pop('opciones', [])#traemos las opciones por kwargs.pop
+        super(Turnos_form, self).__init__(*args, **kwargs)#llamamos a super de turnos self 
+        self.fields['perro'] = forms.ChoiceField(choices=[(opcion, opcion) for opcion in opciones],required=True) #asignamos un tipo y valor a la field perro
 
     descripcion = forms.CharField(max_length=50, required=True)
     perro = forms.ChoiceField()
     motivo = forms.ChoiceField(widget=forms.RadioSelect, label='motivo', choices=[('castrar', 'castrar'), ('vacunar', 'vacunar'), ('revision', 'Revision'), ('otro', 'Otro')])
     fecha = forms.DateField( label='Seleccione la fecha de su turno',
                             widget=forms.DateInput(attrs={"type": "date"}))
+    fHoraria = forms.ChoiceField(widget=forms.RadioSelect, label='Franja Horaria del Turno', choices=[('Mañana', 'Mañana'), ('Tarde', 'Tarde')])
     # Clean son validaciones 
     
     def clean_fecha(self):

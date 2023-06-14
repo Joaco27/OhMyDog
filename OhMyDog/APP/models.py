@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import datetime as dt
-
+from django.utils import timezone 
 # Aca declaramos todas las tablas de la BD
 
 # Create your models here.
@@ -8,11 +8,12 @@ from datetime import datetime as dt
 class Perro(models.Model):
     nombre = models.CharField(max_length=15)
     raza = models.CharField(max_length=30)
-    edad = models.IntegerField()
+    edad = models.IntegerField(null=True,blank=True)
     peso = models.IntegerField( default=0)
     castrado = models.CharField(max_length=2, default='NO')
     sexo = models.CharField(max_length=15,null=True,blank=True)
     emailDueño = models.EmailField(max_length=30)
+    fechaNacimiento = models.DateField(default=timezone.now)
     def __str__(self):
         return f'Perro: {self.nombre} con {self.edad} años, raza {self.raza}, y emailD {self.emailDueño}'
     
@@ -69,6 +70,7 @@ class Turnos(models.Model):
     motivo = models.CharField(max_length=100)
     fecha = models.DateField()
     telDueño = models.IntegerField()
+    fHoraria = models.CharField(max_length=15,null=True,blank=True)
     def __str__(self):
         return f'Turno de {self.perro} de edad {self.edad} raza {self.raza} y descripcion {self.descripcion}, NRO del Dueño {self.telDueño}'
       
