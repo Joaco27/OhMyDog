@@ -6,16 +6,137 @@
 
 {% block contenido %} 
 
+
 <div class="d-flex justify-content-center flex-column align-items-center">
-    {% if turnos|length == 0 %}
+    <h3>Turnos Pendientes</h3>
+    {% if turnosP|length == 0 %}
         <p>Aun no hay consultas</p>
     {% else %}
-        {% for c in turnos %}
-            <p>{{ c }}</p>
-            <a href="./borrarNotiT/{{c.nombre}}/{{c.perro}}" class="btn btn-success">Confirmado</a>
-            <p>-----------------</p>
-        {% endfor %}
+        <table class="table">
+            <thead>
+                <tr>
+                <th>Perro</th>
+                <th>Dueño</th>
+                <th>Edad</th>
+                <th>Raza</th>
+                <th>Descripcion</th>
+                <th>Numero Del Dueño</th>
+                <th>Fecha</th>
+                <th>Franja Horaria</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in turnosP %}
+                <tr>
+                <td>{{ c.perro }}</td>
+                <td>{{ c.nombre }}</td>
+                <td>{{ c.edad }}</td>
+                <td>{{ c.raza }}</td>
+                <td>{{ c.descripcion }}</td>
+                <td>{{ c.telDueño }}</td>
+                <td>{{ c.fecha }}</td>
+                <td>{{ c.fHoraria }}</td>
+                <td><button onclick="confirmar()" class="btn btn-danger">Rechazar</button>
+                        <script>
+                          function confirmar(){
+                            var motivoRechazo = prompt("ingrese el motivo para rechazar el turno");
+                            if(motivoRechazo == "")
+                              window.confirm('Debe ingresar un motivo')
+                            else
+                                window.location.href = `./borrarNotiTe/{{c.nombre}}/{{c.perro}}/{{c.descripcion}}/${motivoRechazo}`
+                          }
+                        </script>
+                </td>
+                <td><a href="./borrarNotiT/{{c.nombre}}/{{c.perro}}/{{c.descripcion}}" class="btn btn-success">Confirmar</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p>-----------------</p>
+    {% endif %}
+    <h3>Turnos Confirmados</h3>
+    {% if turnosC|length == 0 %}
+        <p>Aun no hay consultas</p>
+    {% else %}
+        <table class="table">
+            <thead>
+                <tr>
+                <th>Perro</th>
+                <th>Dueño</th>
+                <th>Edad</th>
+                <th>Raza</th>
+                <th>Descripcion</th>
+                <th>Numero Del Dueño</th>
+                <th>Fecha</th>
+                <th>Franja Horaria</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in turnosC %}
+                <tr>
+                <td>{{ c.perro }}</td>
+                <td>{{ c.nombre }}</td>
+                <td>{{ c.edad }}</td>
+                <td>{{ c.raza }}</td>
+                <td>{{ c.descripcion }}</td>
+                <td>{{ c.telDueño }}</td>
+                <td>{{ c.fecha }}</td>
+                <td>{{ c.fHoraria }}</td>
+                <td><button onclick="confirmar()" class="btn btn-danger">Rechazar</button>
+                    <script>
+                      function confirmar(){
+                        var motivoRechazo = prompt("ingrese el motivo para rechazar el turno");
+                        if(motivoRechazo == "")
+                          window.confirm('Debe ingresar un motivo')
+                        else
+                            window.location.href = `./borrarNotiTe/{{c.nombre}}/{{c.perro}}/{{c.descripcion}}/${motivoRechazo}`
+                      }
+                    </script>
+                </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p>-----------------</p>
+    {% endif %}
+    <h3>Turnos Rechazados</h3>
+    {% if turnosR|length == 0 %}
+        <p>Aun no hay consultas</p>
+    {% else %}
+        <table class="table">
+            <thead>
+                <tr>
+                <th>Perro</th>
+                <th>Dueño</th>
+                <th>Edad</th>
+                <th>Raza</th>
+                <th>Descripcion</th>
+                <th>Numero Del Dueño</th>
+                <th>Motivo de Rechazo</th>
+                <th>Fecha</th>
+                <th>Franja Horaria</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in turnosR %}
+                <tr>
+                <td>{{ c.perro }}</td>
+                <td>{{ c.nombre }}</td>
+                <td>{{ c.edad }}</td>
+                <td>{{ c.raza }}</td>
+                <td>{{ c.descripcion }}</td>
+                <td>{{ c.telDueño }}</td>
+                <td>{{ c.motivoRechazo }}</td>
+                <td>{{ c.fecha }}</td>
+                <td>{{ c.fHoraria }}</td>
+                <td><a href="./borrarNotiT/{{c.nombre}}/{{c.perro}}/{{c.descripcion}}" class="btn btn-success">Confirmar</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p>-----------------</p>
     {% endif %}
 </div>
+
 
 {% endblock %}

@@ -69,8 +69,8 @@ urlpatterns = [
     path('borrarNotiPerd/<str:nombreP>/<str:encontro>/',views.terminarPerd,name='borrarNotiPerd'),
     path('misPerdidos', views.misPerdidos, name='misPerdidos'),
 
-    path('borrarNotiT/<str:nombre>/<str:perro>/',views.borrarNotiT,name='borrarNotiT'),
-
+    path('borrarNotiT/<str:nombre>/<str:perro>/<str:descripcion>/',views.borrarNotiT,name='borrarNotiT'),
+    path('borrarNotiTe/<str:nombre>/<str:perro>/<str:descripcion>/<str:motivoRechazo>/',views.borrarNotiTe,name='borrarNotiTe'),
 
     path('misPerros',views.misPerros,name='misPerros'),
     path('listarHistorialV',views.listarHistorialV,name='listarHistorialV'),

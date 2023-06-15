@@ -71,8 +71,9 @@ class Turnos(models.Model):
     fecha = models.DateField()
     telDueño = models.IntegerField()
     fHoraria = models.CharField(max_length=15,null=True,blank=True)
-    def __str__(self):
-        return f'Turno de {self.perro} de edad {self.edad} raza {self.raza} y descripcion {self.descripcion}, NRO del Dueño {self.telDueño}'
+    estado = models.CharField(max_length=15,null=True,blank=True, default='pendiente')
+    motivoRechazo = models.TextField(max_length=400,null=True,blank=True, default='')
+
       
 
 class PerroAdopcion(models.Model):
