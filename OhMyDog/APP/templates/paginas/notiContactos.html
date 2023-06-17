@@ -12,12 +12,12 @@
     {% else %}
         {% for c in cuidadores %}
             <p>{{ c }}</p>
-            <a href="./borrarNotiC/{{c.usuario}}/{{c.cuidador}}" class="btn btn-success">Confirmado</a>
+            <a href="./borrarNotiC/{{c.id}}" class="btn btn-success">Confirmado</a>
             <p>-----------------</p>
         {% endfor %}
         {% for p in paseadores %}
             <p>{{ p }}</p>
-            <a href="./borrarNotiP/{{p.usuario}}/{{p.paseador}}" class="btn btn-success">Confirmado</a>
+            <a href="./borrarNotiP/{{p.id}}" class="btn btn-success">Confirmado</a>
             <p>-----------------</p>
         {% endfor %}
     {% endif %}

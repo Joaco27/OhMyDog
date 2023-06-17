@@ -54,6 +54,10 @@ def registrarPerro(request):
         form = Perro_form(request.POST) 
         if form.is_valid(): 
             usr=Cliente.objects.get(usuario=usuario['nombre'])
+            p=Perro.objects.filter(nombre=form.cleaned_data['nombre'], emailDueño=usr.mail).exists()
+            if p:
+                messages.add_message(request, messages.SUCCESS, 'El nombre del perro ya se encuentra registrado para ese dueño', extra_tags="tag1")
+                return redirect('registrarPerro')
             edad = (datetime.now().year - form.cleaned_data['fechaNacimiento'].year)
             perro = Perro(
                 nombre = form.cleaned_data['nombre'],
@@ -76,9 +80,8 @@ def registrarPerro(request):
     return render(request, 'paginas/registrarPerro.html', context)
 
 
-def borrarPerro(request, emailDueño, nombre):
-    perro = Perro.objects.get(emailDueño=emailDueño, nombre=nombre)
-    perro.delete()
+def borrarPerro(request, id):
+    Perro.objects.get(id=id).delete()
     messages.add_message(request, messages.SUCCESS, 'Perro Eliminado', extra_tags="tag1")
     
     return redirect("losPerros")
@@ -92,9 +95,8 @@ def borrarPerroA(request,usuario, nombre):
 
 
 
-def borrarPerroC(request, emailDueño, nombre):
-    perro = Perro.objects.get(emailDueño=emailDueño, nombre=nombre)
-    perro.delete()
+def borrarPerroC(request, id):
+    Perro.objects.get(id=id).delete()
     messages.add_message(request, messages.SUCCESS, 'Perro Eliminado', extra_tags="tag1")
     
     return redirect("misPerros")
@@ -298,9 +300,8 @@ def publicarC(request):
     }
     return render(request, 'paginas/agregarCuidador.html', context)
 
-def borrarC(request, telefono):
-    cuidador = Cuidador.objects.get(telefono=telefono)
-    cuidador.delete()
+def borrarC(request, id):
+    Cuidador.objects.get(id=id).delete()
     messages.add_message(request, messages.SUCCESS, 'Cuidador Eliminado', extra_tags="tag1")
     return redirect("cuidadores")
 
@@ -322,9 +323,8 @@ def publicarP(request):
     }
     return render(request, 'paginas/agregarPaseador.html', context)
 
-def borrarP(request, telefono):
-    paseador = Paseador.objects.get(telefono=telefono)
-    paseador.delete()
+def borrarP(request, id):
+    Paseador.objects.get(id=id).delete()
     messages.add_message(request, messages.SUCCESS, 'Paseador Eliminado', extra_tags="tag1")
     
     return redirect("paseadores")
@@ -471,17 +471,17 @@ def borrarNotiT(request, nombre, perro):
 
 
 
-def terminarContactoC(request, nombreU, nombreC):
+def terminarContactoC(request, id):
     
-    ContactoCuidador.objects.filter(usuario=nombreU,cuidador=nombreC).delete()
+    ContactoCuidador.objects.get(id=id).delete()
     
     messages.add_message(request, messages.SUCCESS, 'Consulta efectuada', extra_tags="tag1")
 
     return redirect("notiContacto")
 
-def terminarContactoP(request, nombreU, nombreP):
+def terminarContactoP(request, id):
     
-    ContactoPaseador.objects.filter(usuario=nombreU,paseador=nombreP).delete()
+    ContactoPaseador.objects.get(id=id).delete()
     
     messages.add_message(request, messages.SUCCESS, 'Consulta efectuada', extra_tags="tag1")
 
@@ -582,8 +582,8 @@ def publicarPerdido(request):
     }
     return render(request, 'paginas/publicarPerdido.html', context)
 
-def borrarPerroPerdido(request, dueño, nombre):
-    PerroPerdido.objects.filter(dueño=dueño,nombre=nombre).delete()
+def borrarPerroPerdido(request, id):
+    PerroPerdido.objects.get(id=id).delete()
     
     messages.add_message(request, messages.SUCCESS, 'Perdida borrada', extra_tags="tag1")
 
@@ -624,7 +624,8 @@ def contactarPerdVisit(request, nombre, telDueño):
     context = {
         'form': form,
         'usuario':usuario,
-        'nombre' : nombre,    
+        'nombre' : nombre,  
+        'telDueño':telDueño,  
         }
     return render(request, 'paginas/contactarPerdVisit.html', context)
 
@@ -688,8 +689,8 @@ def notiPerdidos(request):
     }
     return render(request, 'paginas/notiPerdidos.html', context)
 
-def terminarPerd(request, nombreP, encontro):
-    ContactoPerdido.objects.filter(nombreP=nombreP,encontro=encontro).delete()
+def terminarPerd(request, id):
+    ContactoPerdido.objects.get(id=id).delete()
     
     messages.add_message(request, messages.SUCCESS, 'Reporte efectuada', extra_tags="tag1")
 
