@@ -81,7 +81,11 @@ def registrarPerro(request):
 
 
 def borrarPerro(request, id):
-    Perro.objects.get(id=id).delete()
+    p = Perro.objects.get(id=id)
+    usr = Cliente.objects.get(mail=p.emailDueño)
+    PerroAdopcion.objects.filter(usuario=usr.usuario).delete()
+    PerroPerdido.objects.filter(usuario=usr.usuario).delete()
+    p.delete()
     messages.add_message(request, messages.SUCCESS, 'Perro Eliminado', extra_tags="tag1")
     
     return redirect("losPerros")
@@ -96,7 +100,11 @@ def borrarPerroA(request,usuario, nombre):
 
 
 def borrarPerroC(request, id):
-    Perro.objects.get(id=id).delete()
+    p = Perro.objects.get(id=id)
+    usr = Cliente.objects.get(mail=p.emailDueño)
+    PerroAdopcion.objects.filter(usuario=usr.usuario).delete()
+    PerroPerdido.objects.filter(usuario=usr.usuario).delete()
+    p.delete()
     messages.add_message(request, messages.SUCCESS, 'Perro Eliminado', extra_tags="tag1")
     
     return redirect("misPerros")
@@ -394,6 +402,10 @@ def publicarAdopcion(request):
             )
             else:
                 p = Perro.objects.get(nombre=form.cleaned_data['nombre'], emailDueño=d.mail)
+                perroEx = PerroAdopcion.objects.filter(usuario=usuario['nombre'],nombre=p.nombre).exists()
+                if perroEx:
+                    messages.add_message(request, messages.SUCCESS, 'Ya publicaste esta adopcion', extra_tags="tag1")
+                    return redirect('publicarAdopcion')
                 adop = PerroAdopcion(
                     usuario = usuario['nombre'],
                     nombre = p.nombre,
