@@ -9,12 +9,10 @@ class Perro_form(forms.ModelForm):
     # Meta sirve para enlazar con la BD
     class Meta:
         model = Perro
-        fields = ['nombre','raza', 'edad','sexo','fechaNacimiento']
+        fields = ['nombre','raza','sexo','fechaNacimiento']
     # Creamos los campos del formulario
     nombre = forms.CharField(max_length=15, required=True, label='Nombre')
     raza = forms.CharField(max_length=15, required=True, label='Raza')
-    edad = forms.IntegerField(required=False, label='Edad',widget=forms.HiddenInput())
-    emailDueño = forms.EmailField(max_length=30, required=False, label='Email Dueño',widget=forms.HiddenInput())#hay que sacarlo
     opciones = ['Macho','Hembra']
     fechaNacimiento = forms.DateField(label='Fecha de Nacimiento (si no conoce la fecha ingrese una aproximada)'
                                       ,widget=forms.DateInput(attrs={"type": "date"}))
@@ -40,14 +38,16 @@ class Perro_form(forms.ModelForm):
             raise ValidationError("Coloque una fecha valida, inferior a la fecha actual")
         return data
     
-    def clean_nombre(self):
-        data = self.cleaned_data.get('nombre')
-        mail = self.data.get('emailDueño')
-        ok = Perro.objects.filter(nombre=data,emailDueño=mail).exists()
-        print (ok)
-        if ok :
-            raise ValidationError('El nombre del perro ya se encuentra registrado para ese dueño')
-        return data
+    # No le llega el mail haciendo esta validacion, por lo q la hago en las views
+    # def clean_nombre(self):
+    #     data = self.cleaned_data.get('nombre')
+    #     mail = self.data.get('emailDueño')
+    #     ok = Perro.objects.filter(nombre=data,emailDueño=mail).exists()
+    #     print (ok)
+    #     if ok :
+    #         raise ValidationError('El nombre del perro ya se encuentra registrado para ese dueño')
+    #     return data
+    
 class Paseador_form(forms.ModelForm):
     class Meta:
         model=Paseador

@@ -29,7 +29,7 @@
                             <a href="./contactarPerd/{{c.nombre}}/{{c.telDueño}}" class="btn btn-success">Contactar</a>
                             <br>
                         {% else %}
-                            {% if usuario.nombre != c.usuario %}
+                            {% if usuario.esCliente == False %}
                                 <a href="./contactarPerdVisit/{{c.nombre}}/{{c.telDueño}}" class="btn btn-success">Contactar</a>
                                 <br>
                             {% endif %}
@@ -42,7 +42,7 @@
                         function confirmar(){
                             let conf = window.confirm('Seguro que quieres borrar este elemento??')
                             if(conf)
-                            window.location.href = "./borrarPerroPerdido/{{c.dueño}}/{{c.nombre}}"
+                            window.location.href = "./borrarPerroPerdido/{{c.id}}"
                         }
                         </script>
                     {% endif %}
