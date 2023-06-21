@@ -7,18 +7,27 @@
 {% block contenido %} 
 <div class="d-flex justify-content-center flex-column align-items-center">
     {% if usuario.esVeterinario %}
+
         <a href="./notiContacto" class="btn btn-success">Contacto a Paseador/Cuidador</a>
+
         <p>----------------</p>
+
         <a href="./notiTurnos" class="btn btn-success">Solicitudes de Turno</a>
+
         <p>----------------</p>        
-    {% endif %}
-    <a href="./notiAdopContacto" class="btn btn-success">Contacto adopcion</a>
+    {% else %}
+        <a href="./notiAdopContacto" class="btn btn-success">Contacto adopcion</a>
         
         <p>----------------</p>
 
-        <a href="./notiPerdidos" class="btn btn-success">Reportes</a>
+        <a href="./notiPerdidos" class="btn btn-success">Notificaciones de Perdidos</a>
         
         <p>----------------</p>
+
+        <a href="./notiTurnosC" class="btn btn-success">Solicitudes de Turno</a>
+
+        <p>----------------</p> 
+    {% endif %}
 </div>
 
 {% endblock %}

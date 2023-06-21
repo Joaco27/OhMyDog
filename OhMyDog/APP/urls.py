@@ -53,6 +53,7 @@ urlpatterns = [
     path('notificaciones',views.notificaciones,name='notificaciones'),
     path('notiContacto', views.notiContacto,name='notiContacto'),
     path('notiTurnos', views.notiTurnos,name='notiTurnos'),
+    path('notiTurnosC', views.notiTurnosC,name='notiTurnosC'),
     path('borrarNotiC/<int:id>/',views.terminarContactoC,name='borrarNotiC'),
     path('borrarNotiP/<int:id>/',views.terminarContactoP,name='borrarNotiP'),
     

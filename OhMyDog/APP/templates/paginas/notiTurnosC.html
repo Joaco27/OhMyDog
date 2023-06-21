@@ -36,20 +36,6 @@
                 <td>{{ c.telDueño }}</td>
                 <td>{{ c.fecha }}</td>
                 <td>{{ c.fHoraria }}</td>
-                {% if usuario.esVeterinario %}
-                <td><button onclick="confirmar()" class="btn btn-danger">Rechazar</button>
-                        <script>
-                          function confirmar(){
-                            var motivoRechazo = prompt("ingrese el motivo para rechazar el turno");
-                            if(motivoRechazo == "")
-                              window.confirm('Debe ingresar un motivo')
-                            else
-                                window.location.href = `./borrarNotiTe/{{c.nombre}}/{{c.perro}}/{{c.descripcion}}/${motivoRechazo}`
-                          }
-                        </script>
-                </td>
-                <td><a href="./borrarNotiT/{{c.nombre}}/{{c.perro}}/{{c.descripcion}}" class="btn btn-success">Confirmar</a></td>
-                {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -84,19 +70,6 @@
                 <td>{{ c.telDueño }}</td>
                 <td>{{ c.fecha }}</td>
                 <td>{{ c.fHoraria }}</td>
-                {% if usuario.esVeterinario %}
-                <td><button onclick="confirmar()" class="btn btn-danger">Rechazar</button>
-                    <script>
-                      function confirmar(){
-                        var motivoRechazo = prompt("ingrese el motivo para rechazar el turno");
-                        if(motivoRechazo == "")
-                          window.confirm('Debe ingresar un motivo')
-                        else
-                            window.location.href = `./borrarNotiTe/{{c.nombre}}/{{c.perro}}/{{c.descripcion}}/${motivoRechazo}`
-                      }
-                    </script>
-                </td>
-                {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -133,9 +106,6 @@
                 <td>{{ c.motivoRechazo }}</td>
                 <td>{{ c.fecha }}</td>
                 <td>{{ c.fHoraria }}</td>
-                {% if usuario.esVeterinario %}
-                <td><a href="./borrarNotiT/{{c.nombre}}/{{c.perro}}/{{c.descripcion}}" class="btn btn-success">Confirmar</a></td>
-                {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>

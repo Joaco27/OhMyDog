@@ -477,6 +477,19 @@ def notiTurnos(request):
     }
     return render(request,'paginas/notiTurnos.html', context)
 
+def notiTurnosC(request):
+    
+    turnosPendientes = Turnos.objects.filter(estado = "pendiente",nombre = usuario['nombre'])
+    turnosConfirmados = Turnos.objects.filter(estado = "confirmado",nombre = usuario['nombre'])
+    turnosRechazados = Turnos.objects.filter(estado = "rechazado",nombre = usuario['nombre'])
+    context ={
+        'usuario':usuario,
+        'turnosC':turnosConfirmados,
+        'turnosR':turnosRechazados,
+        'turnosP':turnosPendientes,
+    }
+    return render(request,'paginas/notiTurnosC.html', context)
+
 def borrarNotiT(request, nombre, perro,descripcion):
     
     tur=Turnos.objects.get(nombre=nombre, perro=perro,descripcion=descripcion)
