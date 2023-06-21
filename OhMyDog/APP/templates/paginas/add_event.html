@@ -2,26 +2,32 @@
 {% load static %}
 
 
-{% block titulo %} Agregar evento {% endblock %}
+{% block titulo %} Agregar VT {% endblock %}
 
 {% block contenido %} 
-    <h1>Agregar evento</h1>
-
-    <form method="post">
+<style>
+    .errorlist{
+        display: none;
+    }
+</style>
+<div class="d-flex justify-content-center">
+    <h1>Añade una Veterinaria de Turno</h1>
+</div>
+<br>
+<div class="d-flex justify-content-center">
+    <form action= "{% url 'add_event' %}" method="POST">
         {% csrf_token %}
-        <div>
-            <label for="{{ form.title.id_for_label }}">Nombre</label>
-            {{ form.title}}
-          </div>
-        <div>
-          <label for="{{ form.date.id_for_label }}">Fecha</label>
-          {{ form.date }}
-        </div>
-        <div>
-          <label for="{{ form.description.id_for_label }}">Dirección</label>
-          {{ form.description }}
-        </div>
-        <button type="submit">Guardar</button>
+        {% if form.errors %}
+                <div class="alert alert-danger">
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            {{ error }} <br>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {{ form.as_p }}
+        <input type="submit" value="Publicar" class="btn btn-success">
     </form>
-      
+</div>
 {% endblock %}

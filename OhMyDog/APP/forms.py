@@ -197,7 +197,33 @@ class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ['title', 'date', 'description']
+    
+    title = forms.CharField(max_length=30,required=True,label="Veterinaria")
+    date = forms.DateField( label='Fecha',
+                            widget=forms.DateInput(attrs={"type": "date"}), required=True)
+    description = forms.CharField(max_length=30, label="Direccion", required=True)
+    
+    def clean_date(self):
+        data =self.cleaned_data["date"]
+        fecha = date.datetime.today()
 
+        data_str = data.strftime('%d/%m/%Y')
+        data_nueva = date.datetime.strptime(data_str, '%d/%m/%Y')
+        if data_nueva < fecha:
+            raise ValidationError("Coloque una fecha posterior a la fecha actual o actual")
+        return data
+    
+    def clean_description(self):
+        description = self.cleaned_data["description"]
+        title = self.cleaned_data["title"]
+        fecha = self.cleaned_data["date"]
+        e = Event.objects.filter(title=title, date=fecha,description=description).exists()
+        if e:
+            raise ValidationError("Ya registraste esta VT")
+        return description          
+
+
+    
 class perroPerdido_form(forms.Form):
     class Meta:
         model = PerroPerdido

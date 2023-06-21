@@ -7,6 +7,7 @@ from django.urls import reverse
 from itertools import chain
 from datetime import date as dt
 from datetime import *
+import locale
 
 #Declarar funciones para hacer cuando se ingresan direcciones
 
@@ -665,10 +666,20 @@ def eliminarContactoA(request, usuario, nombre):
     return redirect("notiAdopContacto")
 
 def calendar(request):
-    mes = dt.today().month
+    mes=dt.today().month
+    locale.setlocale(locale.LC_TIME, 'es_ES')
+    mes=dt.today().strftime('%B').capitalize()
+    
     events = Event.objects.all().order_by('date')
-    fecha = Event.objects.filter(title='mi perrito')
-    return render(request, 'paginas/calendar.html', {'events': events, 'usuario':usuario})
+    fecha = Event.objects.filter(date__month = dt.today().month).order_by('date')
+    
+    dicc = {}
+    for i in range(31):
+        dicc[i+1] = []
+    for f in fecha:
+        dicc[f.date.day].append(f'{f.title}, {f.description}')  
+    return render(request, 'paginas/calendar.html', 
+                  {'mes':mes,'fecha': dicc, 'events': events,'usuario':usuario})
 
 def add_event(request):
     if request.method == 'POST':
@@ -681,8 +692,7 @@ def add_event(request):
     return render(request, 'paginas/add_event.html', {'form': form, 'usuario': usuario})
 
 def delete_event(request, event_id):
-    event = Event.objects.get(pk=event_id)
-    event.delete()
+    Event.objects.get(pk=event_id).delete()
     return redirect('calendar')
 
 """      
