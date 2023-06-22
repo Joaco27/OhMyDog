@@ -137,3 +137,17 @@ class Historial(models.Model):
     diagnostico_presuntivo = models.CharField(max_length=400)
     tratamiento = models.CharField(max_length=400)
     proxima_visita = models.DateField(blank=True, null=True)
+    
+class Donacion(models.Model):
+    causa = models.CharField(max_length=40)
+    descripcion = models.CharField(max_length=50)
+    objetivo = models.IntegerField()
+    recaudado = models.IntegerField()
+
+class Tarjeta(models.Model):
+    nombre = models.CharField(max_length=40)
+    numero = models.IntegerField()
+    mesV = models.IntegerField()
+    añoV = models.IntegerField()
+    saldo = models.IntegerField()
+    codigo = models.IntegerField()

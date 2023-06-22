@@ -88,6 +88,9 @@ urlpatterns = [
     path('calendar', views.calendar, name='calendar'),
     path('add', views.add_event, name='add_event'),
     path('delete/<int:event_id>', views.delete_event, name='delete_event'),
+    
+    
+    path('donaciones', views.donaciones, name='donaciones'),
 
     
 

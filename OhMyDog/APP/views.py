@@ -8,6 +8,7 @@ from itertools import chain
 from datetime import date as dt
 from datetime import *
 import locale
+from calendar import monthrange
 
 #Declarar funciones para hacer cuando se ingresan direcciones
 
@@ -674,8 +675,11 @@ def calendar(request):
     fecha = Event.objects.filter(date__month = dt.today().month).order_by('date')
     
     dicc = {}
-    for i in range(31):
+    cantidad_dias = monthrange(2023, dt.today().month)[1]
+    #print(cantidad_dias)
+    for i in range(cantidad_dias):
         dicc[i+1] = []
+    #print(dicc)
     for f in fecha:
         dicc[f.date.day].append(f'{f.title}, {f.description}')  
     return render(request, 'paginas/calendar.html', 
@@ -815,3 +819,9 @@ def cargarHistorial(request):
     }
     return render(request, 'paginas/cargarHistorial.html', context)
 #hola
+
+def donaciones(request):
+    context = {
+        'usuario':usuario,
+    }
+    return render(request, 'paginas/donaciones.html', context)
