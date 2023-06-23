@@ -91,6 +91,9 @@ urlpatterns = [
     
     
     path('donaciones', views.donaciones, name='donaciones'),
+    path('agregarDonac', views.agregarDonac, name='agregarDonac'),
+    path('donar/<int:id>', views.donar, name='donar'),
+    path('borrarDonac/<int:id>', views.borrarDonac, name='borrarDonac'),
 
     
 

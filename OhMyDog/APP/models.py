@@ -143,6 +143,7 @@ class Donacion(models.Model):
     descripcion = models.CharField(max_length=50)
     objetivo = models.IntegerField()
     recaudado = models.IntegerField()
+    progreso = models.FloatField()
 
 class Tarjeta(models.Model):
     nombre = models.CharField(max_length=40)

@@ -821,7 +821,59 @@ def cargarHistorial(request):
 #hola
 
 def donaciones(request):
+    don = Donacion.objects.all()
     context = {
         'usuario':usuario,
+        'context':don,
     }
     return render(request, 'paginas/donaciones.html', context)
+
+def agregarDonac(request):
+    if request.method == 'POST':
+        form = Donacion_form(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.add_message(request, messages.SUCCESS, 'Donacion cargada con exito', extra_tags="tag1")
+            return redirect("donaciones")
+    else:
+        form = Donacion_form()
+    context = {
+        'usuario': usuario,
+        'form': form,
+    }
+    return render(request, 'paginas/agregarDonac.html', context)
+
+def borrarDonac(request, id):
+    Donacion.objects.get(id=id).delete()
+    
+    messages.add_message(request, messages.SUCCESS, 'Colecta borrada', extra_tags="tag1")
+
+    return redirect("donaciones")
+
+def donar(request, id):
+    if request.method == 'POST':
+        form = Tarjeta_form(request.POST)
+        if form.is_valid():
+            donacion = Donacion.objects.get(id=id)
+            donacion.recaudado = 0
+            donacion.save()
+            x = donacion.recaudado + form.cleaned_data[0]
+            donacion.recaudado = x
+            donacion.progreso = donacion.recaudado * 100 / donacion.objetivo
+            donacion.save()
+            tarjeta = Tarjeta.objects.get(numero=form.cleaned_data[1])
+            x = tarjeta.saldo - form.cleaned_data[0]
+            tarjeta.saldo = x
+            tarjeta.save()
+            messages.add_message(request, messages.SUCCESS, 'Gracias por contribuir', extra_tags="tag1")
+            return redirect("donaciones")
+    else:
+        form = Tarjeta_form()
+    context = {
+        'usuario': usuario,
+        'form': form,
+        'id':id,
+    }
+    return render(request, 'paginas/pagarConTarjeta.html', context)
+    
+    

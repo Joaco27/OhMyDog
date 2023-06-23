@@ -273,3 +273,56 @@ class Historial_form(forms.Form):
     proxima_visita = forms.DateField( label='Proxima Visita',
                             widget=forms.DateInput(attrs={"type": "date"}), required=False)
     
+    
+    
+class Donacion_form(forms.ModelForm):
+    class Meta:
+        model = Donacion
+        fields = '__all__'
+    causa = forms.CharField(max_length=30, required=True)
+    descripcion = forms.CharField( max_length=400,required=True,
+                                   widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
+    objetivo = forms.IntegerField(required=True, label='Objetivo $')
+    recaudado = forms.IntegerField(required=False, widget=forms.HiddenInput, initial=0)
+    
+class Tarjeta_form(forms.Form):
+    nombre = forms.CharField(max_length=40, required=True)
+    numero = forms.IntegerField(required=True)
+    mesV = forms.IntegerField(required=True)
+    añoV = forms.IntegerField(required=True)
+    codigo = forms.IntegerField(required=True)
+    monto = forms.IntegerField(required=True)
+    
+    def clean(self):
+        numero = self.cleaned_data['numero']
+        ok = Tarjeta.objects.filter(numero=numero).exists()
+        if not ok:
+            raise ValidationError('Nro de tarjeta incorrecto')  
+          
+        data = self.cleaned_data['nombre']
+        ok = Tarjeta.objects.filter(nombre=data).exists()
+        if not ok:
+            raise ValidationError('La tarjeta no corresponde a ese dueño') 
+           
+        data = self.cleaned_data['mesV']
+        ok = Tarjeta.objects.filter(numero=numero, mesV=data).exists()
+        if not ok:
+            raise ValidationError('Revise la fecha de vencimiento')  
+          
+        data = self.cleaned_data['añoV']
+        ok = Tarjeta.objects.filter(numero=numero, añoV=data).exists()
+        if not ok:
+            raise ValidationError('Revise la fecha de vencimiento')
+        
+        data = self.cleaned_data['codigo']
+        ok = Tarjeta.objects.filter(numero=numero, codigo=data).exists()
+        if not ok:
+            raise ValidationError('Codigo de seguridad incorrecto')
+    
+        data = self.cleaned_data['monto']
+        t = Tarjeta.objects.get(numero=numero)
+        if t.saldo-data < 0:
+            raise ValidationError('Saldo Insuficiente')
+        return data, numero
+        
+    

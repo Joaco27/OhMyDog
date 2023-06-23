@@ -6,4 +6,43 @@
 
 {% block contenido %}
 
+
+<div class="d-flex justify-content-center flex-column align-items-center">
+    {% if usuario.esVeterinario %}
+        <a href="/agregarDonac" class="btn btn-success">Agregar Colecta</a>
+        <br>
+    {% endif %}
+    {% if context|length == 0 %}
+        <p>No hay Colectas Publicadas</p>
+    {% else %}
+    {% for c in context %} 
+        <div class="d-flex border border-dark flex-column p-3">
+            <p><strong>Causa: </strong>{{c.causa}}</p>
+            <p><strong>Descripcion: </strong>{{c.descripcion}}</p>
+            <div class="d-flex">
+                <p><strong>Objetivo: </strong>${{c.objetivo}}</p>
+                <span class="text text-white">____</span>
+                <p><strong>Recaudado: </strong>${{c.recaudado}}</p>
+            </div>
+            <p><strong>Progreso: {{c.progreso}}%</strong></p>
+            <div>
+                <a href="/donar/{{c.id}}" class="btn btn-success">Donar</a>
+                {% if usuario.esVeterinario %}
+                    <button onclick="confirmar()" class="btn btn-danger">Borrar</button>
+                            <script>
+                            function confirmar(){
+                                let conf = window.confirm('Seguro que quieres borrar este elemento??')
+                                if(conf)
+                                window.location.href = "/borrarDonac/{{c.id}}"
+                            }
+                            </script>
+                {% endif %}
+            </div>
+        </div>
+        <br>
+    {% endfor %}
+    {% endif %}
+
+
+</div>
 {% endblock %}
