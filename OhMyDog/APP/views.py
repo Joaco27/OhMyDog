@@ -468,18 +468,46 @@ def notiContacto(request):
 
 
 def notiTurnos(request):
-    turnos = Turnos.objects.all()
+    turnosPendientes = Turnos.objects.filter(estado = "pendiente")
+    turnosConfirmados = Turnos.objects.filter(estado = "confirmado")
+    turnosRechazados = Turnos.objects.filter(estado = "rechazado")
     context ={
         'usuario':usuario,
-        'turnos':turnos,
+        'turnosC':turnosConfirmados,
+        'turnosR':turnosRechazados,
+        'turnosP':turnosPendientes,
     }
     return render(request,'paginas/notiTurnos.html', context)
 
-def borrarNotiT(request, nombre, perro):
+def notiTurnosC(request):
     
-    tur=Turnos.objects.filter(nombre=nombre, perro=perro).delete()
+    turnosPendientes = Turnos.objects.filter(estado = "pendiente",nombre = usuario['nombre'])
+    turnosConfirmados = Turnos.objects.filter(estado = "confirmado",nombre = usuario['nombre'])
+    turnosRechazados = Turnos.objects.filter(estado = "rechazado",nombre = usuario['nombre'])
+    context ={
+        'usuario':usuario,
+        'turnosC':turnosConfirmados,
+        'turnosR':turnosRechazados,
+        'turnosP':turnosPendientes,
+    }
+    return render(request,'paginas/notiTurnosC.html', context)
+
+def borrarNotiT(request, nombre, perro,descripcion):
     
-    messages.add_message(request, messages.SUCCESS, 'Consulta efectuada', extra_tags="tag1")
+    tur=Turnos.objects.get(nombre=nombre, perro=perro,descripcion=descripcion)
+    tur.estado="confirmado"
+    tur.save()
+    messages.add_message(request, messages.SUCCESS, 'Confirmacion efectuado', extra_tags="tag1")
+
+    return redirect('notiTurnos')
+
+def borrarNotiTe(request, nombre, perro,descripcion,motivoRechazo):
+    
+    tur=Turnos.objects.get(nombre=nombre, perro=perro,descripcion=descripcion)
+    tur.estado="rechazado"
+    tur.motivoRechazo=motivoRechazo
+    tur.save()
+    messages.add_message(request, messages.SUCCESS, 'Rechazo efectuado', extra_tags="tag1")
 
     return redirect('notiTurnos')
 
