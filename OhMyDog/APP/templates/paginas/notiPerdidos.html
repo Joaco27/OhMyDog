@@ -12,7 +12,7 @@
     {% else %}
         {% for c in context %}
             <p>{{ c }}</p>
-            <a href="./borrarNotiPerd/{{c.nombreP}}/{{c.encontro}}" class="btn btn-success">Confirmado</a>
+            <a href="./borrarNotiPerd/{{c.id}}" class="btn btn-success">Confirmado</a>
             <p>-----------------</p>
         {% endfor %}
     {% endif %}

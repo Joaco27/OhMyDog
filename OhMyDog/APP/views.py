@@ -5,7 +5,10 @@ from .forms import *
 from django.contrib import messages
 from django.urls import reverse
 from itertools import chain
-
+from datetime import date as dt
+from datetime import *
+import locale
+from calendar import monthrange
 
 #Declarar funciones para hacer cuando se ingresan direcciones
 
@@ -53,11 +56,17 @@ def registrarPerro(request):
         form = Perro_form(request.POST) 
         if form.is_valid(): 
             usr=Cliente.objects.get(usuario=usuario['nombre'])
+            p=Perro.objects.filter(nombre=form.cleaned_data['nombre'], emailDueño=usr.mail).exists()
+            if p:
+                messages.add_message(request, messages.SUCCESS, 'El nombre del perro ya se encuentra registrado para ese dueño', extra_tags="tag1")
+                return redirect('registrarPerro')
+            edad = (datetime.now().year - form.cleaned_data['fechaNacimiento'].year)
             perro = Perro(
                 nombre = form.cleaned_data['nombre'],
                 raza = form.cleaned_data['raza'],
-                edad = form.cleaned_data['edad'],
+                edad = edad,
                 emailDueño = usr.mail,
+                sexo = form.cleaned_data['sexo'],
             )
             perro.save()
             messages.add_message(request, messages.SUCCESS, 'Perro registrado con exito', extra_tags="tag1")
@@ -73,9 +82,12 @@ def registrarPerro(request):
     return render(request, 'paginas/registrarPerro.html', context)
 
 
-def borrarPerro(request, emailDueño, nombre):
-    perro = Perro.objects.get(emailDueño=emailDueño, nombre=nombre)
-    perro.delete()
+def borrarPerro(request, id):
+    p = Perro.objects.get(id=id)
+    usr = Cliente.objects.get(mail=p.emailDueño)
+    PerroAdopcion.objects.filter(usuario=usr.usuario).delete()
+    PerroPerdido.objects.filter(usuario=usr.usuario).delete()
+    p.delete()
     messages.add_message(request, messages.SUCCESS, 'Perro Eliminado', extra_tags="tag1")
     
     return redirect("losPerros")
@@ -89,9 +101,12 @@ def borrarPerroA(request,usuario, nombre):
 
 
 
-def borrarPerroC(request, emailDueño, nombre):
-    perro = Perro.objects.get(emailDueño=emailDueño, nombre=nombre)
-    perro.delete()
+def borrarPerroC(request, id):
+    p = Perro.objects.get(id=id)
+    usr = Cliente.objects.get(mail=p.emailDueño)
+    PerroAdopcion.objects.filter(usuario=usr.usuario).delete()
+    PerroPerdido.objects.filter(usuario=usr.usuario).delete()
+    p.delete()
     messages.add_message(request, messages.SUCCESS, 'Perro Eliminado', extra_tags="tag1")
     
     return redirect("misPerros")
@@ -295,9 +310,8 @@ def publicarC(request):
     }
     return render(request, 'paginas/agregarCuidador.html', context)
 
-def borrarC(request, telefono):
-    cuidador = Cuidador.objects.get(telefono=telefono)
-    cuidador.delete()
+def borrarC(request, id):
+    Cuidador.objects.get(id=id).delete()
     messages.add_message(request, messages.SUCCESS, 'Cuidador Eliminado', extra_tags="tag1")
     return redirect("cuidadores")
 
@@ -319,9 +333,8 @@ def publicarP(request):
     }
     return render(request, 'paginas/agregarPaseador.html', context)
 
-def borrarP(request, telefono):
-    paseador = Paseador.objects.get(telefono=telefono)
-    paseador.delete()
+def borrarP(request, id):
+    Paseador.objects.get(id=id).delete()
     messages.add_message(request, messages.SUCCESS, 'Paseador Eliminado', extra_tags="tag1")
     
     return redirect("paseadores")
@@ -350,6 +363,7 @@ def turnos(request):
                 motivo = form.cleaned_data['motivo'],
                 fecha = form.cleaned_data['fecha'],
                 telDueño = usr.telefono,
+                fHoraria = form.cleaned_data['fHoraria']
             )
             turno.save()
             messages.add_message(request, messages.SUCCESS, 'El veterinario se pondra en contacto pronto', extra_tags="tag1")
@@ -390,6 +404,10 @@ def publicarAdopcion(request):
             )
             else:
                 p = Perro.objects.get(nombre=form.cleaned_data['nombre'], emailDueño=d.mail)
+                perroEx = PerroAdopcion.objects.filter(usuario=usuario['nombre'],nombre=p.nombre).exists()
+                if perroEx:
+                    messages.add_message(request, messages.SUCCESS, 'Ya publicaste esta adopcion', extra_tags="tag1")
+                    return redirect('publicarAdopcion')
                 adop = PerroAdopcion(
                     usuario = usuario['nombre'],
                     nombre = p.nombre,
@@ -450,41 +468,69 @@ def notiContacto(request):
 
 
 def notiTurnos(request):
-    turnos = Turnos.objects.all()
+    turnosPendientes = Turnos.objects.filter(estado = "pendiente")
+    turnosConfirmados = Turnos.objects.filter(estado = "confirmado")
+    turnosRechazados = Turnos.objects.filter(estado = "rechazado")
     context ={
         'usuario':usuario,
-        'turnos':turnos,
+        'turnosC':turnosConfirmados,
+        'turnosR':turnosRechazados,
+        'turnosP':turnosPendientes,
     }
     return render(request,'paginas/notiTurnos.html', context)
 
-def borrarNotiT(request, nombre, perro):
+def notiTurnosC(request):
     
-    tur=Turnos.objects.filter(nombre=nombre, perro=perro).delete()
+    turnosPendientes = Turnos.objects.filter(estado = "pendiente",nombre = usuario['nombre'])
+    turnosConfirmados = Turnos.objects.filter(estado = "confirmado",nombre = usuario['nombre'])
+    turnosRechazados = Turnos.objects.filter(estado = "rechazado",nombre = usuario['nombre'])
+    context ={
+        'usuario':usuario,
+        'turnosC':turnosConfirmados,
+        'turnosR':turnosRechazados,
+        'turnosP':turnosPendientes,
+    }
+    return render(request,'paginas/notiTurnosC.html', context)
+
+def borrarNotiT(request, nombre, perro,descripcion):
     
-    messages.add_message(request, messages.SUCCESS, 'Consulta efectuada', extra_tags="tag1")
+    tur=Turnos.objects.get(nombre=nombre, perro=perro,descripcion=descripcion)
+    tur.estado="confirmado"
+    tur.save()
+    messages.add_message(request, messages.SUCCESS, 'Confirmacion efectuado', extra_tags="tag1")
+
+    return redirect('notiTurnos')
+
+def borrarNotiTe(request, nombre, perro,descripcion,motivoRechazo):
+    
+    tur=Turnos.objects.get(nombre=nombre, perro=perro,descripcion=descripcion)
+    tur.estado="rechazado"
+    tur.motivoRechazo=motivoRechazo
+    tur.save()
+    messages.add_message(request, messages.SUCCESS, 'Rechazo efectuado', extra_tags="tag1")
 
     return redirect('notiTurnos')
 
 
 
-def terminarContactoC(request, nombreU, nombreC):
+def terminarContactoC(request, id):
     
-    ContactoCuidador.objects.filter(usuario=nombreU,cuidador=nombreC).delete()
-    
-    messages.add_message(request, messages.SUCCESS, 'Consulta efectuada', extra_tags="tag1")
-
-    return redirect("notiContacto")
-
-def terminarContactoP(request, nombreU, nombreP):
-    
-    ContactoPaseador.objects.filter(usuario=nombreU,paseador=nombreP).delete()
+    ContactoCuidador.objects.get(id=id).delete()
     
     messages.add_message(request, messages.SUCCESS, 'Consulta efectuada', extra_tags="tag1")
 
     return redirect("notiContacto")
 
+def terminarContactoP(request, id):
+    
+    ContactoPaseador.objects.get(id=id).delete()
+    
+    messages.add_message(request, messages.SUCCESS, 'Consulta efectuada', extra_tags="tag1")
 
-def ContactarAdop(request, nombre):
+    return redirect("notiContacto")
+
+
+def ContactarAdop(request, nombre, dueño):
     cli =  Cliente.objects.get(usuario=usuario["nombre"])
     existe = ContactoAdop.objects.filter(nombre=nombre,telUsuario=cli.telefono).exists()
     if existe:
@@ -492,6 +538,7 @@ def ContactarAdop(request, nombre):
         return redirect("listarAdopciones")
     adopcion = ContactoAdop(
         nombre =  nombre,
+        dueño=dueño,
         usuario = cli.nombreC,
         telUsuario = cli.telefono,
     )
@@ -500,12 +547,13 @@ def ContactarAdop(request, nombre):
     messages.add_message(request, messages.SUCCESS, 'Pronto se pondran en contacto con usted', extra_tags="tag1")
     return redirect("index")
 
-def contactarAVisit(request, nombre):
+def contactarAVisit(request, nombre, dueño):
     if request.method == 'POST':
         form = contacto_form(request.POST) 
         if form.is_valid():
             contactoNuevo = ContactoAdop(
                 nombre = nombre,
+                dueño=dueño,
                 usuario = form.cleaned_data.get('usuario'),
                 telUsuario = form.cleaned_data.get('telefono')
             )
@@ -576,8 +624,8 @@ def publicarPerdido(request):
     }
     return render(request, 'paginas/publicarPerdido.html', context)
 
-def borrarPerroPerdido(request, dueño, nombre):
-    PerroPerdido.objects.filter(dueño=dueño,nombre=nombre).delete()
+def borrarPerroPerdido(request, id):
+    PerroPerdido.objects.get(id=id).delete()
     
     messages.add_message(request, messages.SUCCESS, 'Perdida borrada', extra_tags="tag1")
 
@@ -607,7 +655,7 @@ def contactarPerdVisit(request, nombre, telDueño):
                 nombreP = nombre,
                 telDueño = telDueño,
                 encontro = form.cleaned_data.get('usuario'),
-                telEncontro = form.cleaned_data.get('telefono')
+                telEncontro = form.cleaned_data.get('telefono'),
             )
             contactoNuevo.save()
             messages.add_message(request, messages.SUCCESS, 'Le informaremos al Dueño', extra_tags="tag1")
@@ -618,9 +666,10 @@ def contactarPerdVisit(request, nombre, telDueño):
     context = {
         'form': form,
         'usuario':usuario,
-        'nombre' : nombre,    
+        'nombre' : nombre,  
+        'telDueño':telDueño,  
         }
-    return render(request, 'paginas/contactarAVisitante.html', context)
+    return render(request, 'paginas/contactarPerdVisit.html', context)
 
 def notificacionAdopcion(request):
     context ={
@@ -630,7 +679,7 @@ def notificacionAdopcion(request):
     
 def notiAdopContacto(request):
     cli = Cliente.objects.get(usuario = usuario["nombre"])
-    noti = ContactoAdop.objects.filter(nombre=cli.usuario)
+    noti = ContactoAdop.objects.filter(dueño=cli.usuario)
     context ={
         'usuario':usuario,
         'context': noti,
@@ -646,8 +695,23 @@ def eliminarContactoA(request, usuario, nombre):
     return redirect("notiAdopContacto")
 
 def calendar(request):
+    mes=dt.today().month
+    locale.setlocale(locale.LC_TIME, 'es_ES')
+    mes=dt.today().strftime('%B').capitalize()
+    
     events = Event.objects.all().order_by('date')
-    return render(request, 'paginas/calendar.html', {'events': events, 'usuario':usuario})
+    fecha = Event.objects.filter(date__month = dt.today().month).order_by('date')
+    
+    dicc = {}
+    cantidad_dias = monthrange(2023, dt.today().month)[1]
+    #print(cantidad_dias)
+    for i in range(cantidad_dias):
+        dicc[i+1] = []
+    #print(dicc)
+    for f in fecha:
+        dicc[f.date.day].append(f'{f.title}, {f.description}')  
+    return render(request, 'paginas/calendar.html', 
+                  {'mes':mes,'fecha': dicc, 'events': events,'usuario':usuario})
 
 def add_event(request):
     if request.method == 'POST':
@@ -660,8 +724,7 @@ def add_event(request):
     return render(request, 'paginas/add_event.html', {'form': form, 'usuario': usuario})
 
 def delete_event(request, event_id):
-    event = Event.objects.get(pk=event_id)
-    event.delete()
+    Event.objects.get(pk=event_id).delete()
     return redirect('calendar')
 
 """      
@@ -680,8 +743,8 @@ def notiPerdidos(request):
     }
     return render(request, 'paginas/notiPerdidos.html', context)
 
-def terminarPerd(request, nombreP, encontro):
-    ContactoPerdido.objects.filter(nombreP=nombreP,encontro=encontro).delete()
+def terminarPerd(request, id):
+    ContactoPerdido.objects.get(id=id).delete()
     
     messages.add_message(request, messages.SUCCESS, 'Reporte efectuada', extra_tags="tag1")
 
@@ -783,4 +846,62 @@ def cargarHistorial(request):
         'usuario':usuario,
     }
     return render(request, 'paginas/cargarHistorial.html', context)
+#hola
 
+def donaciones(request):
+    don = Donacion.objects.all()
+    context = {
+        'usuario':usuario,
+        'context':don,
+    }
+    return render(request, 'paginas/donaciones.html', context)
+
+def agregarDonac(request):
+    if request.method == 'POST':
+        form = Donacion_form(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.add_message(request, messages.SUCCESS, 'Donacion cargada con exito', extra_tags="tag1")
+            return redirect("donaciones")
+    else:
+        form = Donacion_form()
+    context = {
+        'usuario': usuario,
+        'form': form,
+    }
+    return render(request, 'paginas/agregarDonac.html', context)
+
+def borrarDonac(request, id):
+    Donacion.objects.get(id=id).delete()
+    
+    messages.add_message(request, messages.SUCCESS, 'Colecta borrada', extra_tags="tag1")
+
+    return redirect("donaciones")
+
+def donar(request, id):
+    if request.method == 'POST':
+        form = Tarjeta_form(request.POST)
+        if form.is_valid():
+            donacion = Donacion.objects.get(id=id)
+            donacion.recaudado = 0
+            donacion.save()
+            x = donacion.recaudado + form.cleaned_data[0]
+            donacion.recaudado = x
+            donacion.progreso = donacion.recaudado * 100 / donacion.objetivo
+            donacion.save()
+            tarjeta = Tarjeta.objects.get(numero=form.cleaned_data[1])
+            x = tarjeta.saldo - form.cleaned_data[0]
+            tarjeta.saldo = x
+            tarjeta.save()
+            messages.add_message(request, messages.SUCCESS, 'Gracias por contribuir', extra_tags="tag1")
+            return redirect("donaciones")
+    else:
+        form = Tarjeta_form()
+    context = {
+        'usuario': usuario,
+        'form': form,
+        'id':id,
+    }
+    return render(request, 'paginas/pagarConTarjeta.html', context)
+    
+    

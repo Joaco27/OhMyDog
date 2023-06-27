@@ -2,20 +2,20 @@
 {% load static %}
 
 
-{% block titulo %} Agregar VT {% endblock %}
+{% block titulo %} Donaciones {% endblock %}
 
-{% block contenido %} 
+{% block contenido %}
 <style>
     .errorlist{
         display: none;
     }
 </style>
 <div class="d-flex justify-content-center">
-    <h1>Añade una Veterinaria de Turno</h1>
+    <h1>Añade una Colecta</h1>
 </div>
 <br>
 <div class="d-flex justify-content-center">
-    <form action= "{% url 'add_event' %}" method="POST">
+    <form action= "{% url 'agregarDonac' %}" method="POST">
         {% csrf_token %}
         {% if form.errors %}
                 <div class="alert alert-danger">

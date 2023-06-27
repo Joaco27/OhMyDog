@@ -20,7 +20,7 @@
                 <p><strong>Zona:</strong> {{ c.zona }}</p>
                 <p><strong>Disponibilidad:</strong> {{ c.disponibilidad }}</p>
                 {% if usuario.esCliente %}
-                    <a href="./contactarP/{{c.nombre}}/{{c.telefono}}" class="btn btn-success">Contactar</a>
+                    <a href="/contactarP/{{c.nombre}}/{{c.telefono}}" class="btn btn-success">Contactar</a>
                 {% else %}
                     {% if usuario.esVeterinario %}
                         <button onclick="confirmar()" class="btn btn-danger">Borrar</button>
@@ -28,11 +28,11 @@
                           function confirmar(){
                             let conf = window.confirm('Seguro que quieres borrar este elemento??')
                             if(conf)
-                              window.location.href = "./borrarP/{{c.telefono}}"
+                              window.location.href = "/borrarP/{{c.id}}"
                           }
                         </script>
                     {% else %}
-                        <a href="./contactarPVisit/{{c.nombre}}/{{c.telefono}}" class="btn btn-success">Contactar</a>
+                        <a href="/contactarPVisit/{{c.nombre}}/{{c.telefono}}" class="btn btn-success">Contactar</a>
                     {% endif %}
                 {% endif %}
             </div>

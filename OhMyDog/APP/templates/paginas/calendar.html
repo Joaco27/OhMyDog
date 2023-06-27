@@ -5,39 +5,64 @@
 {% block titulo %} Calendario {% endblock %}
 
 {% block contenido %} 
-    <h1>Calendario</h1>
+<div class="d-flex justify-content-center flex-column align-items-center">
+    {% if usuario.esVeterinario %}
+        <h1>Calendario Completo</h1>
+    {% else %}
+        <h1>Calendario {{mes}}</h1>
+    {%endif%}
 
 
     {% if usuario.esVeterinario %}
-        <a href="{% url 'add_event' %}">Agregar evento</a>
+        <a href="{% url 'add_event' %}" class="btn btn-success">Agregar Veterinaria de Turno</a>
     {%endif%}
-    <table>
+    {% if usuario.esVeterinario %}
+
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Nombre</th>
-                <th>Fecha</th>
-                <th>direccion</th>
+                <th>Dia</th>
+                <th>Direccion</th>
                 
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            {% for event in events %}
+            {% for f in events %}
             <tr>
-                <td>{{ event.title }}</td>
-                <td>{{ event.date }}</td>
-                <td>{{ event.description }}</td>
+                <td>{{ f.title }}</td>
+                <td>{{ f.date }}</td>
+                <td>{{ f.description }}</td>
                 
                 <td>
-                    {% if usuario.esVeterinario %}
-                        <a href="{% url 'delete_event' event.id %}">Eliminar</a>
-                    {%endif%}
-                
+                        <a href="{% url 'delete_event' f.id %}" class="btn btn-danger">Eliminar</a>
                 </td>
-                
             </tr>
+            {% endfor %}
             
+        </tbody>
+    </table>
+    {% else %}
+    <table class="table table-striped w-50">
+        <thead>
+            <th>Dia</th>
+            <th>Veterinaria</th>
+        </thead>
+        <tbody>
+            {% for k, v in fecha.items %}
+            <tr>
+                <td><h1>{{k}}</h1></td>
+                <td>
+                    {% for i in v %}
+                        <p>{{i}}</p>
+                    {% endfor %}
+                </td>
+            </tr> 
             {% endfor %}
         </tbody>
     </table>
+    
+    {%endif%}
+</div>
 {% endblock %}

@@ -16,11 +16,11 @@ urlpatterns = [
     
     path('contactarC/<str:nombre>/<int:telefono>/',views.contactarC,name='contactarC'),
     path('contactarCVisit/<str:nombre>/<int:telefono>/',views.contactarCVisit,name='contactarCVisit'),
-    path('borrarC/<int:telefono>/',views.borrarC,name='borrarC'),
+    path('borrarC/<int:id>/',views.borrarC,name='borrarC'),
     
     path('contactarP/<str:nombre>/<int:telefono>/',views.contactarP,name='contactarP'),
     path('contactarPVisit/<str:nombre>/<int:telefono>/',views.contactarPVisit,name='contactarPVisit'),
-    path('borrarP/<int:telefono>/',views.borrarP,name='borrarP'),
+    path('borrarP/<int:id>/',views.borrarP,name='borrarP'),
     
     path('publicaciones', views.publicaciones,name='publicaciones'),
     path('publicar',views.publicar,name='publicar'),
@@ -31,8 +31,8 @@ urlpatterns = [
     path('publicarAdopcion',views.publicarAdopcion,name='publicarAdopcion'),
 
 
-    path('ContactarAdop/<str:nombre>/',views.ContactarAdop,name='ContactarAdop'),
-    path('contactarAVisit/<str:nombre>/',views.contactarAVisit,name='contactarAVisit'),
+    path('ContactarAdop/<str:nombre>/<str:dueño>/',views.ContactarAdop,name='ContactarAdop'),
+    path('contactarAVisit/<str:nombre>/<str:dueño>/',views.contactarAVisit,name='contactarAVisit'),
     path('borrarNotiAdop/<str:usuario>/<str:nombre>/',views.eliminarContactoA,name='borrarNotiAdop'),
     path('notificacionAdopcion',views.notificacionAdopcion,name='notificacionAdopcion'),
     path('notiAdopContacto', views.notiAdopContacto,name='notiAdopContacto'),
@@ -43,8 +43,8 @@ urlpatterns = [
     path('LogOut',views.LogOut,name='LogOut'),
     path('listarClientes',views.listarClientes,name='listarClientes'),
     path('borrarCliente/<str:usuario>',views.borrarCliente,name='borrarCliente'),
-    path('borrarPerro/<str:emailDueño>/<str:nombre>',views.borrarPerro,name='borrarPerro'),
-    path('borrarPerroC/<str:emailDueño>/<str:nombre>',views.borrarPerroC,name='borrarPerroC'),
+    path('borrarPerro/<int:id>',views.borrarPerro,name='borrarPerro'),
+    path('borrarPerroC/<int:id>',views.borrarPerroC,name='borrarPerroC'),
     path('borrarPerroA/<str:usuario>/<str:nombre>',views.borrarPerroA,name='borrarPerroA'),
     
     path('listarAdopciones',views.ListarAdopciones,name='listarAdopciones'),
@@ -53,8 +53,9 @@ urlpatterns = [
     path('notificaciones',views.notificaciones,name='notificaciones'),
     path('notiContacto', views.notiContacto,name='notiContacto'),
     path('notiTurnos', views.notiTurnos,name='notiTurnos'),
-    path('borrarNotiC/<str:nombreU>/<str:nombreC>/',views.terminarContactoC,name='borrarNotiC'),
-    path('borrarNotiP/<str:nombreU>/<str:nombreP>/',views.terminarContactoP,name='borrarNotiP'),
+    path('notiTurnosC', views.notiTurnosC,name='notiTurnosC'),
+    path('borrarNotiC/<int:id>/',views.terminarContactoC,name='borrarNotiC'),
+    path('borrarNotiP/<int:id>/',views.terminarContactoP,name='borrarNotiP'),
     
     path('registrar',views.registrar,name='registrar'),
     path('registrarPerro',views.registrarPerro,name='registrarPerro'),
@@ -62,15 +63,15 @@ urlpatterns = [
     
     path('publicarPerdido', views.publicarPerdido,name='publicarPerdido'),
     path('listarPerdidos', views.listarPerdidos, name='listarPerdidos'),
-    path('borrarPerroPerdido/<str:dueño>/<str:nombre>/',views.borrarPerroPerdido, name='borrarPerroPerdido'),
+    path('borrarPerroPerdido/<int:id>/',views.borrarPerroPerdido, name='borrarPerroPerdido'),
     path('contactarPerd/<str:nombre>/<int:telDueño>/',views.contactarPerd, name='contactarPerd'),
     path('contactarPerdVisit/<str:nombre>/<int:telDueño>/',views.contactarPerdVisit, name='contactarPerdVisit'),
     path('notiPerdidos', views.notiPerdidos, name='notiPerdidos'),
-    path('borrarNotiPerd/<str:nombreP>/<str:encontro>/',views.terminarPerd,name='borrarNotiPerd'),
+    path('borrarNotiPerd/<int:id>/',views.terminarPerd,name='borrarNotiPerd'),
     path('misPerdidos', views.misPerdidos, name='misPerdidos'),
 
-    path('borrarNotiT/<str:nombre>/<str:perro>/',views.borrarNotiT,name='borrarNotiT'),
-
+    path('borrarNotiT/<str:nombre>/<str:perro>/<str:descripcion>/',views.borrarNotiT,name='borrarNotiT'),
+    path('borrarNotiTe/<str:nombre>/<str:perro>/<str:descripcion>/<str:motivoRechazo>/',views.borrarNotiTe,name='borrarNotiTe'),
 
     path('misPerros',views.misPerros,name='misPerros'),
     path('listarHistorialV',views.listarHistorialV,name='listarHistorialV'),
@@ -88,6 +89,12 @@ urlpatterns = [
     path('calendar', views.calendar, name='calendar'),
     path('add', views.add_event, name='add_event'),
     path('delete/<int:event_id>', views.delete_event, name='delete_event'),
+    
+    
+    path('donaciones', views.donaciones, name='donaciones'),
+    path('agregarDonac', views.agregarDonac, name='agregarDonac'),
+    path('donar/<int:id>', views.donar, name='donar'),
+    path('borrarDonac/<int:id>', views.borrarDonac, name='borrarDonac'),
 
     
 
