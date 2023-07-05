@@ -1,0 +1,47 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+
+{% block titulo %} Adopciones {% endblock %}
+
+{% block contenido %} 
+    
+    <br>
+    
+    <style type="text/css">
+    
+        .boton {
+            cursor: pointer;
+        }
+
+        .boton:hover  img {
+            filter: brightness(70%); 
+        }
+
+    </style>
+    
+    <div class="container">
+        
+        <div class="row justify-content-md-center">
+            <a href="/listarAdopciones" class="boton"><img src="static/imagenes/adoptame.jpg" height="300" width="500" alt="Foto"></a>
+            <span class="text-white">hhhhhhhhhhhh</span>
+            <a href="/listarAdoptados" class="boton"><img src="static/imagenes/adoptados.jpg" height="300" width="500" alt="Foto"></a>
+        </div>
+        <span class="text-white">h</span>
+        
+    </div>
+    <br>
+
+
+        <!-- <div class="d-flex justify-content-center flex-column align-items-center">
+            <img src="static/imagenes/Adopciones.jpeg" alt="Foto" height="300" width="300">
+            <a class="btn btn-primary" href="./" style="position: absolute; left: 700px; top: 500px;"">Adop</a>
+        </div> -->
+    <br>
+   
+    
+{% endblock %}
+
+
+       
+

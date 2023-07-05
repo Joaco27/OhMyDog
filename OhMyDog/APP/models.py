@@ -13,7 +13,8 @@ class Perro(models.Model):
     castrado = models.CharField(max_length=2, default='NO')
     sexo = models.CharField(max_length=15,null=True,blank=True)
     emailDueño = models.EmailField(max_length=30)
-    fechaNacimiento = models.DateField(default=timezone.now)
+    tamaño = models.CharField(max_length=30,null=True)
+    fechaNacimiento = models.DateField(default=timezone.now, null=True)
     def __str__(self):
         return f'Perro: {self.nombre} con {self.edad} años, raza {self.raza}, y emailD {self.emailDueño}'
     
@@ -80,14 +81,16 @@ class PerroAdopcion(models.Model):
     usuario = models.CharField(max_length=30)
     nombre = models.CharField(max_length=30)
     raza = models.CharField(max_length=30)
+    tamaño = models.CharField(max_length=30,null=True)
     descripcion = models.CharField(max_length=30)
     zona = models.CharField(max_length=50, default='NO')
+    estado = models.BooleanField(default=False)
     def __str__(self):
         return f'se publico el perro {self.nombre}'
     
 class ContactoAdop(models.Model):
     nombre = models.CharField(max_length=30)
-    dueño = models.CharField(max_length=30)
+    dueño = models.CharField(max_length=30, default='NO')
     usuario = models.CharField(max_length=30)
     telUsuario = models.IntegerField()
     def __str__(self):

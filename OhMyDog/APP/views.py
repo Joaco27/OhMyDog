@@ -33,6 +33,20 @@ def index(request):
     }
     return render(request, 'paginas/index.html', context)
 
+def adopciones(request):
+    context ={
+        'usuario':usuario
+    }
+    return render(request, 'paginas/adopciones.html', context)
+
+def adopFamilias(request, nombre, usuario):
+    adop = PerroAdopcion.objects.get(nombre=nombre,usuario=usuario)
+    context = {'context': adop,
+               'usuario': usuario,
+               }
+    return render(request, 'paginas/adopFamilias.html', context)
+
+
 def registrarCliente(request):
     if request.method == 'POST':
         form = Cliente_form(request.POST) 
@@ -51,6 +65,8 @@ def registrarCliente(request):
     }
     return render(request, 'paginas/registrarCliente.html', context)
 
+
+
 def registrarPerro(request):
     if request.method == 'POST':
         form = Perro_form(request.POST) 
@@ -67,6 +83,7 @@ def registrarPerro(request):
                 edad = edad,
                 emailDueño = usr.mail,
                 sexo = form.cleaned_data['sexo'],
+                tamaño = form.cleaned_data['tamaño'],
             )
             perro.save()
             messages.add_message(request, messages.SUCCESS, 'Perro registrado con exito', extra_tags="tag1")
@@ -399,6 +416,7 @@ def publicarAdopcion(request):
                 usuario = usuario['nombre'],
                 nombre = 'Desconocido',
                 raza = 'Desconocido',
+                tamaño = 'Desconocido',
                 descripcion = form.cleaned_data['descripcion'],
                 zona = form.cleaned_data['zona'],
             )
@@ -412,6 +430,8 @@ def publicarAdopcion(request):
                     usuario = usuario['nombre'],
                     nombre = p.nombre,
                     raza = p.raza,
+                    tamaño = p.tamaño ,
+                   # edad = p.edad,
                     descripcion = form.cleaned_data['descripcion'],
                     zona = form.cleaned_data['zona'],   
                 )
@@ -559,7 +579,18 @@ def contactarAVisit(request, nombre, dueño):
             )
             contactoNuevo.save()
             messages.add_message(request, messages.SUCCESS, 'Pronto se pondran en contacto con usted', extra_tags="tag1")
+            return redirect ('index')
+    else:
+        form = contacto_form()
+    context = {
+        'usuario' : usuario,
+        'form' : form,
+        'nombre' : nombre,
+        'dueño' : dueño,
+    }
 
+    return render(request, 'paginas/contactarAVisitante.html', context)
+            
 def listarPerdidos(request):
     perdidos = PerroPerdido.objects.all()
     context = {
