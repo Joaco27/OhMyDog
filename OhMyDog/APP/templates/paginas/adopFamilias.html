@@ -17,16 +17,8 @@
             <p>Descripcion: {{ c.descripcion }}</p>
             <p></p>
             
-            {% if usuario.esVeterinario}
-                <button onclick="confirmar()" class="btn btn-danger">Borrar</button>
-                <script>
-                    function confirmar(){
-                        let conf = window.confirm('¿Seguro que quieres borrar este elemento?')
-                        if(conf)
-                            window.location.href = "./borrarPerroA/{{c.usuario}}/{{c.nombre}}"
-                    }
-                </script>
-            {% endif %}   
+            <a href="{% url 'borrarAdoptado' c.usuario c.nombre %}" class="btn">borrar</a>
+
             <p>-----------------</p>
         {% endfor %}
     {% endif %}

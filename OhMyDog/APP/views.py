@@ -33,18 +33,42 @@ def index(request):
     }
     return render(request, 'paginas/index.html', context)
 
-def adopciones(request):
-    context ={
-        'usuario':usuario
-    }
-    return render(request, 'paginas/adopciones.html', context)
+# def adopciones(request):
+#     context = {
+#         'usuario':usuario
+#     }
+#     return render(request, 'paginas/adopciones.html', context)
 
-def adopFamilias(request, nombre, usuario):
-    adop = PerroAdopcion.objects.get(nombre=nombre,usuario=usuario)
-    context = {'context': adop,
-               'usuario': usuario,
-               }
-    return render(request, 'paginas/adopFamilias.html', context)
+# def adopFamilias(request, nombre, usuario):
+#     adop = PerroAdopcion.objects.get(nombre=nombre,usuario=usuario)
+#     adop.estado = True
+#     adop.save()
+#     messages.add_message(request, messages.SUCCESS, 'La publicación se agrego a adopciones realizadas ', extra_tags="tag1")
+
+#     perro_Adop = PerroAdopcion.objects.filter(estado = True)
+#     context = {'context': perro_Adop,
+#                'usuario': usuario,
+#                }
+#     return render(request, 'paginas/adopFamilias.html', context)
+
+# def adopflias(request):
+
+#     perro_Adop = PerroAdopcion.objects.filter(estado = True)
+#     context = {'context': perro_Adop,
+#                'usuario': usuario,
+#                }
+#     return render(request, 'paginas/adopFamilias.html', context)
+
+# def borrarAdoptado(request, usuario, nombre):
+#     perro = PerroAdopcion.objects.get(usuario=usuario, nombre=nombre)
+#     perro.estado = False
+#     perro.save()
+#     messages.add_message(request, messages.SUCCESS, 'La publicación se elimino con éxito y se agrego nuevamente en perros en adopción ', extra_tags="tag1")
+
+#     return redirect('listarAdopciones')
+
+
+
 
 
 def registrarCliente(request):
@@ -80,7 +104,7 @@ def registrarPerro(request):
             perro = Perro(
                 nombre = form.cleaned_data['nombre'],
                 raza = form.cleaned_data['raza'],
-                edad = edad,
+                edad = form.cleaned_data['edad'],
                 emailDueño = usr.mail,
                 sexo = form.cleaned_data['sexo'],
                 tamaño = form.cleaned_data['tamaño'],
@@ -197,11 +221,11 @@ def listarPaseadores(request):
                'usuario': usuario}
     return render(request, 'paginas/listaPaseadores.html', context)
 
-def ListarAdopciones(request): 
-    adop = PerroAdopcion.objects.all()
-    context = {'context': adop,
-               'usuario': usuario}
-    return render(request, 'paginas/listarAdopciones.html', context)
+# def ListarAdopciones(request): 
+#     adop = PerroAdopcion.objects.filter(estado = False)
+#     context = {'context': adop,
+#                'usuario': usuario}
+#     return render(request, 'paginas/listarAdopciones.html', context)
 
 def misPerros(request): 
     usu = Cliente.objects.get(usuario=usuario["nombre"])
@@ -398,56 +422,55 @@ def turnos(request):
     return render(request, 'paginas/turnos.html', context)
 
 
-def publicarAdopcion(request):
-    usu = Cliente.objects.get(usuario=usuario['nombre'])
-    perros = Perro.objects.filter(emailDueño=usu.mail)
-    listaPerros =["","Encontrado"]
-    listaPerros += [p.nombre for p in perros]
-    print(listaPerros)
-    if request.method == 'POST':
-        form = perroAdopcion_form(request.POST, request.FILES,opciones=listaPerros)
-        if form.is_valid():
+# def publicarAdopcion(request):
+#     usu = Cliente.objects.get(usuario=usuario['nombre'])
+#     perros = Perro.objects.filter(emailDueño=usu.mail)
+#     listaPerros =["","Encontrado"]
+#     listaPerros += [p.nombre for p in perros]
+#     print(listaPerros)
+#     if request.method == 'POST':
+#         form = perroAdopcion_form(request.POST, request.FILES,opciones=listaPerros)
+#         if form.is_valid():
             
-            d = Cliente.objects.get(usuario=usuario['nombre'])
-            p = Perro.objects.filter(nombre=form.cleaned_data['nombre'], emailDueño=d.mail).exists()
+#             d = Cliente.objects.get(usuario=usuario['nombre'])
+#             p = Perro.objects.filter(nombre=form.cleaned_data['nombre'], emailDueño=d.mail).exists()
             
-            if not p:
-                adop = PerroAdopcion(
-                usuario = usuario['nombre'],
-                nombre = 'Desconocido',
-                raza = 'Desconocido',
-                tamaño = 'Desconocido',
-                descripcion = form.cleaned_data['descripcion'],
-                zona = form.cleaned_data['zona'],
-            )
-            else:
-                p = Perro.objects.get(nombre=form.cleaned_data['nombre'], emailDueño=d.mail)
-                perroEx = PerroAdopcion.objects.filter(usuario=usuario['nombre'],nombre=p.nombre).exists()
-                if perroEx:
-                    messages.add_message(request, messages.SUCCESS, 'Ya publicaste esta adopcion', extra_tags="tag1")
-                    return redirect('publicarAdopcion')
-                adop = PerroAdopcion(
-                    usuario = usuario['nombre'],
-                    nombre = p.nombre,
-                    raza = p.raza,
-                    tamaño = p.tamaño ,
-                   # edad = p.edad,
-                    descripcion = form.cleaned_data['descripcion'],
-                    zona = form.cleaned_data['zona'],   
-                )
+#             if not p:
+#                 adop = PerroAdopcion(
+#                 usuario = usuario['nombre'],
+#                 nombre = 'Desconocido',
+#                 raza = 'Desconocido',
+#                 tamaño = 'Desconocido',
+#                 descripcion = form.cleaned_data['descripcion'],
+#                 zona = form.cleaned_data['zona'],
+#             )
+#             else:
+#                 p = Perro.objects.get(nombre=form.cleaned_data['nombre'], emailDueño=d.mail)
+#                 perroEx = PerroAdopcion.objects.filter(usuario=usuario['nombre'],nombre=p.nombre).exists()
+#                 if perroEx:
+#                     messages.add_message(request, messages.SUCCESS, 'Ya publicaste esta adopcion', extra_tags="tag1")
+#                     return redirect('publicarAdopcion')
+#                 adop = PerroAdopcion(
+#                     usuario = usuario['nombre'],
+#                     nombre = p.nombre,
+#                     raza = p.raza,
+#                     tamaño = p.tamaño,
+#                     descripcion = form.cleaned_data['descripcion'],
+#                     zona = form.cleaned_data['zona'],   
+#                 )
             
-            adop.save()
-            messages.add_message(request, messages.SUCCESS, 'Se ha publicado perro en adopcion ', extra_tags="tag1")
+#             adop.save()
+#             messages.add_message(request, messages.SUCCESS, 'Se ha publicado perro en adopcion ', extra_tags="tag1")
 
-            return redirect("index")
-    else:
-        form = perroAdopcion_form( opciones=listaPerros)
+#             return redirect("index")
+#     else:
+#         form = perroAdopcion_form( opciones=listaPerros)
     
-    context = {
-        'form': form,
-        'usuario' : usuario,
-    }
-    return render(request, 'paginas/publicarAdopcion.html', context)
+#     context = {
+#         'form': form,
+#         'usuario' : usuario,
+#     }
+#     return render(request, 'paginas/publicarAdopcion.html', context)
 
 def listarClientes(request):
     cli = Cliente.objects.all()

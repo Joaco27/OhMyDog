@@ -9,11 +9,11 @@ class Perro_form(forms.ModelForm):
     # Meta sirve para enlazar con la BD
     class Meta:
         model = Perro
-        fields = ['nombre','raza','sexo','tamaño','fechaNacimiento']
+        fields = ['nombre','raza','edad','sexo','tamaño','fechaNacimiento']
     # Creamos los campos del formulario
     nombre = forms.CharField(max_length=15, required=True, label='Nombre')
     raza = forms.CharField(max_length=15, required=True, label='Raza')
-    #edad = forms.IntegerField(required=True, label='edad')
+    edad = forms.IntegerField(required=True, label='edad')
     tam = ['Chico', 'Mediano', 'Grande']
     opciones = ['Macho','Hembra']
     fechaNacimiento = forms.DateField(label='Fecha de Nacimiento (si no conoce la fecha ingrese una aproximada)'
@@ -117,19 +117,19 @@ class Turnos_form(forms.Form):
             raise ValidationError("Coloque una fecha valida, superior a la fecha actual")
         return data
 
-class perroAdopcion_form(forms.Form):
-    class Meta:
-        model= PerroAdopcion
-        fields=['nombre','descripcion', 'zona']
-    def __init__(self, *args, **kwargs):
-        opciones = kwargs.pop('opciones', [])
-        super(perroAdopcion_form, self).__init__(*args, **kwargs)
-        self.fields['nombre'] = forms.ChoiceField(choices=[(opcion, opcion) for opcion in opciones],required=True)
+# class perroAdopcion_form(forms.Form):
+#     class Meta:
+#         model= PerroAdopcion
+#         fields=['nombre','descripcion', 'zona']
+#     def __init__(self, *args, **kwargs):
+#         opciones = kwargs.pop('opciones', [])
+#         super(perroAdopcion_form, self).__init__(*args, **kwargs)
+#         self.fields['nombre'] = forms.ChoiceField(choices=[(opcion, opcion) for opcion in opciones],required=True)
     
     
-    nombre = forms.ChoiceField()
-    zona = forms.CharField(max_length=50, required=True, label='zona')
-    descripcion= forms.CharField(max_length=30, required=True, label='description')
+#     nombre = forms.ChoiceField()
+#     zona = forms.CharField(max_length=50, required=True, label='zona')
+#     descripcion= forms.CharField(max_length=30, required=True, label='description')
 
 
 class Cliente_form(forms.ModelForm):
