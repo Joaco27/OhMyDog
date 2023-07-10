@@ -742,6 +742,7 @@ def add_event(request):
 
 def delete_event(request, event_id):
     Event.objects.get(pk=event_id).delete()
+    messages.add_message(request, messages.SUCCESS, 'Veterinaria de Turno eliminada', extra_tags="tag1")
     return redirect('calendar')
 
 """      
