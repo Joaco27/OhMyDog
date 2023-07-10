@@ -36,7 +36,14 @@
                 <td>{{ f.description }}</td>
                 
                 <td>
-                        <a href="{% url 'delete_event' f.id %}" class="btn btn-danger">Eliminar</a>
+                        <button onclick="confirmar()" class="btn btn-danger">Borrar</button>
+                        <script>
+                          function confirmar(){
+                            let conf = window.confirm('Seguro que quieres borrar este elemento??')
+                            if(conf)
+                              window.location.href = "/delete/{{f.id}}"
+                          }
+                        </script>
                 </td>
             </tr>
             {% endfor %}

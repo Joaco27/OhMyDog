@@ -734,13 +734,15 @@ def add_event(request):
         form = EventForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.add_message(request, messages.SUCCESS, 'Veterinaria de Turno Agregada', extra_tags="tag1")
             return redirect('calendar')
     else:
         form = EventForm()
     return render(request, 'paginas/add_event.html', {'form': form, 'usuario': usuario})
 
 def delete_event(request, event_id):
-    Event.objects.get(pk=event_id).delete()
+    Event.objects.get(id=event_id).delete()
+    messages.add_message(request, messages.SUCCESS, 'Veterinaria de Turno eliminada', extra_tags="tag1")
     return redirect('calendar')
 
 """      

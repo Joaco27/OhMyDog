@@ -206,7 +206,7 @@ class EventForm(forms.ModelForm):
                             widget=forms.DateInput(attrs={"type": "date"}), required=True)
     description = forms.CharField(max_length=30, label="Direccion", required=True)
     
-    def clean(self):
+    def clean_data(self):
         fecha =self.cleaned_data["date"]
         hoy = date.datetime.today()
 
@@ -214,7 +214,6 @@ class EventForm(forms.ModelForm):
         data_nueva = date.datetime.strptime(data_str, '%d/%m/%Y')
         if data_nueva < hoy:
             raise ValidationError("Coloque una fecha posterior a la fecha actual o actual")
-            return fecha
         description = self.cleaned_data["description"]
         title = self.cleaned_data["title"]
         e = Event.objects.filter(title=title, date=fecha,description=description).exists()
