@@ -6,7 +6,7 @@
 {% block contenido %} 
 
 <div class="d-flex justify-content-center flex-column align-items-center">
-    
+    <h1>Perros en Adopcion</h1>
     {% if context|length == 0 %}
         <p>No hay perros en adopcion publicados</p>
     {% else %}
@@ -17,6 +17,7 @@
             <p>Raza: {{ c.raza }}</p>
             <p>Tamaño: {{ c.tamaño }}</p>
             <p>Descripcion: {{ c.descripcion }}</p>
+            <p>Edad: {{ c.edad }}</p>
             <p></p>
             <p></p>
             {% if usuario.esCliente or usuario.esVeterinario%}
@@ -36,7 +37,7 @@
                             window.location.href = "./borrarPerroA/{{c.usuario}}/{{c.nombre}}"
                     }
                 </script>
-                <a href="./adopFamilias/{{c.nombre}}/{{c.usuario}}" class="btn">Adoptado</a>
+                <a href="./adopFamilias/{{c.nombre}}/{{c.usuario}}" class="btn btn-success">Adoptado</a>
             {% endif %}   
             <p>-----------------</p>
         {% endfor %}

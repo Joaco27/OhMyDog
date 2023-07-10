@@ -117,6 +117,7 @@ class PerroPerdido(models.Model):
     zona= models.CharField(max_length=50)
     fechaD= models.DateTimeField()
     imagen = models.ImageField(upload_to='imagenes/',null=True)
+    estado = models.CharField(max_length=10,default='perdido')
 
    
 class ContactoPerdido(models.Model):

@@ -40,8 +40,8 @@ def adopciones(request):
     }
     return render(request, 'paginas/adopciones.html', context)
 
-def adopFamilias(request, nombre, usuario):
-    adop = PerroAdopcion.objects.get(nombre=nombre,usuario=usuario)
+def adopFamilias(request, nombre, usu):
+    adop = PerroAdopcion.objects.get(nombre=nombre,usuario=usu)
     adop.estado = True
     adop.save()
     messages.add_message(request, messages.SUCCESS, 'La publicación se agrego a adopciones realizadas ', extra_tags="tag1")
@@ -105,7 +105,7 @@ def registrarPerro(request):
             perro = Perro(
                 nombre = form.cleaned_data['nombre'],
                 raza = form.cleaned_data['raza'],
-                edad = form.cleaned_data['edad'],
+                edad = edad,
                 emailDueño = usr.mail,
                 sexo = form.cleaned_data['sexo'],
                 tamaño = form.cleaned_data['tamaño'],
@@ -444,6 +444,7 @@ def publicarAdopcion(request):
                 tamaño = 'Desconocido',
                 descripcion = form.cleaned_data['descripcion'],
                 zona = form.cleaned_data['zona'],
+                edad = 0,
             )
             else:
                 p = Perro.objects.get(nombre=form.cleaned_data['nombre'], emailDueño=d.mail)
@@ -458,6 +459,7 @@ def publicarAdopcion(request):
                     tamaño = p.tamaño,
                     descripcion = form.cleaned_data['descripcion'],
                     zona = form.cleaned_data['zona'],   
+                    edad = p.edad,
                 )
             
             adop.save()
@@ -485,7 +487,7 @@ def borrarCliente(request, usuario):
     cli = Cliente.objects.get(usuario=usuario)
     PerroAdopcion.objects.filter(usuario=cli.usuario).delete()
     
-    # PerroPerdido.objects.filter(usuario=cli.usuario).delete()
+    PerroPerdido.objects.filter(usuario=cli.usuario).delete()
     Perro.objects.filter(emailDueño=cli.mail).delete()
     cli.delete()
     messages.add_message(request, messages.SUCCESS, 'Cliente Eliminado', extra_tags="tag1")
