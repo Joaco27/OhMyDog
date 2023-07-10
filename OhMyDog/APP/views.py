@@ -766,7 +766,7 @@ def eliminarContactoA(request, usuario, nombre):
 
 def calendar(request):
     mes=dt.today().month
-    locale.setlocale(locale.LC_TIME, 'es_ES')
+    #locale.setlocale(locale.LC_TIME, 'es_ES')
     mes=dt.today().strftime('%B').capitalize()
     
     events = Event.objects.all().order_by('date')
@@ -834,7 +834,7 @@ def misPerdidos(request):
         'context' : perd,
         'usuario' : usuario,
     }
-    return render(request,'paginas/misperdidos.html',context)
+    return render(request,'paginas/misPerdidos.html',context)
 
 
 def listarHistorialV(request,nombre):
