@@ -734,6 +734,7 @@ def add_event(request):
         form = EventForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.add_message(request, messages.SUCCESS, 'Veterinaria de Turno Agregada', extra_tags="tag1")
             return redirect('calendar')
     else:
         form = EventForm()
