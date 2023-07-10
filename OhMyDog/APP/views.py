@@ -8,6 +8,7 @@ from itertools import chain
 from datetime import date as dt
 from datetime import *
 import locale
+from django.db.models import Q
 from calendar import monthrange
 
 #Declarar funciones para hacer cuando se ingresan direcciones
@@ -561,12 +562,21 @@ def contactarAVisit(request, nombre, dueño):
             messages.add_message(request, messages.SUCCESS, 'Pronto se pondran en contacto con usted', extra_tags="tag1")
 
 def listarPerdidos(request):
-    perdidos = PerroPerdido.objects.all()
+    perdidos = PerroPerdido.objects.filter(~Q(usuario=usuario["nombre"]), estado="perdido")
+    #perdidos = PerroPerdido.objects.filter(estado="perdido")
     context = {
         'context':perdidos,
         'usuario':usuario,
     }
     return render(request, 'paginas/listaPerdidos.html', context)
+
+def listarPerdidosEncontrados(request):
+    perdidos = PerroPerdido.objects.filter(estado="encontrado")
+    context = {
+        'context':perdidos,
+        'usuario':usuario,
+    }
+    return render(request, 'paginas/listarPerdidosEncontrados.html', context)
 
 def publicarPerdido(request):
     usu = Cliente.objects.get(usuario=usuario['nombre'])
@@ -629,7 +639,7 @@ def borrarPerroPerdido(request, id):
     
     messages.add_message(request, messages.SUCCESS, 'Perdida borrada', extra_tags="tag1")
 
-    return redirect("listarPerdidos")
+    return redirect("index")
 
 def contactarPerd(request, nombre, telDueño):
     cli =  Cliente.objects.get(usuario=usuario["nombre"])
@@ -670,6 +680,12 @@ def contactarPerdVisit(request, nombre, telDueño):
         'telDueño':telDueño,  
         }
     return render(request, 'paginas/contactarPerdVisit.html', context)
+
+def encontrado(request, id):
+    perro = PerroPerdido.objects.get(id=id)
+    perro.estado="encontrado"
+    perro.save()
+    return redirect("misPerdidos")
 
 def notificacionAdopcion(request):
     context ={

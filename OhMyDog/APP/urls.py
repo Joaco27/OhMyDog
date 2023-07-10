@@ -63,12 +63,14 @@ urlpatterns = [
     
     path('publicarPerdido', views.publicarPerdido,name='publicarPerdido'),
     path('listarPerdidos', views.listarPerdidos, name='listarPerdidos'),
+    path('listarPerdidosEncontrados', views.listarPerdidosEncontrados, name='listarPerdidosEncontrados'),
     path('borrarPerroPerdido/<int:id>/',views.borrarPerroPerdido, name='borrarPerroPerdido'),
     path('contactarPerd/<str:nombre>/<int:telDueño>/',views.contactarPerd, name='contactarPerd'),
     path('contactarPerdVisit/<str:nombre>/<int:telDueño>/',views.contactarPerdVisit, name='contactarPerdVisit'),
     path('notiPerdidos', views.notiPerdidos, name='notiPerdidos'),
     path('borrarNotiPerd/<int:id>/',views.terminarPerd,name='borrarNotiPerd'),
     path('misPerdidos', views.misPerdidos, name='misPerdidos'),
+    path('encontrado/<int:id>/', views.encontrado, name='encontrado'),
 
     path('borrarNotiT/<str:nombre>/<str:perro>/<str:descripcion>/',views.borrarNotiT,name='borrarNotiT'),
     path('borrarNotiTe/<str:nombre>/<str:perro>/<str:descripcion>/<str:motivoRechazo>/',views.borrarNotiTe,name='borrarNotiTe'),

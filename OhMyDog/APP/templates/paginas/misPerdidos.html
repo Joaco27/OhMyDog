@@ -22,12 +22,15 @@
                 <p><strong>Zona:</strong> {{ c.zona }}</p>
                 <p><strong>Descripcion:</strong> {{ c.descripcion }}</p>
                 <p><strong>Fecha de Desaparicion:</strong> {{ c.fechaD }}</p>
+                {% if c.estado == "perdido" %}
+                    <a href="/encontrado/{{c.id}}" class="btn btn-success">Encontrado</a>
+                {% endif %}
                     <button onclick="confirmar()" class="btn btn-danger">Borrar</button>
                     <script>
                     function confirmar(){
                         let conf = window.confirm('Seguro que quieres borrar este elemento??')
                         if(conf)
-                        window.location.href = "./borrarPerroPerdido/{{c.dueño}}/{{c.nombre}}"
+                        window.location.href = "./borrarPerroPerdido/{{c.id}}"
                     }
                     </script>
             </div>

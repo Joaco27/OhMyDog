@@ -6,7 +6,8 @@
 {% block contenido %} 
 
 <div class="d-flex justify-content-center flex-column align-items-center">
-    
+    <aside><a href="/listarPerdidosEncontrados" class="btn btn-success">¡Echa un vistazo a los perros que hemos encontrado!</a></aside>
+    <br><br>
     {% if context|length == 0 %}
         <p>No hay perros perdidos publicados</p>
     {% else %}
@@ -26,23 +27,22 @@
                         <p><strong>Telefono:</strong> {{ c.telDueño }}</p>
                     {% else %}
                         {% if usuario.esCliente and usuario.nombre != c.usuario %}
-                            <a href="./contactarPerd/{{c.nombre}}/{{c.telDueño}}" class="btn btn-success">Contactar</a>
+                            <a href="/contactarPerd/{{c.nombre}}/{{c.telDueño}}" class="btn btn-success">Contactar</a>
                             <br>
                         {% else %}
                             {% if usuario.esCliente == False %}
-                                <a href="./contactarPerdVisit/{{c.nombre}}/{{c.telDueño}}" class="btn btn-success">Contactar</a>
+                                <a href="/contactarPerdVisit/{{c.nombre}}/{{c.telDueño}}" class="btn btn-success">Contactar</a>
                                 <br>
                             {% endif %}
                         {% endif %}
                     {% endif %}
-
                     {% if usuario.esVeterinario or usuario.nombre == c.usuario %}
                         <button onclick="confirmar()" class="btn btn-danger">Borrar</button>
                         <script>
                         function confirmar(){
                             let conf = window.confirm('Seguro que quieres borrar este elemento??')
                             if(conf)
-                            window.location.href = "./borrarPerroPerdido/{{c.id}}"
+                            window.location.href = "/borrarPerroPerdido/{{c.id}}"
                         }
                         </script>
                     {% endif %}
