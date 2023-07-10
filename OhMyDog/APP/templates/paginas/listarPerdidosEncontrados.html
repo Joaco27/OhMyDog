@@ -17,12 +17,6 @@
                     <p><strong>Raza:</strong> {{ c.raza }}</p>
                     <img src="{{c.imagen.url}}" alt="FOTO" height="150" width="150">
                 </div>
-                <div class="col">
-                    <p><strong>Reportado por:</strong> {{ c.dueño }}</p>
-                    <p><strong>Zona:</strong> {{ c.zona }}</p>
-                    <p><strong>Descripcion:</strong> {{ c.descripcion }}</p>
-                    <p><strong>Fecha de Desaparicion:</strong> {{ c.fechaD }}</p>
-                </div>
             </div>   
             {% endfor %}
     {% endif %}
