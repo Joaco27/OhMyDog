@@ -58,8 +58,9 @@ class Paseador_form(forms.ModelForm):
     nombre = forms.CharField(max_length=50, required=True, label='Nombre')
     dni = forms.CharField(max_length=8,required=True, label='DNI')
     telefono = forms.IntegerField(required=True, label='Telefono')
-    zona = forms.CharField(max_length=20, required=True, label='Zona')
-    disponibilidad = forms.CharField(max_length=30, required=True, label='Disponibilidad')
+    zona = forms.CharField(max_length=50, required=True, label='Recorrido')
+    lista = ["Mañana", "Mediodia", "Tarde", "Noche"]
+    disponibilidad = forms.ChoiceField(choices=[(l, l) for l in lista],required=True, label='Disponibilidad')
     
     def clean_dni(self):
         data=self.cleaned_data["dni"]
@@ -77,9 +78,11 @@ class Cuidador_form(forms.ModelForm):
     nombre = forms.CharField(max_length=50, required=True, label='Nombre')
     dni = forms.CharField(max_length=8,required=True, label='DNI')
     telefono = forms.IntegerField(required=True, label='Telefono')
-    zona = forms.CharField(max_length=20, required=True, label='Zona')
-    disponibilidad = forms.CharField(max_length=30, required=True, label='Disponibilidad')
-    
+    lista = ['A Domicilio','Direccion Particular','A Eleccion del Cliente']
+    zona = forms.ChoiceField(choices=[(l, l) for l in lista],required=True, label="Lugar")
+    lista = ["Mañana", "Mediodia", "Tarde", "Noche"]
+    disponibilidad = forms.ChoiceField(choices=[(l, l) for l in lista],required=True, label='Disponibilidad') 
+       
     def clean_dni(self):
         data=self.cleaned_data["dni"]
         if len(str(data)) < 8:
@@ -206,20 +209,17 @@ class EventForm(forms.ModelForm):
                             widget=forms.DateInput(attrs={"type": "date"}), required=True)
     description = forms.CharField(max_length=30, label="Direccion", required=True)
     
-    def clean_date(self):
-        data =self.cleaned_data["date"]
-        fecha = date.datetime.today()
+    def clean(self):
+        fecha =self.cleaned_data["date"]
+        hoy = date.datetime.today()
 
-        data_str = data.strftime('%d/%m/%Y')
+        data_str = fecha.strftime('%d/%m/%Y')
         data_nueva = date.datetime.strptime(data_str, '%d/%m/%Y')
-        if data_nueva < fecha:
+        if data_nueva < hoy:
             raise ValidationError("Coloque una fecha posterior a la fecha actual o actual")
-        return data
-    
-    def clean_description(self):
+            return fecha
         description = self.cleaned_data["description"]
         title = self.cleaned_data["title"]
-        fecha = self.cleaned_data["date"]
         e = Event.objects.filter(title=title, date=fecha,description=description).exists()
         if e:
             raise ValidationError("Ya registraste esta VT")
@@ -289,11 +289,11 @@ class Donacion_form(forms.ModelForm):
     recaudado = forms.IntegerField(required=False, widget=forms.HiddenInput, initial=0)
     
 class Tarjeta_form(forms.Form):
-    nombre = forms.CharField(max_length=40, required=True)
+    nombre = forms.CharField(max_length=40, required=True, label="Titular de la Tarjeta")
     numero = forms.IntegerField(required=True)
-    mesV = forms.IntegerField(required=True)
-    añoV = forms.IntegerField(required=True)
-    codigo = forms.IntegerField(required=True)
+    mesV = forms.IntegerField(required=True, label="Mes Vencimiento")
+    añoV = forms.IntegerField(required=True, label="Año Vencimiento")
+    codigo = forms.IntegerField(required=True, label="Codigo de Seguridad")
     monto = forms.IntegerField(required=True)
     
     def clean(self):
@@ -327,5 +327,5 @@ class Tarjeta_form(forms.Form):
         if t.saldo-data < 0:
             raise ValidationError('Saldo Insuficiente')
         return data, numero
-        
+#hola
     
