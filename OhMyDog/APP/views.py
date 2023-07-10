@@ -781,9 +781,12 @@ def validate(request):#extrae el nombre y email del perro y hace de conector con
       infoHistorial['nombreP']= request.POST["nombre"]
       infoHistorial['mailD']= request.POST["emailD"]
       his = Historial.objects.filter(nombreP=nombre,mailD=emailD)
+      cli=Cliente.objects.get(mail=emailD)
       context = {
         'context':his,
-        'usuario':usuario
+        'usuario':usuario,
+        'nombreP':nombre,
+        'nombreC':cli.nombreC
     }
       return render(request, 'paginas/listarHistorialV.html', context)#aca me tendria que mandar a listarHistorialV
 
@@ -795,9 +798,12 @@ def validateC(request):#extrae el nombre y email del perro y hace de conector co
       infoHistorial['nombreP']= request.POST["nombre"]
       infoHistorial['mailD']= request.POST["emailD"]
       his = Historial.objects.all().filter(nombreP=nombre,mailD=emailD)
+      cli=Cliente.objects.get(mail=emailD)
       context = {
         'context':his,
-        'usuario':usuario
+        'usuario':usuario,
+        'nombreP':nombre,
+        'nombreC':cli.nombreC
     }
       return render(request, 'paginas/listarHistorialC.html', context)
 
@@ -836,7 +842,7 @@ def cargarHistorial(request):
             his.save()
             messages.add_message(request, messages.SUCCESS, 'Historial cargado con exito', extra_tags="tag1")
 
-            return redirect("index")
+            return redirect('losPerros')
     else:
         form = Historial_form()
             
@@ -847,6 +853,8 @@ def cargarHistorial(request):
     }
     return render(request, 'paginas/cargarHistorial.html', context)
 #hola
+
+
 
 def donaciones(request):
     don = Donacion.objects.all()

@@ -189,7 +189,6 @@ class Migration(migrations.Migration):
                 ('fecha', models.DateField()),
                 ('telDueño', models.IntegerField()),
                 ('fHoraria', models.CharField(blank=True, max_length=15, null=True)),
-                ('estado', models.CharField(blank=True, default='pendiente', max_length=15, null=True)),
                 ('motivoRechazo', models.TextField(blank=True, default='', max_length=400, null=True)),
             ],
         ),
