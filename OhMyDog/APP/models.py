@@ -109,6 +109,7 @@ class PerroPerdido(models.Model):
     telDueño = models.IntegerField()
     nombre = models.CharField(max_length=30)
     raza= models.CharField(max_length=20)
+    estado= models.CharField(max_length=20, default="perdido")
     descripcion= models.CharField(max_length=30)
     zona= models.CharField(max_length=50)
     fechaD= models.DateTimeField()

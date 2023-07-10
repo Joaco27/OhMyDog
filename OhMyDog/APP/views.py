@@ -8,6 +8,7 @@ from itertools import chain
 from datetime import date as dt
 from datetime import *
 import locale
+from django.db.models import Q
 from calendar import monthrange
 
 #Declarar funciones para hacer cuando se ingresan direcciones
@@ -561,12 +562,21 @@ def contactarAVisit(request, nombre, dueño):
             messages.add_message(request, messages.SUCCESS, 'Pronto se pondran en contacto con usted', extra_tags="tag1")
 
 def listarPerdidos(request):
-    perdidos = PerroPerdido.objects.all()
+    perdidos = PerroPerdido.objects.filter(~Q(usuario=usuario["nombre"]), estado="perdido")
+    #perdidos = PerroPerdido.objects.filter(estado="perdido")
     context = {
         'context':perdidos,
         'usuario':usuario,
     }
     return render(request, 'paginas/listaPerdidos.html', context)
+
+def listarPerdidosEncontrados(request):
+    perdidos = PerroPerdido.objects.filter(estado="encontrado")
+    context = {
+        'context':perdidos,
+        'usuario':usuario,
+    }
+    return render(request, 'paginas/listarPerdidosEncontrados.html', context)
 
 def publicarPerdido(request):
     usu = Cliente.objects.get(usuario=usuario['nombre'])
@@ -629,7 +639,7 @@ def borrarPerroPerdido(request, id):
     
     messages.add_message(request, messages.SUCCESS, 'Perdida borrada', extra_tags="tag1")
 
-    return redirect("listarPerdidos")
+    return redirect("index")
 
 def contactarPerd(request, nombre, telDueño):
     cli =  Cliente.objects.get(usuario=usuario["nombre"])
@@ -670,6 +680,12 @@ def contactarPerdVisit(request, nombre, telDueño):
         'telDueño':telDueño,  
         }
     return render(request, 'paginas/contactarPerdVisit.html', context)
+
+def encontrado(request, id):
+    perro = PerroPerdido.objects.get(id=id)
+    perro.estado="encontrado"
+    perro.save()
+    return redirect("misPerdidos")
 
 def notificacionAdopcion(request):
     context ={
@@ -781,9 +797,12 @@ def validate(request):#extrae el nombre y email del perro y hace de conector con
       infoHistorial['nombreP']= request.POST["nombre"]
       infoHistorial['mailD']= request.POST["emailD"]
       his = Historial.objects.filter(nombreP=nombre,mailD=emailD)
+      cli=Cliente.objects.get(mail=emailD)
       context = {
         'context':his,
-        'usuario':usuario
+        'usuario':usuario,
+        'nombreP':nombre,
+        'nombreC':cli.nombreC
     }
       return render(request, 'paginas/listarHistorialV.html', context)#aca me tendria que mandar a listarHistorialV
 
@@ -795,9 +814,12 @@ def validateC(request):#extrae el nombre y email del perro y hace de conector co
       infoHistorial['nombreP']= request.POST["nombre"]
       infoHistorial['mailD']= request.POST["emailD"]
       his = Historial.objects.all().filter(nombreP=nombre,mailD=emailD)
+      cli=Cliente.objects.get(mail=emailD)
       context = {
         'context':his,
-        'usuario':usuario
+        'usuario':usuario,
+        'nombreP':nombre,
+        'nombreC':cli.nombreC
     }
       return render(request, 'paginas/listarHistorialC.html', context)
 
@@ -836,7 +858,7 @@ def cargarHistorial(request):
             his.save()
             messages.add_message(request, messages.SUCCESS, 'Historial cargado con exito', extra_tags="tag1")
 
-            return redirect("index")
+            return redirect('losPerros')
     else:
         form = Historial_form()
             
@@ -847,6 +869,8 @@ def cargarHistorial(request):
     }
     return render(request, 'paginas/cargarHistorial.html', context)
 #hola
+
+
 
 def donaciones(request):
     don = Donacion.objects.all()
@@ -883,8 +907,6 @@ def donar(request, id):
         form = Tarjeta_form(request.POST)
         if form.is_valid():
             donacion = Donacion.objects.get(id=id)
-            donacion.recaudado = 0
-            donacion.save()
             x = donacion.recaudado + form.cleaned_data[0]
             donacion.recaudado = x
             donacion.progreso = donacion.recaudado * 100 / donacion.objetivo

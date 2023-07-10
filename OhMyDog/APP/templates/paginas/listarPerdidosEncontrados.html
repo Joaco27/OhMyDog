@@ -1,0 +1,32 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+{% block titulo %} Listar Perdidos {% endblock %}
+
+{% block contenido %} 
+
+<div class="d-flex justify-content-center flex-column align-items-center">
+    
+    {% if context|length == 0 %}
+        <p>No hay perros perdidos encontrados</p>
+    {% else %}
+        {% for c in context %}
+            <div class="flex row border border-5 border-dark rounded">
+                <div class="col">
+                    <p><strong>Nombre:</strong> {{ c.nombre }}</p>
+                    <p><strong>Raza:</strong> {{ c.raza }}</p>
+                    <img src="{{c.imagen.url}}" alt="FOTO" height="150" width="150">
+                </div>
+                <div class="col">
+                    <p><strong>Reportado por:</strong> {{ c.dueño }}</p>
+                    <p><strong>Zona:</strong> {{ c.zona }}</p>
+                    <p><strong>Descripcion:</strong> {{ c.descripcion }}</p>
+                    <p><strong>Fecha de Desaparicion:</strong> {{ c.fechaD }}</p>
+                </div>
+            </div>   
+            {% endfor %}
+    {% endif %}
+    
+</div>
+
+{% endblock %}
