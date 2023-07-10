@@ -81,7 +81,7 @@ class PerroAdopcion(models.Model):
     usuario = models.CharField(max_length=30)
     nombre = models.CharField(max_length=30)
     raza = models.CharField(max_length=30)
-    #edad = models.IntegerField(null=True)
+    edad = models.IntegerField(null=True)
     tamaño = models.CharField(max_length=30,null=True)
     descripcion = models.CharField(max_length=30)
     zona = models.CharField(max_length=50, default='NO')

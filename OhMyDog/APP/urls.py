@@ -7,9 +7,9 @@ from django.contrib.staticfiles.urls import static
 
 urlpatterns = [
     path('',views.index,name='index'),
-    # path('adopciones',views.adopciones,name='adopciones'),
-    # path('adopFamilias/<str:nombre>/<str:usuario>/',views.adopFamilias,name='adopFamilias'),
-    # path('adopflias/',views.adopflias,name='adopflias'),
+    path('adopciones',views.adopciones,name='adopciones'),
+    path('adopFamilias/<str:nombre>/<str:usuario>/',views.adopFamilias,name='adopFamilias'),
+    path('adopflias/',views.adopflias,name='adopflias'),
     path('nosotros',views.nosotros,name='nosotros'),
     path('listarAlgo',views.listarAlgo,name='listarAlgo'),
     path('formulario',views.agregarAlgo,name='formulario'),
@@ -31,14 +31,14 @@ urlpatterns = [
     path('publicarC',views.publicarC,name='publicarC'),
     
     path('turnos',views.turnos,name='turnos'),
-    # path('publicarAdopcion',views.publicarAdopcion,name='publicarAdopcion'),
+    path('publicarAdopcion',views.publicarAdopcion,name='publicarAdopcion'),
 
 
-    # path('ContactarAdop/<str:nombre>/<str:dueño>/',views.ContactarAdop,name='ContactarAdop'),
-    # path('contactarAVisit/<str:nombre>/<str:dueño>/',views.contactarAVisit,name='contactarAVisit'),
-    # path('borrarNotiAdop/<str:usuario>/<str:nombre>/',views.eliminarContactoA,name='borrarNotiAdop'),
-    # path('notificacionAdopcion',views.notificacionAdopcion,name='notificacionAdopcion'),
-    # path('notiAdopContacto', views.notiAdopContacto,name='notiAdopContacto'),
+    path('ContactarAdop/<str:nombre>/<str:dueño>/',views.ContactarAdop,name='ContactarAdop'),
+    path('contactarAVisit/<str:nombre>/<str:dueño>/',views.contactarAVisit,name='contactarAVisit'),
+    path('borrarNotiAdop/<str:usuario>/<str:nombre>/',views.eliminarContactoA,name='borrarNotiAdop'),
+    path('notificacionAdopcion',views.notificacionAdopcion,name='notificacionAdopcion'),
+    path('notiAdopContacto', views.notiAdopContacto,name='notiAdopContacto'),
 
 
     path('registrarCliente',views.registrarCliente,name='registrarCliente'),
@@ -49,9 +49,9 @@ urlpatterns = [
     path('borrarPerro/<int:id>',views.borrarPerro,name='borrarPerro'),
     path('borrarPerroC/<int:id>',views.borrarPerroC,name='borrarPerroC'),
     path('borrarPerroA/<str:usuario>/<str:nombre>',views.borrarPerroA,name='borrarPerroA'),
-    # path('borrarAdoptado/<str:usuario>/<str:nombre>/',views.borrarAdoptado,name='borrarAdoptado'),
+    path('borrarAdoptado/<str:usuario>/<str:nombre>/',views.borrarAdoptado,name='borrarAdoptado'),
     
-    # path('listarAdopciones',views.ListarAdopciones,name='listarAdopciones'),
+    path('listarAdopciones',views.ListarAdopciones,name='listarAdopciones'),
     path('misPerros',views.misPerros,name='misPerros'),
     
     path('notificaciones',views.notificaciones,name='notificaciones'),

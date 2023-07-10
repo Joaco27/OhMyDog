@@ -120,19 +120,18 @@ class Turnos_form(forms.Form):
             raise ValidationError("Coloque una fecha valida, superior a la fecha actual")
         return data
 
-# class perroAdopcion_form(forms.Form):
-#     class Meta:
-#         model= PerroAdopcion
-#         fields=['nombre','descripcion', 'zona']
-#     def __init__(self, *args, **kwargs):
-#         opciones = kwargs.pop('opciones', [])
-#         super(perroAdopcion_form, self).__init__(*args, **kwargs)
-#         self.fields['nombre'] = forms.ChoiceField(choices=[(opcion, opcion) for opcion in opciones],required=True)
+class perroAdopcion_form(forms.Form):
+    class Meta:
+        model= PerroAdopcion
+        fields=['nombre','descripcion', 'zona']
+    def __init__(self, *args, **kwargs):
+        opciones = kwargs.pop('opciones', [])
+        super(perroAdopcion_form, self).__init__(*args, **kwargs)
+        self.fields['nombre'] = forms.ChoiceField(choices=[(opcion, opcion) for opcion in opciones],required=True)
     
-    
-#     nombre = forms.ChoiceField()
-#     zona = forms.CharField(max_length=50, required=True, label='zona')
-#     descripcion= forms.CharField(max_length=30, required=True, label='description')
+    nombre = forms.ChoiceField()
+    zona = forms.CharField(max_length=50, required=True, label='zona')
+    descripcion= forms.CharField(max_length=30, required=True, label='description')
 
 
 class Cliente_form(forms.ModelForm):
