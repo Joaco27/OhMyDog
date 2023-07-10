@@ -286,11 +286,11 @@ class Donacion_form(forms.ModelForm):
     recaudado = forms.IntegerField(required=False, widget=forms.HiddenInput, initial=0)
     
 class Tarjeta_form(forms.Form):
-    nombre = forms.CharField(max_length=40, required=True)
+    nombre = forms.CharField(max_length=40, required=True, label="Titular de la Tarjeta")
     numero = forms.IntegerField(required=True)
-    mesV = forms.IntegerField(required=True)
-    añoV = forms.IntegerField(required=True)
-    codigo = forms.IntegerField(required=True)
+    mesV = forms.IntegerField(required=True, label="Mes Vencimiento")
+    añoV = forms.IntegerField(required=True, label="Año Vencimiento")
+    codigo = forms.IntegerField(required=True, label="Codigo de Seguridad")
     monto = forms.IntegerField(required=True)
     
     def clean(self):

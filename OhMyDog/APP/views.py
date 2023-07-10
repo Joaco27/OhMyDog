@@ -883,8 +883,6 @@ def donar(request, id):
         form = Tarjeta_form(request.POST)
         if form.is_valid():
             donacion = Donacion.objects.get(id=id)
-            donacion.recaudado = 0
-            donacion.save()
             x = donacion.recaudado + form.cleaned_data[0]
             donacion.recaudado = x
             donacion.progreso = donacion.recaudado * 100 / donacion.objetivo
