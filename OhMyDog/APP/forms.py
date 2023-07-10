@@ -324,5 +324,5 @@ class Tarjeta_form(forms.Form):
         if t.saldo-data < 0:
             raise ValidationError('Saldo Insuficiente')
         return data, numero
-        
+#hola
     
