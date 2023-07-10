@@ -34,6 +34,44 @@ def index(request):
     }
     return render(request, 'paginas/index.html', context)
 
+def adopciones(request):
+    context = {
+        'usuario':usuario
+    }
+    return render(request, 'paginas/adopciones.html', context)
+
+def adopFamilias(request, nombre, usuario):
+    adop = PerroAdopcion.objects.get(nombre=nombre,usuario=usuario)
+    adop.estado = True
+    adop.save()
+    messages.add_message(request, messages.SUCCESS, 'La publicación se agrego a adopciones realizadas ', extra_tags="tag1")
+
+    perro_Adop = PerroAdopcion.objects.filter(estado = True)
+    context = {'context': perro_Adop,
+               'usuario': usuario,
+               }
+    return render(request, 'paginas/adopFamilias.html', context)
+
+def adopflias(request):
+
+    perro_Adop = PerroAdopcion.objects.filter(estado = True)
+    context = {'context': perro_Adop,
+               'usuario': usuario,
+               }
+    return render(request, 'paginas/adopFamilias.html', context)
+
+def borrarAdoptado(request, usuario, nombre):
+    perro = PerroAdopcion.objects.get(usuario=usuario, nombre=nombre)
+    perro.estado = False
+    perro.save()
+    messages.add_message(request, messages.SUCCESS, 'La publicación se elimino con éxito y se agrego nuevamente en perros en adopción ', extra_tags="tag1")
+
+    return redirect('listarAdopciones')
+
+
+
+
+
 def registrarCliente(request):
     if request.method == 'POST':
         form = Cliente_form(request.POST) 
@@ -52,6 +90,8 @@ def registrarCliente(request):
     }
     return render(request, 'paginas/registrarCliente.html', context)
 
+
+
 def registrarPerro(request):
     if request.method == 'POST':
         form = Perro_form(request.POST) 
@@ -65,9 +105,10 @@ def registrarPerro(request):
             perro = Perro(
                 nombre = form.cleaned_data['nombre'],
                 raza = form.cleaned_data['raza'],
-                edad = edad,
+                edad = form.cleaned_data['edad'],
                 emailDueño = usr.mail,
                 sexo = form.cleaned_data['sexo'],
+                tamaño = form.cleaned_data['tamaño'],
             )
             perro.save()
             messages.add_message(request, messages.SUCCESS, 'Perro registrado con exito', extra_tags="tag1")
@@ -182,7 +223,7 @@ def listarPaseadores(request):
     return render(request, 'paginas/listaPaseadores.html', context)
 
 def ListarAdopciones(request): 
-    adop = PerroAdopcion.objects.all()
+    adop = PerroAdopcion.objects.filter(estado = False)
     context = {'context': adop,
                'usuario': usuario}
     return render(request, 'paginas/listarAdopciones.html', context)
@@ -400,6 +441,7 @@ def publicarAdopcion(request):
                 usuario = usuario['nombre'],
                 nombre = 'Desconocido',
                 raza = 'Desconocido',
+                tamaño = 'Desconocido',
                 descripcion = form.cleaned_data['descripcion'],
                 zona = form.cleaned_data['zona'],
             )
@@ -413,6 +455,7 @@ def publicarAdopcion(request):
                     usuario = usuario['nombre'],
                     nombre = p.nombre,
                     raza = p.raza,
+                    tamaño = p.tamaño,
                     descripcion = form.cleaned_data['descripcion'],
                     zona = form.cleaned_data['zona'],   
                 )
@@ -422,7 +465,7 @@ def publicarAdopcion(request):
 
             return redirect("index")
     else:
-        form = perroAdopcion_form( opciones=listaPerros)
+         form = perroAdopcion_form( opciones=listaPerros)
     
     context = {
         'form': form,
@@ -560,7 +603,18 @@ def contactarAVisit(request, nombre, dueño):
             )
             contactoNuevo.save()
             messages.add_message(request, messages.SUCCESS, 'Pronto se pondran en contacto con usted', extra_tags="tag1")
+            return redirect ('index')
+    else:
+        form = contacto_form()
+    context = {
+        'usuario' : usuario,
+        'form' : form,
+        'nombre' : nombre,
+        'dueño' : dueño,
+    }
 
+    return render(request, 'paginas/contactarAVisitante.html', context)
+            
 def listarPerdidos(request):
     perdidos = PerroPerdido.objects.filter(~Q(usuario=usuario["nombre"]), estado="perdido")
     #perdidos = PerroPerdido.objects.filter(estado="perdido")

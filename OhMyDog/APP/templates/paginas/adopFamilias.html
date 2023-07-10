@@ -1,0 +1,28 @@
+{% extends 'paginas/base.html' %}
+{% load static %}
+
+{% block titulo %} Familias {% endblock %}
+
+{% block contenido %} 
+
+<div class="d-flex justify-content-center flex-column align-items-center">
+    
+    {% if context|length == 0 %}
+        <p>No hay perros publicados</p>
+    {% else %}
+        {% for c in context %}
+
+            <p>Nombre: {{ c.nombre }}</p>
+            <p>Tamaño: {{ c.tamaño }}</p>
+            <p>Descripcion: {{ c.descripcion }}</p>
+            <p></p>
+            
+            <a href="{% url 'borrarAdoptado' c.usuario c.nombre %}" class="btn">borrar</a>
+
+            <p>-----------------</p>
+        {% endfor %}
+    {% endif %}
+    
+</div>
+
+{% endblock %}

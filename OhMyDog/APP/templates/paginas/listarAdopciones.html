@@ -15,6 +15,7 @@
             <p>Nombre: {{ c.nombre }}</p>
             <p>Zona: {{ c.zona }}</p>
             <p>Raza: {{ c.raza }}</p>
+            <p>Tamaño: {{ c.tamaño }}</p>
             <p>Descripcion: {{ c.descripcion }}</p>
             <p></p>
             <p></p>
@@ -35,6 +36,7 @@
                             window.location.href = "./borrarPerroA/{{c.usuario}}/{{c.nombre}}"
                     }
                 </script>
+                <a href="./adopFamilias/{{c.nombre}}/{{c.usuario}}" class="btn">Adoptado</a>
             {% endif %}   
             <p>-----------------</p>
         {% endfor %}
