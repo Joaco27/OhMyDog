@@ -100,9 +100,9 @@ class ContactoAdop(models.Model):
 
 
 class Event(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=30)
     date = models.DateField()
-    description = models.TextField()
+    description = models.CharField(max_length=30)
 
     def __str__(self):
         return f'{self.date}'
